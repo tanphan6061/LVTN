@@ -17,12 +17,15 @@ class CreateSuppliersTable extends Migration
             $table->id();
             $table->string('name');
             $table->string('email');
-            $table->string('password');
-            $table->string('slug');
-            $table->string('address');
+
             $table->string('avatar');
             $table->string('phone');
-            $table->string('nameOwner');
+            $table->string('password');
+
+            $table->string('nameOfShop')->nullable();
+            $table->string('slug')->nullable();
+            $table->string('address')->nullable();
+            $table->enum('role',['supplier','admin']); // default is supplier
             $table->timestamps();
         });
     }

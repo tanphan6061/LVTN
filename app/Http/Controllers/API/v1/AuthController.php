@@ -8,6 +8,7 @@ use App\Http\Requests\AuthorizationRegisterRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
 class AuthController extends ApiController
@@ -26,9 +27,28 @@ class AuthController extends ApiController
 
     public function update(AccountUpdateRequest $request)
     {
+        $user = Auth::user();
         $validated = $request->validated();
-        $this->user->update($validated);
-        return $this->responded("Update information successfully", Auth::user());
+        $array_pw = isset($validated['old_password']) ? [
+            'password' => bcrypt($validated['new_password'])
+        ] : [];
+        if (isset($validated['old_password'], $validated['new_password']) && $validated['old_password'] == $validated['new_password']) {
+            return $this->respondedError("Update information failed", [
+                'new_password' => ['Mật khẩu mới không được trùng với mật khẩu cũ.']
+            ]);
+        } elseif (isset($validated['old_password'], $validated['new_password']) && !Hash::check($validated['old_password'], $user->password)) {
+            return $this->respondedError("Update information failed", [
+                'old_password' => ['Mật khẩu cũ không hợp lệ.']
+            ]);
+        } else {
+            unset($validated['old_password'], $validated['new_password']);
+            $user->update(array_merge(
+                $validated,
+                $array_pw
+            ));
+            return $this->responded("Update information successfully", Auth::user());
+        }
+
     }
 
     public function login(Request $request): \Illuminate\Http\JsonResponse
@@ -65,7 +85,6 @@ class AuthController extends ApiController
     {
         return $this->createNewToken(auth()->refresh());
         return $this->responded("Refresh token success");
-
     }
 
 

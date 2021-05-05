@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API\v1;
 
+use App\Http\Requests\AccountUpdateRequest;
 use App\Http\Requests\AuthorizationLoginRequest;
 use App\Http\Requests\AuthorizationRegisterRequest;
 use App\Models\User;
@@ -15,6 +16,19 @@ class AuthController extends ApiController
     public function __construct()
     {
         $this->middleware('jwt.verify', ['except' => ['login', 'register']]);
+        $this->user = Auth::user();
+    }
+
+    public function show()
+    {
+        return $this->responded("Show information successfully", Auth::user());
+    }
+
+    public function update(AccountUpdateRequest $request)
+    {
+        $validated = $request->validated();
+        $this->user->update($validated);
+        return $this->responded("Update information successfully", Auth::user());
     }
 
     public function login(Request $request): \Illuminate\Http\JsonResponse

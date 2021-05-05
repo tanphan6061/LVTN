@@ -30,6 +30,32 @@ class ApiRequest extends FormRequest
         ];
     }
 
+    public function attributes()
+    {
+        return [
+            'name' => 'Họ tên',
+            'password' => 'Mật khẩu',
+            'sex' => 'Giới tính',
+            'birthday' => 'Ngày sinh',
+            'email' => 'Email'
+        ];
+    }
+
+
+    public function messages()
+    {
+        return [
+            'required' => ':attribute là bắt buộc.',
+            'between' => ':attribute phải dài khoảng :min - :max kí tự.',
+            'confirmed' => 'Nhập lại mật khẩu không chính xác.',
+            'date' => 'Ngày không hợp lệ.',
+            'date_format' => 'Không đúng định dạng.',
+            'before' => 'Ngày không hợp lệ.',
+            'unique' => ':attribute đã tồn tại trên hệ thống.',
+            'in' => ':attribute không hợp lệ.'
+        ];
+    }
+
     protected function failedValidation(Validator $validator)
     {
         $message = "The given data was invalid.";

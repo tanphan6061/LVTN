@@ -29,4 +29,6 @@ class AuthorizationRegisterRequest extends ApiRequest
             'birthday' => 'required|date|date_format:Y-m-d|before:now'
         ];
     }
+
+
 }

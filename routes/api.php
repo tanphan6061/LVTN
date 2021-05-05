@@ -21,8 +21,10 @@ Route::group(['prefix' => 'v1', 'middleware' => ['api']], function () {
     route::post('logout', [AuthController::class, 'logout']);
     route::post('register', [AuthController::class, 'register']);
     route::post('refresh', [AuthController::class, 'refresh']);
+    route::get('me', [AuthController::class, 'show']);
+    route::put('me', [AuthController::class, 'update']);
 });
 
-Route::group(['prefix' => 'v1', 'middleware' => ['jwt.verify','api']], function (){
-    route::get('me', [UserController::class,'show']);
+Route::group(['prefix' => 'v1', 'middleware' => ['jwt.verify', 'api']], function () {
+
 });

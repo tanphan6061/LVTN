@@ -13,6 +13,7 @@ class AuthenticateWithJWT
 
     public function handle(Request $request, Closure $next)
     {
+
         try {
             $user = JWTAuth::parseToken()->authenticate();
             //if (!$user = auth()->user()) throw new Exception("Unauthorized"); //fail

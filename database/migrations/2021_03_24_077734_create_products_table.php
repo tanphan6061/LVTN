@@ -22,11 +22,11 @@ class CreateProductsTable extends Migration
             $table->bigInteger('brand_id')->unsigned();
             $table->bigInteger('supplier_id')->unsigned();
             $table->integer('amount');
-            $table->string('description');
-            $table->string('detail');
+            $table->text('description');
+            $table->text('detail');
             $table->enum('status',['available','out_of_stock']);
-            $table->integer('discount');
-            $table->boolean('is_deleted');
+            $table->integer('discount')->default(0);
+            $table->boolean('is_deleted')->default(0);
 
             $table->foreign('sub_category_id')->references('id')->on('sub_categories');
             $table->foreign('brand_id')->references('id')->on('brands');

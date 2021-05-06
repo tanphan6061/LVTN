@@ -18,7 +18,7 @@ class CreateSubCategoriesTable extends Migration
             $table->string('name');
             $table->string('slug');
             $table->bigInteger('category_id')->unsigned();
-            $table->boolean('is_deleted');
+            $table->boolean('is_deleted')->default(0);
 
             $table->foreign('category_id')->references('id')->on('categories');
             $table->timestamps();

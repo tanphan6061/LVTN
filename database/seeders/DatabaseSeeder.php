@@ -2,6 +2,12 @@
 
 namespace Database\Seeders;
 
+use App\Models\Brand;
+use App\Models\Category;
+use App\Models\Product;
+use App\Models\Product_image;
+use App\Models\Sub_category;
+use App\Models\Supplier;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
@@ -18,8 +24,14 @@ class DatabaseSeeder extends Seeder
     {
         // \App\Models\User::factory(10)->create();
         User::factory()->count(10)->create();
+        Brand::factory()->count(5)->create();
+        Category::factory()->count(2)->create();
+        Sub_category::factory()->count(4)->create();
+
         $this->call([
-        SupplierSeeder::class,
-    ]);
+            SupplierSeeder::class,
+        ]);
+        Product::factory()->count(10)->create();
+        Product_image::factory()->count(50)->create();
     }
 }

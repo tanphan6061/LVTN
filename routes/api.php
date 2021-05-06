@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\API\v1\AuthController;
 use App\Http\Controllers\API\v1\UserController;
+use \App\Http\Controllers\API\v1\ProductController;
 use App\Http\Controllers\API\v1\AddressController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -27,5 +28,6 @@ Route::group(['prefix' => 'v1', 'middleware' => ['api']], function () {
 });
 
 Route::group(['prefix' => 'v1', 'middleware' => ['jwt.verify', 'api']], function () {
-    route::resource('address', AddressController::class);
+    route::resource('addresses', AddressController::class);
+    route::resource('products', ProductController::class);
 });

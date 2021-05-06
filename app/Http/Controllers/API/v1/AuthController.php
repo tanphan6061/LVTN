@@ -17,7 +17,6 @@ class AuthController extends ApiController
     public function __construct()
     {
         $this->middleware('jwt.verify', ['except' => ['login', 'register']]);
-        $this->user = Auth::user();
     }
 
     public function show()
@@ -36,10 +35,12 @@ class AuthController extends ApiController
             return $this->respondedError("Update information failed", [
                 'new_password' => ['Mật khẩu mới không được trùng với mật khẩu cũ.']
             ]);
+
         } elseif (isset($validated['old_password'], $validated['new_password']) && !Hash::check($validated['old_password'], $user->password)) {
             return $this->respondedError("Update information failed", [
                 'old_password' => ['Mật khẩu cũ không hợp lệ.']
             ]);
+
         } else {
             unset($validated['old_password'], $validated['new_password']);
             $user->update(array_merge(
@@ -83,8 +84,9 @@ class AuthController extends ApiController
 
     public function refresh(): \Illuminate\Http\JsonResponse
     {
-        return $this->createNewToken(auth()->refresh());
-        return $this->responded("Refresh token success");
+        $token = auth('api')->refresh();
+        $data = $this->respondedWithToken($token);
+        return $this->responded("Refresh token success", $data);
     }
 
 
@@ -93,7 +95,7 @@ class AuthController extends ApiController
         return [
             'access_token' => $token,
             'token_type' => 'bearer',
-            'expires_in' => auth('api')->payload()->get('exp'),
+            'expires_in' => auth('api')->factory()->getTTL() * 60,
         ];
     }
 

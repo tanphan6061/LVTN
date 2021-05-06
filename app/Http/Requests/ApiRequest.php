@@ -34,6 +34,8 @@ class ApiRequest extends FormRequest
     {
         return [
             'name' => 'Họ tên',
+            'phone' => 'Số điện thoại',
+            'address' => 'Địa chỉ',
             'password' => 'Mật khẩu',
             'sex' => 'Giới tính',
             'birthday' => 'Ngày sinh',

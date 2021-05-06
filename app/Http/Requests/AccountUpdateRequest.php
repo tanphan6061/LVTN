@@ -36,7 +36,6 @@ class AccountUpdateRequest extends ApiRequest
             ];
         }
 
-
         return array_merge($validate, $ext_rules);
     }
 }

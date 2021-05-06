@@ -19,7 +19,7 @@ class CreateAddressesTable extends Migration
             $table->bigInteger('user_id')->unsigned();
             $table->string('phone');
             $table->string('address');
-            $table->boolean('active');
+            $table->boolean('active')->default(0);
             $table->timestamps();
             $table->foreign('user_id')->references('id')->on('users');
         });

@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::group(['prefix' => 'v1', 'middleware' => ['api']], function () {
+Route::group(['prefix' => 'v1', 'middleware' => ['api','cors']], function () {
     route::post('login', [AuthController::class, 'login']);
     route::post('logout', [AuthController::class, 'logout']);
     route::post('register', [AuthController::class, 'register']);
@@ -29,6 +29,6 @@ Route::group(['prefix' => 'v1', 'middleware' => ['api']], function () {
 
 });
 
-Route::group(['prefix' => 'v1', 'middleware' => ['jwt.verify', 'api']], function () {
-    route::resource('addresses', AddressController::class);
+Route::group(['prefix' => 'v1', 'middleware' => ['jwt.verify', 'api','cors']], function () {
+    route::resource('addresses', AddressController::class)->middleware('cors');
 });

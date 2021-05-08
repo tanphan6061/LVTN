@@ -36,7 +36,7 @@
                 <ul class="nav side-menu">
                     <li>
                         <a
-                        ><i class="fa fa-home"></i> Home
+                        ><i class="fa fa-home"></i> Trang Chủ
                             <span class="fa fa-chevron-down"></span
                             ></a>
                         <ul class="nav child_menu">
@@ -47,7 +47,7 @@
                     </li>
                     <li>
                         <a
-                        ><i class="fa fa-edit"></i> Forms
+                        ><i class="fa fa-edit"></i> Đơn Hàng
                             <span class="fa fa-chevron-down"></span
                             ></a>
                         <ul class="nav child_menu">
@@ -65,16 +65,16 @@
                     </li>
                     <li>
                         <a
-                        ><i class="fa fa-desktop"></i> UI Elements
+                        ><i class="fa fa-desktop"></i> Sản phẩm
                             <span class="fa fa-chevron-down"></span
                             ></a>
                         <ul class="nav child_menu">
                             <li>
-                                <a href="general_elements.html">General Elements</a>
+                                <a href="general_elements.html">Danh sách sản phẩm</a>
                             </li>
-                            <li><a href="media_gallery.html">Media Gallery</a></li>
-                            <li><a href="typography.html">Typography</a></li>
-                            <li><a href="icons.html">Icons</a></li>
+                            <li><a href="media_gallery.html">Tạo mới/ Đăng sản phẩm</a></li>
+                            <li><a href="typography.html">Đánh giá sản phẩm</a></li>
+                            <li><a href="icons.html">Báo cáo tồn kho</a></li>
                             <li><a href="glyphicons.html">Glyphicons</a></li>
                             <li><a href="widgets.html">Widgets</a></li>
                             <li><a href="invoice.html">Invoice</a></li>
@@ -84,7 +84,7 @@
                     </li>
                     <li>
                         <a
-                        ><i class="fa fa-table"></i> Tables
+                        ><i class="fa fa-table"></i> Thông tin nhà bán
                             <span class="fa fa-chevron-down"></span
                             ></a>
                         <ul class="nav child_menu">

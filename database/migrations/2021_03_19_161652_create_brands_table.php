@@ -17,7 +17,7 @@ class CreateBrandsTable extends Migration
             $table->id();
             $table->string('name');
             $table->string('slug');
-            $table->boolean('is_deleted');
+            $table->boolean('is_deleted')->default(0);
             $table->timestamps();
         });
     }

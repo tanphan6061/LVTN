@@ -8,15 +8,16 @@ use App\Http\Requests\AuthorizationRegisterRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
 class AuthController extends ApiController
 {
-    //
+
     public function __construct()
     {
-        $this->middleware('jwt.verify', ['except' => ['login', 'register']]);
-        $this->user = Auth::user();
+        $this->user = Auth::guard('api')->user();
+        $this->middleware('auth:api')->except(['login','register']);
     }
 
     public function show()
@@ -26,9 +27,31 @@ class AuthController extends ApiController
 
     public function update(AccountUpdateRequest $request)
     {
+
         $validated = $request->validated();
-        $this->user->update($validated);
-        return $this->responded("Update information successfully", Auth::user());
+        $array_pw = isset($validated['old_password']) ? [
+            'password' => bcrypt($validated['new_password'])
+        ] : [];
+        if (isset($validated['old_password'], $validated['new_password']) && $validated['old_password'] == $validated['new_password']) {
+            return $this->respondedError("Update information failed", [
+                'new_password' => ['Mật khẩu mới không được trùng với mật khẩu cũ.']
+            ]);
+
+        } elseif (isset($validated['old_password'], $validated['new_password']) && !Hash::check($validated['old_password'], $user->password)) {
+            return $this->respondedError("Update information failed", [
+                'old_password' => ['Mật khẩu cũ không hợp lệ.']
+            ]);
+
+        } else {
+            unset($validated['old_password'], $validated['new_password']);
+
+            $this->user->update(array_merge(
+                $validated,
+                $array_pw
+            ));
+            return $this->responded("Update information successfully", Auth::user());
+        }
+
     }
 
     public function login(Request $request): \Illuminate\Http\JsonResponse
@@ -63,9 +86,9 @@ class AuthController extends ApiController
 
     public function refresh(): \Illuminate\Http\JsonResponse
     {
-        return $this->createNewToken(auth()->refresh());
-        return $this->responded("Refresh token success");
-
+        $token = auth('api')->refresh();
+        $data = $this->respondedWithToken($token);
+        return $this->responded("Refresh token success", $data);
     }
 
 
@@ -74,7 +97,7 @@ class AuthController extends ApiController
         return [
             'access_token' => $token,
             'token_type' => 'bearer',
-            'expires_in' => auth('api')->payload()->get('exp'),
+            'expires_in' => auth('api')->factory()->getTTL() * 60 * 24,
         ];
     }
 

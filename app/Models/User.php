@@ -25,7 +25,7 @@ class User extends Authenticatable implements JWTSubject
 //        'birthday'
 //    ];
 
-    protected $guarded = ['id'];
+    protected $guarded = [];
 
     /**
      * The attributes that should be hidden for arrays.
@@ -63,9 +63,15 @@ class User extends Authenticatable implements JWTSubject
         return $this->hasMany(Cart::class);
     }
 
+
     public function orders()
     {
         return $this->hasMany(Order::class);
+    }
+
+    public function addresses()
+    {
+        return $this->hasMany(Address::class);
     }
 
 

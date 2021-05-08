@@ -34,10 +34,14 @@ class ApiRequest extends FormRequest
     {
         return [
             'name' => 'Họ tên',
+            'phone' => 'Số điện thoại',
+            'address' => 'Địa chỉ',
             'password' => 'Mật khẩu',
             'sex' => 'Giới tính',
             'birthday' => 'Ngày sinh',
-            'email' => 'Email'
+            'email' => 'Email',
+            'old_password' => 'Mật khẩu cũ',
+            'new_password' => 'Mật khẩu mới',
         ];
     }
 
@@ -47,7 +51,7 @@ class ApiRequest extends FormRequest
         return [
             'required' => ':attribute là bắt buộc.',
             'between' => ':attribute phải dài khoảng :min - :max kí tự.',
-            'confirmed' => 'Nhập lại mật khẩu không chính xác.',
+            'confirmed' => ':attribute nhập lại không chính xác.',
             'date' => 'Ngày không hợp lệ.',
             'date_format' => 'Không đúng định dạng.',
             'before' => 'Ngày không hợp lệ.',

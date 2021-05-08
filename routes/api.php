@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\API\v1\AuthController;
 use App\Http\Controllers\API\v1\UserController;
+use \App\Http\Controllers\API\v1\ProductController;
+use App\Http\Controllers\API\v1\AddressController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -23,8 +25,10 @@ Route::group(['prefix' => 'v1', 'middleware' => ['api']], function () {
     route::post('refresh', [AuthController::class, 'refresh']);
     route::get('me', [AuthController::class, 'show']);
     route::put('me', [AuthController::class, 'update']);
+    route::resource('products', ProductController::class);
+
 });
 
 Route::group(['prefix' => 'v1', 'middleware' => ['jwt.verify', 'api']], function () {
-
+    route::resource('addresses', AddressController::class);
 });

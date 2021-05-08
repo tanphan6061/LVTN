@@ -5,17 +5,9 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class AccountUpdateRequest extends FormRequest
+class AccountUpdateRequest extends ApiRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
-    public function authorize()
-    {
-        return false;
-    }
+
 
     /**
      * Get the validation rules that apply to the request.
@@ -24,10 +16,10 @@ class AccountUpdateRequest extends FormRequest
      */
     public function rules()
     {
+        $ext_rules = [];
         $validate = [
             'name' => 'required|between:3,16',
-            'email' => 'required|email|unique:users',
-            'password' => 'required|confirmed|between:6,32', //password_confirmation
+            //'email' => 'required|email|unique:users',
             'birthday' => 'required|date|date_format:Y-m-d|before:now',
             'sex' => [
                 'required',
@@ -35,8 +27,15 @@ class AccountUpdateRequest extends FormRequest
             ]
         ];
 
-        return [
-            //
-        ];
+        $isChangePw = $this->request->get('is_change_password');
+
+        if ($isChangePw) {
+            $ext_rules = [
+                'old_password' => 'required|between:6,32',
+                'new_password' => 'required|confirmed|between:6,32', //password_confirmation
+            ];
+        }
+
+        return array_merge($validate, $ext_rules);
     }
 }

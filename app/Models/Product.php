@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Taka\Filters\Filterable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+
 class Product extends Model
 {
     use HasFactory, Filterable;
@@ -21,14 +22,14 @@ class Product extends Model
         return $this->belongsTo(Supplier::class);
     }
 
-    public function sub_category()
-    {
-        return $this->belongsTo(Sub_category::class);
-    }
+//    public function sub_category()
+//    {
+//        return $this->belongsTo(Sub_category::class);
+//    }
 
     public function category()
     {
-        return $this->hasManyThrough(Category::class, Sub_category::class);
+        return $this->belongsTo(Category::class);
     }
 
     public function reviews()

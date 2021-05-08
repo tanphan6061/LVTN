@@ -25,9 +25,10 @@ Route::group(['prefix' => 'v1', 'middleware' => ['api']], function () {
     route::post('refresh', [AuthController::class, 'refresh']);
     route::get('me', [AuthController::class, 'show']);
     route::put('me', [AuthController::class, 'update']);
+    route::resource('products', ProductController::class);
+
 });
 
 Route::group(['prefix' => 'v1', 'middleware' => ['jwt.verify', 'api']], function () {
     route::resource('addresses', AddressController::class);
-    route::resource('products', ProductController::class);
 });

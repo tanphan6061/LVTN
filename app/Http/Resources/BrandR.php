@@ -14,6 +14,6 @@ class BrandR extends JsonResource
      */
     public function toArray($request)
     {
-        return parent::toArray($request);
+        return collect($this->resource)->only('id','name','slug');
     }
 }

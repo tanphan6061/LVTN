@@ -2,33 +2,28 @@
 
 namespace App\Http\Controllers\API\v1;
 
-use App\Http\Controllers\Controller;
 use App\Http\Resources\ProductR;
 use App\Models\Product;
-use App\Models\Supplier;
+use App\Taka\Filters\ProductFilter;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class ProductController extends ApiController
 {
     /**
      * Display a listing of the resource.
      *
+     * @param \ProductFilter $filter
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(ProductFilter $filter)
     {
-        $slug = request()->get('supplier_slug');
-        $limit = request()->get('limit', 10);
-        $offset = request()->get('offset', 0);
-        if ($slug) {
-            $builder = Supplier::where('slug', $slug)->first()->products();
-        } else {
-            $builder = Product::all();
-        }
-        $products = $builder->skip($offset)->take($limit)->get();
-        dd($products);
-//        return $this->responded("get list products", ProductR::collection($products));
+        $products = Product::filter($filter)->get();
+        //dd($products);
+        $data = [
+            'products' => ProductR::collection($products),
+            'count' => $products->count(),
+        ];
+        return $this->responded('Get list products successfully', $data);
     }
 
     /**

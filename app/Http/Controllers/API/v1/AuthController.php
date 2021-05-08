@@ -14,13 +14,20 @@ use Tymon\JWTAuth\Facades\JWTAuth;
 class AuthController extends ApiController
 {
 
+    public function __construct()
+    {
+        $this->user = Auth::guard('api')->user();
+        $this->middleware('auth:api')->except(['login','register']);
+    }
+
     public function show()
     {
-        return $this->responded("Show information successfully", $this->user);
+        return $this->responded("Show information successfully", Auth::user());
     }
 
     public function update(AccountUpdateRequest $request)
     {
+
         $validated = $request->validated();
         $array_pw = isset($validated['old_password']) ? [
             'password' => bcrypt($validated['new_password'])
@@ -37,6 +44,7 @@ class AuthController extends ApiController
 
         } else {
             unset($validated['old_password'], $validated['new_password']);
+
             $this->user->update(array_merge(
                 $validated,
                 $array_pw

@@ -2,12 +2,12 @@
 
 namespace App\Models;
 
+use App\Taka\Filters\Filterable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-
 class Product extends Model
 {
-    use HasFactory;
+    use HasFactory, Filterable;
 
     protected $guarded = [];
 
@@ -40,4 +40,6 @@ class Product extends Model
     {
         return $this->hasMany(Product_image::class);
     }
+
+
 }

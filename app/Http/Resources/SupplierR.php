@@ -14,7 +14,7 @@ class SupplierR extends JsonResource
      */
     public function toArray($request)
     {
-        $exceptions = ['email'];
+        $exceptions = ['email','created_at','updated_at'];
         return collect($this->resource)->except($exceptions);
     }
 }

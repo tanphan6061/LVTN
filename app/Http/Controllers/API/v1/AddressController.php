@@ -19,13 +19,12 @@ class AddressController extends ApiController
 
     public function __construct()
     {
-
+        $this->user = Auth::guard('api')->user();
     }
 
     public function index()
     {
-        $user = Auth::user();
-        $data = AddressR::collection($user->addresses->sortByDesc('active'));
+        $data = AddressR::collection($this->user->addresses->sortByDesc('active'));
         return $this->responded("Get list addresses", $data);
     }
 
@@ -51,8 +50,6 @@ class AddressController extends ApiController
     public function store(AddressCreateRequest $request)
     {
         //
-        $user = Auth::user();
-        //dd($user);
         $isActive = $request->active ? 1 : 0;
         $validated = $request->validated();
         $ext_rules = [
@@ -61,14 +58,14 @@ class AddressController extends ApiController
         ];
 
         if ($isActive) {
-            foreach ($user->addresses as $address) {
+            foreach ($this->user->addresses as $address) {
                 $address->active = 0;
                 $address->save();
             }
         }
 
-        $user->addresses()->create(array_merge($validated, $ext_rules));
-        $data = AddressR::collection($user->addresses->sortByDesc('active'));
+        $this->user->addresses()->create(array_merge($validated, $ext_rules));
+        $data = AddressR::collection($this->user->addresses->sortByDesc('active'));
         return $this->responded("Create address successfully", $data);
     }
 
@@ -81,8 +78,7 @@ class AddressController extends ApiController
     public function show(Address $address)
     {
         //
-        $user = Auth::user();
-        if ($address->user->id == $user->id) {
+        if ($address->user->id == $this->user->id) {
             return $this->responded('Get detail address', new AddressR($address));
         }
         return $this->respondedError("Invalid");
@@ -110,8 +106,7 @@ class AddressController extends ApiController
     public function update(AddressCreateRequest $request, Address $address)
     {
         //
-        $user = Auth::user();
-        if ($address->user->id == $user->id) {
+        if ($address->user->id == $this->user->id) {
             $isActive = $request->active ? 1 : 0;
             $validated = $request->validated();
             $ext_rules = [
@@ -120,14 +115,14 @@ class AddressController extends ApiController
             ];
 
             if ($isActive) {
-                foreach ($user->addresses as $address) {
+                foreach ($this->user->addresses as $address) {
                     $address->active = 0;
                     $address->save();
                 }
             }
 
             $address->update(array_merge($validated, $ext_rules));
-            $data = AddressR::collection($user->addresses->sortByDesc('active'));
+            $data = AddressR::collection($this->user->addresses->sortByDesc('active'));
             return $this->responded("Update address successfully", $data);
         }
 
@@ -143,11 +138,10 @@ class AddressController extends ApiController
      */
     public function destroy(Address $address)
     {
-        $user = Auth::user();
-        if ($address->user->id == $user->id) {
+        if ($address->user->id == $this->user->id) {
             $address->delete();
-            $data = AddressR::collection($user->addresses->sortByDesc('active'));
-            return $this->responded("Get list addresses", $data);
+            $data = AddressR::collection($this->user->addresses->sortByDesc('active'));
+            return $this->responded("Remove address successfully", $data);
         }
 
         return $this->respondedError("Invalid");

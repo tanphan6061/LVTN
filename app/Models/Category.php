@@ -11,10 +11,10 @@ class Category extends Model
 
     protected $guarded = [];
 
-    public function sub_categories()
-    {
-        return $this->hasMany(Category::class, 'parent_category_id', 'id');
-    }
+//    public function sub_categories()
+//    {
+//        return $this->hasMany(Category::class, 'parent_category_id', 'id');
+//    }
 
     public function parent_category()
     {

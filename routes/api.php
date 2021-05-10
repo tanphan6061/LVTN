@@ -18,17 +18,17 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::group(['prefix' => 'v1', 'middleware' => ['api']], function () {
+Route::group(['prefix' => 'v1', 'middleware' => ['api', 'cors']], function () {
     route::post('login', [AuthController::class, 'login']);
     route::post('logout', [AuthController::class, 'logout']);
     route::post('register', [AuthController::class, 'register']);
     route::post('refresh', [AuthController::class, 'refresh']);
     route::get('me', [AuthController::class, 'show']);
     route::put('me', [AuthController::class, 'update']);
-    route::resource('products', ProductController::class);
+    route::resource('products', ProductController::class)->only(['show', 'index']);
 
 });
 
-Route::group(['prefix' => 'v1', 'middleware' => ['jwt.verify', 'api']], function () {
-    route::resource('addresses', AddressController::class);
+Route::group(['prefix' => 'v1', 'middleware' => ['jwt.verify', 'api', 'cors']], function () {
+    route::resource('addresses', AddressController::class)->middleware('cors');
 });

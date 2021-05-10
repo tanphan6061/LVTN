@@ -12,7 +12,7 @@
         <div class="profile clearfix">
             <div class="profile_pic">
                 <img
-                    src="images/img.jpg"
+                    src="https://via.placeholder.com/640x480.png/006611?text=ipsam"
                     alt="..."
                     class="img-circle profile_img"
                 />

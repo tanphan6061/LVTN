@@ -22,11 +22,12 @@ class ProductR extends JsonResource
         ];
 
         $data = collect($this->resource)->except($exceptions);
-        $data['sub_category'] = new SubCategoryR($this->sub_category);
+        $data['category'] = new CategoryR($this->category);
         $data['supplier'] = new SupplierR($this->supplier);
         $data['brand'] = new BrandR($this->brand);
         $data['images'] = ProductImageR::collection($this->images);
-        $data['rate'] = $this->reviews()->avg('star');
+        $data['rating_average'] = $this->reviews()->avg('star');
+        $data['rating_count'] = $this->reviews()->count();
         return $data;
     }
 }

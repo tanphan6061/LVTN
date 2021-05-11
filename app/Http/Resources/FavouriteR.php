@@ -4,7 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class ReviewR extends JsonResource
+class FavouriteR extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -14,9 +14,8 @@ class ReviewR extends JsonResource
      */
     public function toArray($request)
     {
-        $exceptions = [];
-        $data = collect($this->resource)->only($exceptions);
-        //$data['is_reviewed'] =
+        $data = collect($this->resource)->except('user_id', 'product_id','is_deleted');
+        $data['product'] = new ProductR($this->product);
         return $data;
     }
 }

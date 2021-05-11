@@ -17,13 +17,13 @@ class CreateDiscountCodesTable extends Migration
             $table->id();
             $table->bigInteger('supplier_id')->unsigned();
             $table->string('code');
-            $table->date('date');
-            $table->date('expired');
+            $table->date('start_date');
+            $table->date('end_date');
             $table->integer('amount');
             $table->integer('percent');
-            $table->integer('max');
-            $table->integer('from');
-            $table->integer('type');
+            $table->integer('from_price');
+            $table->integer('max_price');
+            $table->integer('isGlobal')->default(0);
 
             $table->foreign('supplier_id')->references('id')->on('suppliers');
             $table->timestamps();

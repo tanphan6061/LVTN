@@ -28,6 +28,6 @@ class Order extends Model
 
     public function products()
     {
-        return $this->hasManyThrough(Productclass, Order_detail::class);
+        return $this->hasManyThrough(Product::class, Order_detail::class);
     }
 }

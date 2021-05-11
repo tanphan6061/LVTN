@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\API\v1;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\AddressCreateRequest;
+use App\Http\Requests\Api\AddressCreateRequest;
 use App\Http\Resources\AddressR;
 use App\Models\Address;
 use Illuminate\Http\Request;
@@ -64,8 +64,7 @@ class AddressController extends ApiController
             }
         }
 
-        $this->user->addresses()->create(array_merge($validated, $ext_rules));
-        $data = AddressR::collection($this->user->addresses->sortByDesc('active'));
+        $data = $this->user->addresses()->create(array_merge($validated, $ext_rules));
         return $this->responded("Create address successfully", $data);
     }
 
@@ -121,8 +120,7 @@ class AddressController extends ApiController
                 }
             }
 
-            $address->update(array_merge($validated, $ext_rules));
-            $data = AddressR::collection($this->user->addresses->sortByDesc('active'));
+            $data = $address->update(array_merge($validated, $ext_rules));
             return $this->responded("Update address successfully", $data);
         }
 
@@ -140,8 +138,7 @@ class AddressController extends ApiController
     {
         if ($address->user->id == $this->user->id) {
             $address->delete();
-            $data = AddressR::collection($this->user->addresses->sortByDesc('active'));
-            return $this->responded("Remove address successfully", $data);
+            return $this->responded("Remove address successfully");
         }
 
         return $this->respondedError("Invalid");

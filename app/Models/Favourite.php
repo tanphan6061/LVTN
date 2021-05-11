@@ -2,13 +2,12 @@
 
 namespace App\Models;
 
-use App\Taka\Filters\Filterable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Review extends Model
+class Favourite extends Model
 {
-    use HasFactory, Filterable;
+    use HasFactory;
 
     protected $guarded = [];
 
@@ -22,4 +21,8 @@ class Review extends Model
         return $this->belongsTo(Product::class);
     }
 
+    public function scopeAvailable()
+    {
+        return $this->where('is_deleted', 0);
+    }
 }

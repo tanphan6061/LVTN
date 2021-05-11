@@ -28,6 +28,7 @@ class ProductR extends JsonResource
         $data['images'] = ProductImageR::collection($this->images);
         $data['rating_average'] = $this->reviews()->avg('star');
         $data['rating_count'] = $this->reviews()->count();
+        $data['favourited'] = $this->favourited;
         return $data;
     }
 }

@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Discount_code;
+use App\Models\Favourite;
 use App\Models\Product;
 use App\Models\Product_image;
 use App\Models\Supplier;
@@ -33,5 +34,6 @@ class DatabaseSeeder extends Seeder
         Product::factory()->count(50)->create();
         Discount_code::factory()->count(50)->create();
         Product_image::factory()->count(50)->create();
+        Favourite::factory()->count(30)->create();
     }
 }

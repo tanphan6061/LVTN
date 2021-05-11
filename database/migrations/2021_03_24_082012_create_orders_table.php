@@ -23,7 +23,6 @@ class CreateOrdersTable extends Migration
             $table->string('payment_type');
             $table->integer('total_price');
             $table->enum('status',['cancel','delivered','shipping']);
-
             $table->foreign('user_id')->references('id')->on('users');
             $table->foreign('discount_code_id')->references('id')->on('discount_codes');
             $table->timestamps();

@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\API\v1\AuthController;
+use App\Http\Controllers\API\v1\FavouriteController;
+use App\Http\Controllers\API\v1\ReviewController;
 use App\Http\Controllers\API\v1\UserController;
 use \App\Http\Controllers\API\v1\ProductController;
 use App\Http\Controllers\API\v1\AddressController;
@@ -25,10 +27,13 @@ Route::group(['prefix' => 'v1', 'middleware' => ['api', 'cors']], function () {
     route::post('refresh', [AuthController::class, 'refresh']);
     route::get('me', [AuthController::class, 'show']);
     route::put('me', [AuthController::class, 'update']);
+    route::get('me/reviews', [ProductController::class, 'auth']);
     route::resource('products', ProductController::class)->only(['show', 'index']);
-
+    route::resource('products/{product}/reviews', ReviewController::class);
 });
 
 Route::group(['prefix' => 'v1', 'middleware' => ['jwt.verify', 'api', 'cors']], function () {
-    route::resource('addresses', AddressController::class)->middleware('cors');
+    route::resource('me/favourites', FavouriteController::class)->only(['index', 'store']);
+    route::delete('me/favourites', [FavouriteController::class, 'destroy']);
+    route::resource('addresses', AddressController::class);
 });

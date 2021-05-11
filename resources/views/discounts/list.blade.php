@@ -9,7 +9,7 @@
         </ul>
         <div class="d-flex justify-content-between align-items-center">
             <h1>Danh sách mã giảm giá</h1>
-            <button class="btn btn-primary">Tạo mã giảm giá mới</button>
+            <a href="{{route('discounts.create')}}" class="btn btn-primary">Tạo mã giảm giá mới</a>
         </div>
     </div>
     <div class="table-responsive">
@@ -49,7 +49,7 @@
                         <td>{{ $discount_code->from_price }}</td>
                         <td>{{ $discount_code->max_price }}</td>
                         <td>
-                            <button class="btn btn-warning">Sửa</button>
+                            <a href="{{route('discounts.edit',$discount_code)}}" class="btn btn-warning">Sửa</a>
                             <button data-code="{{ $discount_code->code }}" data-id="{{ $discount_code->id }}"
                                 data-toggle="modal" data-target="#modalDelete"
                                 class="btn btn-danger delete-discount-code">Xóa</button>

@@ -30,8 +30,8 @@ class Discount_codeFactory extends Factory
             'end_date'=>'2021-03-09',
             'amount'=>rand(0,20),
             'percent'=>rand(0,20),
-            'from_price'=>rand(1000,90000),
-            'max_price'=>rand(1000,90000),
+            'from_price'=>rand(1,50)*1000,
+            'max_price'=>rand(1,90)*1000,
         ];
     }
 }

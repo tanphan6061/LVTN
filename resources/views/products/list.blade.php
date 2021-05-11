@@ -31,7 +31,6 @@
         <div class="d-flex justify-content-center mt-4">
             {!! $products->render('pagination::bootstrap-4') !!}
         </div>
-        {{-- {{ dd($products[0]) }} --}}
         <div>
 
             <script>

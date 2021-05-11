@@ -6,7 +6,6 @@ use App\Http\Controllers\API\v1\ReviewController;
 use App\Http\Controllers\API\v1\UserController;
 use \App\Http\Controllers\API\v1\ProductController;
 use App\Http\Controllers\API\v1\AddressController;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -27,9 +26,8 @@ Route::group(['prefix' => 'v1', 'middleware' => ['api', 'cors']], function () {
     route::post('refresh', [AuthController::class, 'refresh']);
     route::get('me', [AuthController::class, 'show']);
     route::put('me', [AuthController::class, 'update']);
-    route::get('me/reviews', [ProductController::class, 'auth']);
     route::resource('products', ProductController::class)->only(['show', 'index']);
-    route::resource('products/{product}/reviews', ReviewController::class);
+    route::resource('reviews', ReviewController::class);
 });
 
 Route::group(['prefix' => 'v1', 'middleware' => ['jwt.verify', 'api', 'cors']], function () {

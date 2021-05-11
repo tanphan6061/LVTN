@@ -1,12 +1,10 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Api;
 
-use Illuminate\Foundation\Http\FormRequest;
 
-class FavouriteCreateRequest extends ApiRequest
+class AddressCreateRequest extends ApiRequest
 {
-
 
     /**
      * Get the validation rules that apply to the request.
@@ -16,7 +14,9 @@ class FavouriteCreateRequest extends ApiRequest
     public function rules()
     {
         return [
-            'product_id' => 'required|numeric'
+            'name' => 'required',
+            'phone' => 'required',
+            'address' => 'required',
         ];
     }
 }

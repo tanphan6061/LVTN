@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\API\v1;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\AddressCreateRequest;
+use App\Http\Requests\Api\AddressCreateRequest;
 use App\Http\Resources\AddressR;
 use App\Models\Address;
 use Illuminate\Http\Request;

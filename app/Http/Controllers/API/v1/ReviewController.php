@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\ReviewR;
 use App\Models\Product;
 use App\Models\Review;
+use App\Taka\Filters\ReviewFilter;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -21,18 +22,16 @@ class ReviewController extends ApiController
     /**
      * Display a listing of the resource.
      *
-     * @param Product $product
+     * @param ReviewFilter $filter
      * @return \Illuminate\Http\Response
      */
-    public function index(Product $product)
+    public function index(ReviewFilter $filter)
     {
+        $reviews = Review::filter($filter)->get();
         $data = [
-            'count' => $product->reviews()->count(),
-            'rating_average' => (float)$product->reviews()->avg('star'),
-            'stars' => $product->stars,
-            'data' => ReviewR::collection($product->reviews),
+            'count' => $reviews->count(),
         ];
-        return $this->responded("get reviews successfully", $data);
+        return $this->responded('Get list reviews successfully', $data);
     }
 
     /**

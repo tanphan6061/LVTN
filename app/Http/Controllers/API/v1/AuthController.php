@@ -2,9 +2,8 @@
 
 namespace App\Http\Controllers\API\v1;
 
-use App\Http\Requests\AccountUpdateRequest;
-use App\Http\Requests\AuthorizationLoginRequest;
-use App\Http\Requests\AuthorizationRegisterRequest;
+use App\Http\Requests\Api\AccountUpdateRequest;
+use App\Http\Requests\Api\AuthorizationRegisterRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;

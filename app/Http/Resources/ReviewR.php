@@ -4,7 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class CategoryR extends JsonResource
+class ReviewR extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -14,9 +14,7 @@ class CategoryR extends JsonResource
      */
     public function toArray($request)
     {
-        $exceptions = [
-            'created_at', 'updated_at', 'is_deleted', 'parent_category_id '
-        ];
-        return collect($this->resource)->except($exceptions);
+        $exceptions = [];
+        return collect($this->resource)->only($exceptions);
     }
 }

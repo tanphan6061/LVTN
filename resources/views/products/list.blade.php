@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('content')
-    <div class="border-bottom">
+    <div class="border-bottom mb-5">
         <ul class="nav--header">
             <li><a href="#">Trang chủ</a></li>
             <li><span>Sản phẩm</span></li>
@@ -11,7 +11,7 @@
             <a href="{{ route('products.create') }}" class="btn btn-primary">Thêm sản phẩm mới</a>
         </div>
     </div>
-    <div class="mt-4">
+    <div>
         <div class="d-flex flex-wrap">
             @foreach ($products as $product)
                 <div onclick="changeRoute('{{ route('products.show', $product) }}')"
@@ -31,7 +31,6 @@
         <div class="d-flex justify-content-center mt-4">
             {!! $products->render('pagination::bootstrap-4') !!}
         </div>
-        {{-- {{ dd($products[0]) }} --}}
         <div>
 
             <script>

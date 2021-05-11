@@ -29,7 +29,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
             SupplierSeeder::class,
         ]);
-        Product::factory()->count(10)->create();
+        Product::factory()->count(50)->create();
         Product_image::factory()->count(50)->create();
     }
 }

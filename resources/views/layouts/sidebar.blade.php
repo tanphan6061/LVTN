@@ -55,9 +55,9 @@
                             <span class="fa fa-chevron-down"></span></a>
                         <ul class="nav child_menu">
                             <li>
-                                <a href="general_elements.html">Danh sách sản phẩm</a>
+                                <a href="{{route('products.index')}}">Danh sách sản phẩm</a>
                             </li>
-                            <li><a href="media_gallery.html">Tạo mới/ Đăng sản phẩm</a></li>
+                            <li><a href="{{route('products.create')}}">Tạo mới/ Đăng sản phẩm</a></li>
                             <li><a href="typography.html">Đánh giá sản phẩm</a></li>
                             <li><a href="icons.html">Báo cáo tồn kho</a></li>
                             <li><a href="glyphicons.html">Glyphicons</a></li>

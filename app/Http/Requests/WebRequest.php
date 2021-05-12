@@ -33,6 +33,7 @@ class WebRequest extends FormRequest
     public function attributes()
     {
         return [
+            // discount code
             'code' => 'Mã giảm giá',
             'amount' => 'Số lượng',
             'start_date' => 'Ngày bắt đầu',
@@ -40,6 +41,14 @@ class WebRequest extends FormRequest
             'percent' => 'Phần trăm giảm',
             'from_price' => 'Giá giảm từ (vnđ)',
             'max_price' => 'Giá giảm tối đa (vnđ)',
+
+            // supplier
+            'name' => 'Tên',
+            'email' => 'email',
+            'avatar' => 'Ảnh đại diện',
+            'phone' => 'Số điện thoại',
+            'password' => 'Mật khẩu',
+            'nameOfShop' => 'Tên của cửa hàng',
         ];
     }
 

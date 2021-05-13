@@ -33,5 +33,6 @@ Route::group(['prefix' => 'v1', 'middleware' => ['api', 'cors']], function () {
 Route::group(['prefix' => 'v1', 'middleware' => ['jwt.verify', 'api', 'cors']], function () {
     route::resource('me/favourites', FavouriteController::class)->only(['index', 'store']);
     route::delete('me/favourites', [FavouriteController::class, 'destroy']);
+    route::get('me/listWaitingForReview', [ReviewController::class, 'listWaitingForReview']);
     route::resource('addresses', AddressController::class);
 });

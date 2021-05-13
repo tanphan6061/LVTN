@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Taka\Filters;
 
 use App\Models\Brand;

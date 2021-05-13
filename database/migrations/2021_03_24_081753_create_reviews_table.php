@@ -18,7 +18,7 @@ class CreateReviewsTable extends Migration
             $table->bigInteger('product_id')->unsigned();
             $table->bigInteger('user_id')->unsigned();
             $table->integer('star');
-            $table->string('comment');
+            $table->string('comment',500);
             $table->boolean('is_deleted')->default(0);
             $table->foreign('product_id')->references('id')->on('products');
             $table->foreign('user_id')->references('id')->on('users');

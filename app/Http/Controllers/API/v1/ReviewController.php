@@ -3,6 +3,9 @@
 namespace App\Http\Controllers\API\v1;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Api\ReviewCreateRequest;
+use App\Http\Requests\Api\ReviewEditRequest;
+use App\Http\Resources\ProductR;
 use App\Http\Resources\ReviewR;
 use App\Models\Product;
 use App\Models\Review;
@@ -29,9 +32,22 @@ class ReviewController extends ApiController
     {
         $reviews = Review::filter($filter)->get();
         $data = [
+            'reviews' => ReviewR::collection($reviews),
             'count' => $reviews->count(),
         ];
+
         return $this->responded('Get list reviews successfully', $data);
+    }
+
+    public function listWaitingForReview()
+    {
+        $productIDsAvailable = $this->user->listWaitingForReview;
+        $products = Product::whereIn('id', $productIDsAvailable)->get();
+        $data = [
+            'products' => ProductR::collection($products),
+            'count' => $productIDsAvailable->count()
+        ];
+        return $this->responded('Get list waiting for review successfully', $data);
     }
 
     /**
@@ -50,9 +66,21 @@ class ReviewController extends ApiController
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(ReviewCreateRequest $request)
     {
-        //
+        $validated = $request->validated();
+        $product = Product::find($validated['product_id']);
+        $productIDsAvailable = $this->user->listWaitingForReview;
+        if ($product && $product->reviewed) {
+            return $this->respondedError("Ảo thật đấy", ['product' => 'Bạn đã đánh giá sản phẩm này rồi']);
+        }
+
+        if (!$productIDsAvailable->contains($product->id)) {
+            return $this->respondedError("Ảo thật đấy", ['product' => 'Bạn không thể đánh giá sản phẩm này']);
+        }
+
+        $data = $this->user->reviews()->create($validated);
+        return $this->responded("Create review successfully", $data);
     }
 
     /**
@@ -84,9 +112,16 @@ class ReviewController extends ApiController
      * @param \App\Models\Review $review
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Review $review)
+    public function update(ReviewEditRequest $request, Review $review)
     {
         //
+        $validated = $request->validated();
+        if ($review->user_id != $this->user->id) {
+            return $this->respondedError("Ảo thật đấy", ['auth' => 'Ảo thật đấy']);
+        }
+
+        $data = $review->update($validated);
+        return $this->responded("Update review successfully", $review);
     }
 
     /**

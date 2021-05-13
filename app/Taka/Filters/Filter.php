@@ -19,13 +19,15 @@ class Filter
     public function getMethods()
     {
         $class = new ReflectionClass(static::class);
-        return array_map(function ($method) use ($class) {
+        $methods = array_map(function ($method) use ($class) {
             return $method->class == $class->getName() ? $method->getName() : null;
         }, $class->getMethods());
+        return array_filter($methods);
     }
 
     public function getFilters()
     {
+        //dd($this->getMethods());
         return array_filter($this->request->only($this->getMethods()));
     }
 
@@ -33,6 +35,7 @@ class Filter
     public function apply(Builder $builder)
     {
         $states = $this->getFilters();
+        //dd($states);
         $this->builder = $builder;
         foreach ($states as $method_name => $value) {
             if (method_exists($this, $method_name)) {
@@ -43,6 +46,12 @@ class Filter
                 }
             }
         }
+
+        return $this->response();
+    }
+
+    protected function response()
+    {
         return $this->builder;
     }
 }

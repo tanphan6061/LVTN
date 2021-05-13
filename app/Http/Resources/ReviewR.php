@@ -14,9 +14,11 @@ class ReviewR extends JsonResource
      */
     public function toArray($request)
     {
-        $exceptions = [];
-        $data = collect($this->resource)->only($exceptions);
-        //$data['is_reviewed'] =
+        $exceptions = ['user_id', 'product_id', 'is_deleted'];
+        $data = collect($this->resource)->except($exceptions);
+        $data['profile'] = new ProfileR($this->user);
+        $data['product'] = new ProductR($this->product);
+        //$data['product'] = collect($this->product)->only('id','name','slug');
         return $data;
     }
 }

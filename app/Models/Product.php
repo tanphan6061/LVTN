@@ -3,13 +3,14 @@
 namespace App\Models;
 
 use App\Taka\Favourite\Favouritable;
+use App\Taka\Review\Reviewable;
 use App\Taka\Filters\Filterable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Product extends Model
 {
-    use HasFactory, Filterable, Favouritable;
+    use HasFactory, Filterable, Favouritable, Reviewable;
 
     protected $guarded = [];
 
@@ -48,25 +49,20 @@ class Product extends Model
         return $this->hasMany(Favourite::class);
     }
 
+    public function getCurrentPriceAttribute()
+    {
+        return $this->price * (100 - $this->discount);
+    }
+
     public function scopeAvailable()
     {
         return $this->where('is_deleted', 0);
     }
 
-
-
-    public function getStarsAttribute()
+    public function getIsBuyAttribute()
     {
-        return [
-            '1' => $this->reviews->where('star', 1)->count(),
-            '2' => $this->reviews->where('star', 2)->count(),
-            '3' => $this->reviews->where('star', 3)->count(),
-            '4' => $this->reviews->where('star', 4)->count(),
-            '5' => $this->reviews->where('star', 5)->count(),
-        ];
+        return false;
     }
-
-
 
 
 }

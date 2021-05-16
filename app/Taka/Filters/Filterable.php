@@ -9,12 +9,12 @@ trait Filterable
         return $filter->apply($query);
     }
 
-    public function scopeFilterQ()
+    public function scopeFilterQ($query)
     {
         $name = request()->get('q');
         if ($name) {
-            return $this->where('name', 'like', "%$name%");
+            return $query->where('name', 'like', "%$name%");
         }
-        return $this;
+        return $query;
     }
 }

@@ -24,8 +24,10 @@ class ProductController extends ApiController
      */
     public function index(ProductFilter $filter)
     {
-        //DB::enableQueryLog();
+        DB::enableQueryLog();
         $builder = Product::filterQ();
+        //dd($builder);
+
         $brands = $builder->getElementRelation('brand');
         $suppliers = $builder->getElementRelation('supplier');
         $products = new Paginate($builder->filter($filter));

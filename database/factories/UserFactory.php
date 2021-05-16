@@ -28,12 +28,8 @@ class UserFactory extends Factory
             'email' => $this->faker->unique()->safeEmail,
             'email_verified_at' => now(),
             'password' => bcrypt('Demopass69'), // password
-            //'phone' => $this->faker->e164PhoneNumber, // password
-            //'address' => $this->faker->address, // password
             'birthday' => '1999-01-01', // password
-            //'coin' => 0, // password
             'sex' => $sex[rand(0, count($sex) - 1)], // password
-            //'remember_token' => Str::random(10),
         ];
     }
 

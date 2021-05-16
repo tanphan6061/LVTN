@@ -8,4 +8,13 @@ trait Filterable
     {
         return $filter->apply($query);
     }
+
+    public function scopeFilterQ()
+    {
+        $name = request()->get('q');
+        if ($name) {
+            return $this->where('name', 'like', "%$name%");
+        }
+        return $this;
+    }
 }

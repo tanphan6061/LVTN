@@ -39,7 +39,7 @@ class ReviewController extends ApiController
         return $this->responded('Get list reviews successfully', $data);
     }
 
-    public function listWaitingForReview()
+    public function getListWaitingReview()
     {
         $productIDsAvailable = $this->user->listWaitingForReview;
         $products = Product::whereIn('id', $productIDsAvailable)->get();

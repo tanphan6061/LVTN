@@ -16,7 +16,7 @@ class AuthController extends ApiController
     public function __construct()
     {
         $this->user = Auth::guard('api')->user();
-        $this->middleware('auth:api')->except(['login','register']);
+        $this->middleware('auth:api')->except(['login', 'register']);
     }
 
     public function show()

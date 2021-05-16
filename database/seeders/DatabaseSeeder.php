@@ -26,14 +26,22 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         // \App\Models\User::factory(10)->create();
+        User::create([
+            'name' => 'Nguoi trong ao ho',
+            'email' => 'choeger@example.net',
+            'email_verified_at' => now(),
+            'password' => bcrypt('Demopass69'), // password
+            'birthday' => '1999-01-01', // password
+            'sex' => 'male', // password
+        ]);
         User::factory()->count(10)->create();
-        Brand::factory()->count(5)->create();
+        Brand::factory()->count(10)->create();
         Category::factory()->count(5)->create();
 
         $this->call([
             SupplierSeeder::class,
         ]);
-        Product::factory()->count(10)->create();
+        Product::factory()->count(45)->create();
         Product_image::factory()->count(50)->create();
         Favourite::factory()->count(30)->create();
         Review::factory()->count(60)->create();

@@ -2,10 +2,17 @@
 
 namespace App\Http\Controllers\API\v1;
 
+use App\Http\Resources\BrandR;
 use App\Http\Resources\ProductR;
+use App\Http\Resources\SearchResultR;
+use App\Http\Resources\SupplierR;
 use App\Models\Product;
 use App\Taka\Filters\ProductFilter;
+use App\Taka\Paginate\Paginate;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use function React\Promise\all;
+use function Symfony\Component\String\s;
 
 class ProductController extends ApiController
 {
@@ -17,15 +24,25 @@ class ProductController extends ApiController
      */
     public function index(ProductFilter $filter)
     {
-        $products = Product::filter($filter)->get();
-        //dd($products);
-        $data = [
-            'products' => ProductR::collection($products),
-            'count' => $products->count(),
+        //DB::enableQueryLog();
+        $builder = Product::filterQ();
+        $brands = $builder->getElementRelation('brand');
+        $suppliers = $builder->getElementRelation('supplier');
+        $products = new Paginate($builder->filter($filter));
+        $list_sort = [
+            ['key' => 'default', 'value' => 'Bán chạy'],
+            ['key' => 'new_products', 'value' => 'Hàng mới'],
+            ['key' => 'low_price', 'value' => 'Giá thấp'],
+            ['key' => 'high_price', 'value' => 'Giá cao'],
         ];
-        return $this->responded('Get list products successfully', $data);
-    }
+        //dd(DB::getQueryLog());
+        $listDataToArray = (object)[
+            'products' => $products, 'brands' => $brands,
+            'suppliers' => $suppliers, 'sort_settings' => collect($list_sort)
+        ];
 
+        return $this->responded('Get list products successfully', new SearchResultR($listDataToArray));
+    }
 
 
     /**
@@ -38,7 +55,4 @@ class ProductController extends ApiController
     {
         return $this->responded("Get product successfully", new ProductR($product));
     }
-
-
-
 }

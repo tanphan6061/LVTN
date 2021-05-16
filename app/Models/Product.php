@@ -24,11 +24,6 @@ class Product extends Model
         return $this->belongsTo(Supplier::class);
     }
 
-//    public function sub_category()
-//    {
-//        return $this->belongsTo(Sub_category::class);
-//    }
-
     public function category()
     {
         return $this->belongsTo(Category::class);
@@ -56,12 +51,14 @@ class Product extends Model
 
     public function scopeAvailable()
     {
-        return $this->where('is_deleted', 0);
+        return $this->whereRaw("`products`.is_deleted = 0");
     }
 
-    public function getIsBuyAttribute()
+    public function scopeGetElementRelation($query, $relation)
     {
-        return false;
+        return $query->with($relation)->get()->map(function ($product) use ($relation) {
+            return $product->$relation;
+        })->unique()->sortBy('id');
     }
 
 

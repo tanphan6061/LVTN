@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Scopes\ActiveScope;
 use App\Taka\Favourite\Favouritable;
 use App\Taka\Review\Reviewable;
 use App\Taka\Filters\Filterable;
@@ -23,11 +24,6 @@ class Product extends Model
     {
         return $this->belongsTo(Supplier::class);
     }
-
-//    public function sub_category()
-//    {
-//        return $this->belongsTo(Sub_category::class);
-//    }
 
     public function category()
     {
@@ -54,14 +50,16 @@ class Product extends Model
         return $this->price * (100 - $this->discount);
     }
 
-    public function scopeAvailable()
+    public function scopeGetElementRelation($query, $relation)
     {
-        return $this->where('is_deleted', 0);
+        return $query->with($relation)->get()->map(function ($product) use ($relation) {
+            return $product->$relation;
+        })->unique()->sortBy('id');
     }
 
-    public function getIsBuyAttribute()
+    protected static function booted()
     {
-        return false;
+        static::addGlobalScope(new ActiveScope);
     }
 
 

@@ -27,7 +27,7 @@ class ProductFactory extends Factory
     {
         return [
             'category_id' => rand(1, Category::count()),
-            'brand_id' => rand(1, Brand::count()),
+            'brand_id' => rand(1, Brand::count() - 4),
             'supplier_id' => rand(1, Supplier::count()),
             'name' => $this->faker->unique()->name,
             'slug' => Str::random(16),

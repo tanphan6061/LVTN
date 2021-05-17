@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\API\v1\AuthController;
 use App\Http\Controllers\API\v1\FavouriteController;
+use App\Http\Controllers\API\v1\OrderController;
 use App\Http\Controllers\API\v1\ReviewController;
 use App\Http\Controllers\API\v1\UserController;
 use \App\Http\Controllers\API\v1\ProductController;
@@ -33,6 +34,7 @@ Route::group(['prefix' => 'v1', 'middleware' => ['api', 'cors']], function () {
 Route::group(['prefix' => 'v1', 'middleware' => ['jwt.verify', 'api', 'cors']], function () {
     route::resource('addresses', AddressController::class)->only(['index', 'destroy', 'store', 'update']);
     route::resource('me/favourites', FavouriteController::class)->only(['index', 'store', 'destroy']);
+    route::resource('me/orders', OrderController::class)->only(['index', 'show']);
     route::delete('me/favourites', [FavouriteController::class, 'destroy']);
     route::get('me/getListWaitingReview', [ReviewController::class, 'getListWaitingReview']);
 });

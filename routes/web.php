@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\DiscountController;
 use App\Http\Controllers\ProductController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -16,11 +17,12 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+   return redirect()->route('login');
 });
 
 Auth::routes();
 Route::group(['prefix' => '/admin', 'middleware' => ['auth']], function () {
     Route::resource('products', ProductController::class);
+    Route::resource('discounts', DiscountController::class);
 });
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

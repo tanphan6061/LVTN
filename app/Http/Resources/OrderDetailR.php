@@ -19,12 +19,10 @@ class OrderDetailR extends JsonResource
             return $product->name;
         })->implode(', ');
         $data['items'] = ProductR::collection($this->products);
-        $data['shipping_address'] = [];
-        $data['status_histories'] = [];
-        $data['price_summary'] = [];
+        $data['shipping_address'] = new ShippingAddressR($this->shipping_address);
+        //$data['status_histories'] = [];
+        //$data['price_summary'] = [];
         $data['coupon_code'] = [];
-        $data['payment'] = [];
-        $data['notification'] = [];
         return $data;
     }
 }

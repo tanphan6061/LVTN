@@ -25,10 +25,11 @@ class OrderFactory extends Factory
         $user = User::find(1);
         return [
             'user_id' => 1,
-            'phone' => '0358771364',
-            'address' => $this->faker->address,
+            'supplier_id' => 1,
             'payment_type' => 'COD',
-            'total_price' => rand(1000000, 100000000),
+            'price' => rand(1000000, 100000000),
+            'discount' => 0,
+            'grand_total' => rand(1000000, 100000000),
             'status' => 'delivered',
         ];
     }

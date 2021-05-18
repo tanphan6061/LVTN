@@ -67,7 +67,7 @@ class OrderController extends ApiController
      */
     public function show(Order $order)
     {
-        //
+
         if ($order->user_id != $this->user->id) {
             return $this->respondedError("Not authorization");
         }

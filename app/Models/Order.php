@@ -33,7 +33,7 @@ class Order extends Model
 
     public function shipping_address()
     {
-        $this->hasOne(Shipping_address::class);
+        return $this->hasOne(Shipping_address::class);
     }
 
 

@@ -9,6 +9,7 @@ class Shipping_address extends Model
 {
     use HasFactory;
 
+    protected $table = "shipping_addresses";
     protected $guarded = [];
 
     public function order()

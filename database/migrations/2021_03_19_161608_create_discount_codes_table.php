@@ -24,6 +24,7 @@ class CreateDiscountCodesTable extends Migration
             $table->integer('from_price');
             $table->integer('max_price');
             $table->integer('isGlobal')->default(0);
+
             $table->foreign('supplier_id')->references('id')->on('suppliers');
             $table->timestamps();
         });

@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Brand;
 use App\Models\Category;
+use App\Models\Discount_code;
 use App\Models\Favourite;
 use App\Models\Order;
 use App\Models\Order_detail;
@@ -42,7 +43,9 @@ class DatabaseSeeder extends Seeder
         $this->call([
             SupplierSeeder::class,
         ]);
-        Product::factory()->count(45)->create();
+
+        Product::factory()->count(50)->create();
+        Discount_code::factory()->count(50)->create();
         Product_image::factory()->count(50)->create();
         Favourite::factory()->count(30)->create();
         Review::factory()->count(60)->create();

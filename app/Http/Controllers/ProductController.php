@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\Request;
@@ -18,6 +19,8 @@ class ProductController extends Controller
     public function index()
     {
         //
+        $products = Auth::user()->products()->paginate(6);
+        return view('products.list',compact('products'));
     }
 
     /**
@@ -29,8 +32,8 @@ class ProductController extends Controller
     {
         //
         $categories = Category::all();
-        dd($categories[0]->sub_categories);
-        return view('products.create');
+        $brands = Brand::all();
+        return view('products.create', compact('categories', 'brands'));
     }
 
     /**
@@ -41,30 +44,40 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
         $data = $this->validate(
             $request,
             [
                 'name' => 'required',
-                'slug' => [
-                    'regex:/^[a-z0-9-]+$/',
-                    'unique' => Rule::unique('events')->where(function ($query) {
-                        return $query->where('organizer_id', Auth::user()->id);
-                    })
-                ],
+                // 'slug' => [
+                //     'regex:/^[a-z0-9-]+$/',
+                //     'unique' => Rule::unique('events')->where(function ($query) {
+                //         return $query->where('organizer_id', Auth::user()->id);
+                //     })
+                // ],
                 'price' => 'required|numeric|min:0',
                 'amount' => 'required|numeric|min:0',
                 'description' => 'required',
-                'detail' => 'required',
+                // 'detail' => 'required',
                 'discount' => 'required|numeric|min:0',
-                'sub_category_id' => 'required|exists:sub_categories,id',
+                'category_id' => 'required|exists:categories,id',
                 'brand_id' => 'required|exists:brands,id',
             ],
             [
-                'slug.regex' => "Slug must not be empty and only contain a-z, 0-9 and '-'",
-                'slug.unique' => 'Slug is already used'
+                'name.required' => "Tên sản phẩm là bắt buộc",
+                'amount.required' => "Số lượng sản phẩm là bắt buộc",
+                'description.required' => "Mô tả là bắt buộc",
+                'discount.required' => "Số tiền (%) giảm là bắt buộc",
+                'category_id.required' => "Loại phẩm là bắt buộc",
+                'brand_id.required' => "Nhãn hiệu là bắt buộc",
+                'price.required' => 'Giá sản phẩm là bắt buộc',
+                'price.numeric' => 'Giá sản phẩm phải là số',
+                'price.min' => 'Giá sản phẩm tối thiểu 0 vnđ',
             ]
         );
+        dd($data, Auth::user()->products);
+        //   $event = Auth::user()->events()->create($data);
+        // return redirect()->route('events.show', $event)->with('success', 'Event successfully created');
     }
 
     /**

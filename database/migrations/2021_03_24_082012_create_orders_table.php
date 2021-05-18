@@ -16,15 +16,14 @@ class CreateOrdersTable extends Migration
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('user_id')->unsigned();
-            //$table->bigInteger('discount_code_id')->unsigned();
-            $table->string('phone');
-            $table->string('address');
-            //$table->dateTime('datetime');
+            //$table->bigInteger('shipping_address_id')->unsigned();
             $table->string('payment_type');
-            $table->integer('total_price');
+            $table->integer('subtotal');
+            $table->integer('discount_amount')->default(0);
+            $table->integer('grand_total');
             $table->enum('status', ['cancel', 'delivered', 'shipping']);
             $table->foreign('user_id')->references('id')->on('users');
-            //$table->foreign('discount_code_id')->references('id')->on('discount_codes');
+            //$table->foreign('shipping_address_id')->references('id')->on('shipping_addresses');
             $table->timestamps();
         });
     }

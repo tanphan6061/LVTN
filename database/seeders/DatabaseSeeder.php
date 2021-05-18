@@ -10,6 +10,7 @@ use App\Models\Order_detail;
 use App\Models\Product;
 use App\Models\Product_image;
 use App\Models\Review;
+use App\Models\Shipping_address;
 use App\Models\Supplier;
 use App\Models\User;
 use Illuminate\Database\Seeder;
@@ -45,6 +46,7 @@ class DatabaseSeeder extends Seeder
         Product_image::factory()->count(50)->create();
         Favourite::factory()->count(30)->create();
         Review::factory()->count(60)->create();
+        Shipping_address::factory()->count(1)->create();
         Order::factory()->count(1)->create();
         Order_detail::factory()->count(5)->create();
     }

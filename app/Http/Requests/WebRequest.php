@@ -49,6 +49,7 @@ class WebRequest extends FormRequest
             'phone' => 'Số điện thoại',
             'password' => 'Mật khẩu',
             'nameOfShop' => 'Tên của cửa hàng',
+            'address'=> 'Địa chỉ'
         ];
     }
 

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\DiscountController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\SupplierController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -24,5 +25,10 @@ Auth::routes();
 Route::group(['prefix' => '/admin', 'middleware' => ['auth']], function () {
     Route::resource('products', ProductController::class);
     Route::resource('discounts', DiscountController::class);
+    // suppliers
+    Route::get('edit-profile', [SupplierController::class, 'edit'])->name('suppliers.edit');
+    Route::put('edit-profile', [SupplierController::class, 'update'])->name('suppliers.update');
+    Route::get('change-password', [SupplierController::class, 'changePassword'])->name('suppliers.changePassword');
+    // Route::put('change-profile', [SupplierController::class, 'update'])->name('suppliers.update');
 });
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

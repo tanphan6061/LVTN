@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Supplier;
 use Illuminate\Http\Request;
 
-class Supplier extends Controller
+class SupplierController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -55,9 +55,10 @@ class Supplier extends Controller
      * @param  \App\Models\Supplier  $supplier
      * @return \Illuminate\Http\Response
      */
-    public function edit(Supplier $supplier)
+    public function edit()
     {
         //
+        return view('suppliers.edit');
     }
 
     /**

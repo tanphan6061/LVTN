@@ -27,7 +27,8 @@ class SupplierRequest extends WebRequest
             'email'=>'required|regex:/^([a-z0-9\+_\-]+)(\.[a-z0-9\+_\-]+)*@([a-z0-9\-]+\.)+[a-z]{2,6}$/ix',
             'avatar'=>'required',
             'phone'=>'required|regex:/(84|0[3|5|7|8|9])+([0-9]{8})\b/g',
-            'nameOfShop' =>'required'
+            'nameOfShop' =>'required',
+            'address'=>'required'
         ];
     }
 }

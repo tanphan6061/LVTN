@@ -20,7 +20,7 @@ class SupplierSeeder extends Seeder
                 'email' => 'admin@gmail.com',
                 'password' => bcrypt('12345'),
                 'phone' => '0923123123',
-                'avatar' => 'https://cdn2.vectorstock.com/i/thumb-large/23/81/default-avatar-profile-icon-vector-18942381.jpg',
+                'avatar' => 'https://clinicforspecialchildren.org/wp-content/uploads/2016/08/avatar-placeholder.gif',
                 'role' => 'admin'
             ]
         );
@@ -33,7 +33,7 @@ class SupplierSeeder extends Seeder
                 'nameOfShop' => 'Shop cua tao',
                 'slug' => 'shop-cua-tao',
                 'address' => '70/10 Tô Ký, quận 12, tp. HCM',
-                'avatar' => 'https://cdn1.vectorstock.com/i/thumb-large/82/55/anonymous-user-circle-icon-vector-18958255.jpg',
+                'avatar' => 'https://clinicforspecialchildren.org/wp-content/uploads/2016/08/avatar-placeholder.gif',
             ]
         );
     }

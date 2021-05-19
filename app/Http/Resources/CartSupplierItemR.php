@@ -4,7 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class SupplierR extends JsonResource
+class CartSupplierItemR extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -14,7 +14,8 @@ class SupplierR extends JsonResource
      */
     public function toArray($request)
     {
-        $exceptions = ['email','updated_at'];
-        return collect($this->resource)->except($exceptions);
+        $data = collect($this->resource)->except(['items']);
+        $data['products'] = CartProductItemR::collection($this['items']);
+        return $data;
     }
 }

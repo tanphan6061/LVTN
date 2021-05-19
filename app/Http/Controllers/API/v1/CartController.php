@@ -3,7 +3,14 @@
 namespace App\Http\Controllers\API\v1;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Api\CartCreateRequest;
+use App\Http\Requests\Api\CartEditRequest;
+use App\Http\Resources\CartItemR;
+use App\Http\Resources\CartProductItemR;
+use App\Http\Resources\CartSupplierItemR;
+use App\Http\Resources\SupplierR;
 use App\Models\Cart;
+use App\Models\Product;
 use Illuminate\Http\Request;
 
 class CartController extends ApiController
@@ -20,68 +27,83 @@ class CartController extends ApiController
      */
     public function index()
     {
-        //return
+        $cart_items = $this->user->carts;
+        $products = $suppliers = $cart_items->map(function ($item) {
+            $product = $item->product;
+            $product->quantity = $item->amount;
+            return $product;
+        });
+
+        $suppliers = $cart_items->map(function ($item) use ($products) {
+            $supplier = $item->product->supplier;
+            $supplier->items = $products->filter(function ($product) use ($supplier) {
+                return $product->supplier->id == $supplier->id;
+            });
+            return collect($supplier);
+        })->unique();
+
+
+        $data = [
+            'suppliers' => CartSupplierItemR::collection($suppliers),
+            'total_count' => $cart_items->sum('amount')
+        ];
+        return $this->responded("Get cart successfully", $data);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(CartCreateRequest $request)
     {
+        $validated = $request->validated();
+        $cart_item = $this->user->carts;
+        if (!$product = Product::find($validated['product_id'])) {
+            return $this->respondedError('product_id invalid');
+        }
 
-    }
+        if ($item = $cart_item->where('product_id', $validated['product_id'])->first()) {
+            $item->amount += $validated['amount'];
+            $item->save();
+            return $this->responded("Update quality cart item successfully", $item);
+        }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Cart  $cart
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Cart $cart)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Cart  $cart
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Cart $cart)
-    {
-        //
+        $data = $this->user->carts()->create($validated);
+        return $this->responded("Create cart item successfully", $data);
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Cart  $cart
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Models\Cart $cart
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Cart $cart)
+    public function update(CartEditRequest $request, Cart $cart)
     {
-        //
+        $validated = $request->validated();
+        if ($this->user->id != $cart->user_id) {
+            return $this->respondedError("Invalid");
+        }
+
+        if ($validated['amount']) {
+            $cart->update($validated);
+            return $this->responded("Update cart item successfully", $cart);
+        }
+
+        $cart->is_deleted = 1;
+        $cart->save();
+        return $this->responded("Update cart item successfully");
+
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Cart  $cart
+     * @param \App\Models\Cart $cart
      * @return \Illuminate\Http\Response
      */
     public function destroy(Cart $cart)

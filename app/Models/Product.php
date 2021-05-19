@@ -45,6 +45,11 @@ class Product extends Model
         return $this->hasMany(Favourite::class);
     }
 
+    public function carts()
+    {
+        return $this->hasMany(Cart::class);
+    }
+
     public function getCurrentPriceAttribute()
     {
         return $this->price * (100 - $this->discount);

@@ -40,6 +40,7 @@ class WebRequest extends FormRequest
             'percent' => 'Phần trăm giảm',
             'from_price' => 'Giá giảm từ (vnđ)',
             'max_price' => 'Giá giảm tối đa (vnđ)',
+            'category_id' => 'Loại sản phẩm'
         ];
     }
 

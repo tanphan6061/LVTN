@@ -16,6 +16,7 @@ class CreateDiscountCodesTable extends Migration
         Schema::create('discount_codes', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('supplier_id')->unsigned();
+            $table->bigInteger('category_id')->unsigned()->nullable();
             $table->string('code');
             $table->date('start_date');
             $table->date('end_date');
@@ -23,9 +24,11 @@ class CreateDiscountCodesTable extends Migration
             $table->integer('percent');
             $table->integer('from_price');
             $table->integer('max_price');
-            $table->integer('isGlobal')->default(0);
+            $table->integer('is_global')->default(0);
+            $table->boolean('is_deleted')->default(0);
 
             $table->foreign('supplier_id')->references('id')->on('suppliers');
+            $table->foreign('category_id')->references('id')->on('categories');
             $table->timestamps();
         });
     }

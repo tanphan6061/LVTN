@@ -2,14 +2,16 @@
 
 namespace App\Models;
 
+use App\Scopes\ActiveScope;
 use App\Taka\Favourite\Favouritable;
+use App\Taka\Review\Reviewable;
 use App\Taka\Filters\Filterable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Product extends Model
 {
-    use HasFactory, Filterable, Favouritable;
+    use HasFactory, Filterable, Favouritable, Reviewable;
 
     protected $guarded = [];
 
@@ -22,11 +24,6 @@ class Product extends Model
     {
         return $this->belongsTo(Supplier::class);
     }
-
-//    public function sub_category()
-//    {
-//        return $this->belongsTo(Sub_category::class);
-//    }
 
     public function category()
     {
@@ -48,25 +45,22 @@ class Product extends Model
         return $this->hasMany(Favourite::class);
     }
 
-    public function scopeAvailable()
+    public function getCurrentPriceAttribute()
     {
-        return $this->where('is_deleted', 0);
+        return $this->price * (100 - $this->discount);
     }
 
-
-
-    public function getStarsAttribute()
+    public function scopeGetElementRelation($query, $relation)
     {
-        return [
-            '1' => $this->reviews->where('star', 1)->count(),
-            '2' => $this->reviews->where('star', 2)->count(),
-            '3' => $this->reviews->where('star', 3)->count(),
-            '4' => $this->reviews->where('star', 4)->count(),
-            '5' => $this->reviews->where('star', 5)->count(),
-        ];
+        return $query->with($relation)->get()->map(function ($product) use ($relation) {
+            return $product->$relation;
+        })->unique()->sortBy('id');
     }
 
-
+    protected static function booted()
+    {
+        static::addGlobalScope(new ActiveScope);
+    }
 
 
 }

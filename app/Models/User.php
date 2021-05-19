@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Taka\Review\Reviewable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -11,7 +12,7 @@ use function Symfony\Component\Translation\t;
 
 class User extends Authenticatable implements JWTSubject
 {
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable, Reviewable;
 
     /**
      * The attributes that are mass assignable.
@@ -67,6 +68,11 @@ class User extends Authenticatable implements JWTSubject
     public function orders()
     {
         return $this->hasMany(Order::class);
+    }
+
+    public function order_details()
+    {
+        return $this->hasManyThrough(Order_detail::class, Order::class);
     }
 
 

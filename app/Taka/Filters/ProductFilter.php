@@ -3,27 +3,33 @@
 namespace App\Taka\Filters;
 
 use App\Models\Brand;
+use App\Models\Product;
 use App\Models\Supplier;
+use Illuminate\Support\Facades\DB;
 
 class ProductFilter extends Filter
 {
-    public function supplier($slug)
+
+
+//    public function q($name)
+//    {
+//        return $this->builder->where('name', 'like', "%$name%");
+//    }
+
+    public function suppliers($list)
     {
-        $supplier = Supplier::where('slug', $slug)->first();
-        $productIDs = ($supplier) ? $supplier->products->pluck('id') : [];
-        return $this->builder->whereIn('id', $productIDs);
+        $ar_suppliers = explode(",", $list);
+        $supplierIDs = Brand::getAvailable()->whereIn('id', $ar_suppliers)->pluck('id') ?? [];
+        return $this->builder->whereIn('brand_id', $supplierIDs);
     }
 
-    public function name($name)
+    public function brands($list)
     {
-        return $this->builder->where('name', 'like', "%$name%");
-    }
-
-    public function brand($slug)
-    {
-        $brand = Brand::where('slug', $slug)->first();
-        $productIDs = ($brand) ? $brand->products->pluck('id') : [];
-        return $this->builder->whereIn('id', $productIDs);
+        $ar_brands = explode(",", $list);
+        /*$brand = Brand::where('slug', $slug)->first();
+        $productIDs = ($brand) ? $brand->products->pluck('id') : [];*/
+        $brandIDs = Brand::getAvailable()->whereIn('id', $ar_brands)->pluck('id') ?? [];
+        return $this->builder->whereIn('brand_id', $brandIDs);
     }
 
     public function price($range_string)
@@ -46,6 +52,38 @@ class ProductFilter extends Filter
             $builder = $builder->where('price', '<=', $range[1]);
         }
 
+        return $builder;
+    }
+
+    public function stars($list)
+    {
+        $arr_star = explode(",", $list);
+        return $this->builder
+            ->join('reviews', 'products.id', '=', 'reviews.product_id')
+            ->select([
+                'products.*',
+            ])
+            ->groupByRaw('name')
+            ->havingRaw('AVG(reviews.star) >= ?', [min($arr_star)]);
+        //return $this->builder;
+    }
+
+    public function sortBy($type = "default")
+    {
+        switch ($type) {
+            case "new_products":
+                $builder = $this->builder->orderBy('products.updated_at', 'desc');
+                break;
+            case "low_price":
+                $builder = $this->builder->orderBy('price');
+                break;
+            case "high_price":
+                $builder = $this->builder->orderByDesc('price');
+                break;
+            default:
+                $builder = $this->builder;
+        }
+        //dd($builder);
         return $builder;
     }
 }

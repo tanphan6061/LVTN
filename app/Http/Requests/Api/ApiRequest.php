@@ -42,6 +42,7 @@ class ApiRequest extends FormRequest
             'email' => 'Email',
             'old_password' => 'Mật khẩu cũ',
             'new_password' => 'Mật khẩu mới',
+            'comment' => 'Bình luận'
         ];
     }
 

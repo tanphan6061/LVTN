@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\DiscountRequest;
+use App\Models\Category;
 use App\Models\Discount_code;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
@@ -16,7 +17,7 @@ class DiscountController extends Controller
      */
     public function index()
     {
-        $discount_codes = Auth::user()->discount_codes()->orderBy('created_at','DESC')->paginate(10);
+        $discount_codes = Auth::user()->discount_codes()->where('is_deleted', false)->orderBy('created_at', 'DESC')->paginate(10);
         return view('discounts.list', compact('discount_codes'));
     }
 
@@ -28,7 +29,8 @@ class DiscountController extends Controller
     public function create()
     {
         //
-        return view('discounts.create');
+        $categories = Category::where('is_deleted', false)->where('parent_category_id', '!=', null)->get();
+        return view('discounts.create',compact('categories'));
     }
 
     /**
@@ -40,7 +42,9 @@ class DiscountController extends Controller
     public function store(DiscountRequest $request)
     {
         $data = $request->validate(
-            array_merge($request->rules(), [
+            array_merge(
+                $request->rules(),
+                [
                     'code' => [
                         'required',
                         'unique:discount_codes'
@@ -77,7 +81,8 @@ class DiscountController extends Controller
         if (!$discount_code)
             return abort('404');
 
-        return view('discounts.edit', compact('discount_code'));
+        $categories = Category::where('is_deleted', false)->where('parent_category_id', '!=', null)->get();
+        return view('discounts.edit', compact('discount_code','categories'));
         //
     }
 
@@ -94,9 +99,10 @@ class DiscountController extends Controller
         $discount_code = Discount_code::find($id);
         if (!$discount_code)
             return abort('404');
-
         $data = $request->validate(
-            array_merge($request->rules(), [
+            array_merge(
+                $request->rules(),
+                [
                     'code' => [
                         'required',
                         'unique' => Rule::unique('discount_codes')->where(function ($query) use ($discount_code) {
@@ -108,6 +114,7 @@ class DiscountController extends Controller
             $request->messages(),
             $request->attributes()
         );
+
         $discount_code->update($data);
         return redirect()->route('discounts.index')->with('success', 'Cập nhật mã giảm giá thành công');
     }
@@ -124,7 +131,7 @@ class DiscountController extends Controller
         $discount_code = Discount_code::find($id);
         if (!$discount_code)
             return abort('404');
-        $discount_code->delete();
+        $discount_code->update(['is_deleted' => true]);
         return redirect()->back()->with('success', 'Xóa mã giảm giá thành công');;
     }
 }

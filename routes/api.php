@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\API\v1\AuthController;
 use App\Http\Controllers\API\v1\FavouriteController;
+use App\Http\Controllers\API\v1\OrderController;
 use App\Http\Controllers\API\v1\ReviewController;
 use App\Http\Controllers\API\v1\UserController;
 use \App\Http\Controllers\API\v1\ProductController;
@@ -26,12 +27,14 @@ Route::group(['prefix' => 'v1', 'middleware' => ['api', 'cors']], function () {
     route::post('refresh', [AuthController::class, 'refresh']);
     route::get('me', [AuthController::class, 'show']);
     route::put('me', [AuthController::class, 'update']);
-    route::resource('products', ProductController::class)->only(['show', 'index']);
-    route::resource('reviews', ReviewController::class);
+    route::resource('products', ProductController::class)->only(['index', 'show']);
+    route::resource('reviews', ReviewController::class)->only(['index', 'store', 'update']);
 });
 
 Route::group(['prefix' => 'v1', 'middleware' => ['jwt.verify', 'api', 'cors']], function () {
-    route::resource('me/favourites', FavouriteController::class)->only(['index', 'store']);
+    route::resource('addresses', AddressController::class)->only(['index', 'destroy', 'store', 'update']);
+    route::resource('me/favourites', FavouriteController::class)->only(['index', 'store', 'destroy']);
+    route::resource('me/orders', OrderController::class)->only(['index', 'show']);
     route::delete('me/favourites', [FavouriteController::class, 'destroy']);
-    route::resource('addresses', AddressController::class);
+    route::get('me/getListWaitingReview', [ReviewController::class, 'getListWaitingReview']);
 });

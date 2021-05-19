@@ -14,16 +14,33 @@
     <div>
         <form method="post" action="{{route('discounts.store')}}">
             @csrf
-            <div class="form-group mt-4">
-                <label for="code"><span class="text-danger">*</span> Mã giảm giá:</label>
-                <input type="code" name="code" value="{{old('code') }}"
-                       class="form-control {{ $errors->has('code') ? 'is-invalid' : '' }}"
-                       placeholder="Nhập mã giảm giá" id="code">
-                @if ($errors->has('code'))
-                    <div class="invalid-feedback">
-                        {{ $errors->first('code') }}
-                    </div>
-                @endif
+            <div class="row mt-4 ">
+                <div class="form-group col-6">
+                    <label for="code"><span class="text-danger">*</span> Mã giảm giá:</label>
+                    <input name="code" value="{{old('code')}}"
+                           type="text"
+                           class="form-control {{ $errors->has('code') ? 'is-invalid' : '' }}"
+                           placeholder="Nhập ngày bắt đầu" id="code">
+                    @if ($errors->has('code'))
+                        <div class="invalid-feedback">
+                            {{ $errors->first('code') }}
+                        </div>
+                    @endif
+                </div>
+                <div class="form-group col-6">
+                    <label for="category_id"><span class="text-danger">*</span> Áp dụng cho loại sản phẩm:</label>
+                    <select class="form-control {{ $errors->has('category_id') ? 'is-invalid' : '' }}" name="category_id" id="category_id">
+                        <option value="">Tất cả</option>
+                        @foreach($categories as $category)
+                        <option value={{$category->id}} {{ old('category_id') == $category->id ? 'selected' : '' }}>{{$category->name}}</option>
+                        @endforeach
+                    </select>
+                    @if ($errors->has('category_id'))
+                        <div class="invalid-feedback">
+                            {{ $errors->first('category_id') }}
+                        </div>
+                    @endif
+                </div>
             </div>
             <div class="row mt-4 ">
                 <div class="form-group col-6">

@@ -23,7 +23,8 @@ class DiscountRequest extends WebRequest
             'end_date'=>'required|date|after:start_date',
             'percent'=>'required|numeric|min:0',
             'from_price'=>'required|numeric|min:1000',
-            'max_price'=>'required|numeric|min:1000'
+            'max_price'=>'required|numeric|min:1000',
+            'category_id'=>'nullable|exists:categories,id'
         ];
     }
 }

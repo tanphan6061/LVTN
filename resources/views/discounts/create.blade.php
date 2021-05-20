@@ -4,11 +4,11 @@
     <div class="border-bottom mb-5">
         <ul class="nav--header">
             <li><a href="#">Trang chủ</a></li>
-            <li><span>Mã giảm giá</span></li>
-            <li><span>Thêm mã giảm giá</span></li>
+            <li><a href="{{route('discounts.index')}}">Mã giảm giá</a></li>
+            <li><span>Tạo mã giảm giá mới</span></li>
         </ul>
         <div class="d-flex justify-content-between align-items-center">
-            <h1>Thêm giảm giá</h1>`
+            <h1>Tạo mã giảm giá mới</h1>`
         </div>
     </div>
     <div>
@@ -122,6 +122,7 @@
                 </div>
             </div>
             <div class="d-flex justify-content-end">
+                <a href={{route('discounts.index')}} class="btn btn-secondary  mt-3 px-5">Huỷ</a>
                 <button class="btn btn-primary mt-3 px-5">Thêm</button>
             </div>
         </form>

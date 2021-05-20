@@ -33,6 +33,7 @@ class WebRequest extends FormRequest
     public function attributes()
     {
         return [
+            // discount code
             'code' => 'Mã giảm giá',
             'amount' => 'Số lượng',
             'start_date' => 'Ngày bắt đầu',
@@ -40,7 +41,19 @@ class WebRequest extends FormRequest
             'percent' => 'Phần trăm giảm',
             'from_price' => 'Giá giảm từ (vnđ)',
             'max_price' => 'Giá giảm tối đa (vnđ)',
-            'category_id' => 'Loại sản phẩm'
+            'category_id' => 'Loại sản phẩm',
+
+            // supplier
+            'name' => 'Tên',
+            'email' => 'Địa chỉ email',
+            'avatar' => 'Ảnh đại diện',
+            'phone' => 'Số điện thoại',
+            'password' => 'Mật khẩu',
+            'nameOfShop' => 'Tên của cửa hàng',
+            'address'=> 'Địa chỉ',
+            'password'=>'Mật khẩu',
+            'new_password'=>'Mật khẩu mới'
+
         ];
     }
 
@@ -57,7 +70,10 @@ class WebRequest extends FormRequest
             'unique' => ':attribute đã tồn tại trên hệ thống.',
             'in' => ':attribute không hợp lệ.',
             'numeric' => ':attribute phải là một số.',
-            'after'=>':attribute phải sau ngày bắt đầu.'
+            'after'=>':attribute phải sau ngày bắt đầu.',
+            'regex'=>':attribute định dạng không hợp lệ.',
+            'min'=>':attribute tối thiểu :min kí tự.',
+            'max'=>':attribute tối đa :max kí tự.',
         ];
     }
 }

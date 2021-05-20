@@ -43,3 +43,8 @@
     object-fit: cover;
     pointer-events: none;
 }
+.edit-avatar{
+    width: 230px;
+    height: 230px;
+    display:block;object-fit: cover;
+}

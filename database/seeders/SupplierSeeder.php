@@ -20,7 +20,6 @@ class SupplierSeeder extends Seeder
                 'email' => 'admin@gmail.com',
                 'password' => bcrypt('12345'),
                 'phone' => '0923123123',
-                'avatar' => 'https://clinicforspecialchildren.org/wp-content/uploads/2016/08/avatar-placeholder.gif',
                 'role' => 'admin'
             ]
         );
@@ -33,7 +32,6 @@ class SupplierSeeder extends Seeder
                 'nameOfShop' => 'Shop cua tao',
                 'slug' => 'shop-cua-tao',
                 'address' => '70/10 Tô Ký, quận 12, tp. HCM',
-                'avatar' => 'https://clinicforspecialchildren.org/wp-content/uploads/2016/08/avatar-placeholder.gif',
             ]
         );
     }

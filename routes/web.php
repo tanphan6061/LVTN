@@ -26,9 +26,10 @@ Route::group(['prefix' => '/admin', 'middleware' => ['auth']], function () {
     Route::resource('products', ProductController::class);
     Route::resource('discounts', DiscountController::class);
     // suppliers
+    Route::get('view-profile', [SupplierController::class, 'index'])->name('suppliers.index');
     Route::get('edit-profile', [SupplierController::class, 'edit'])->name('suppliers.edit');
     Route::put('edit-profile', [SupplierController::class, 'update'])->name('suppliers.update');
     Route::get('change-password', [SupplierController::class, 'changePassword'])->name('suppliers.changePassword');
-    // Route::put('change-profile', [SupplierController::class, 'update'])->name('suppliers.update');
+    Route::post('change-password', [SupplierController::class, 'updatePassword'])->name('suppliers.updatePassword');
 });
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

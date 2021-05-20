@@ -13,16 +13,6 @@
         </div>
     </div>
     <div class="table-responsive">
-        @if (session('success'))
-            <?php if (session('success')) {
-            echo '<script>
-                swal("' .
-                        session('success').
-                        '", "", "success");
-
-            </script>';
-            } ?>
-        @endif
         <table class="table table-striped table-hover table-bordered">
             <thead>
                 <tr>

@@ -9,7 +9,7 @@
         <!-- menu profile quick info -->
         <div class="profile clearfix">
             <div class="profile_pic">
-                <img src="{{ Auth::user()->avatar }}" alt="..." class="img-circle profile_img" />
+                <img src="{{ url(Auth::user()->avatar) }}" alt="..." class="img-circle profile_img" />
             </div>
             <div class="profile_info">
                 <span>Welcome,</span>
@@ -68,11 +68,12 @@
                         </ul>
                     </li>
                     <li>
-                        <a><i class="fa fa-table"></i> Thông tin nhà bán
+                        <a><i class="fa fa-table"></i> Thông tin cửa hàng
                             <span class="fa fa-chevron-down"></span></a>
                         <ul class="nav child_menu">
                             <li><a href="{{route('suppliers.edit')}}">Xem thông tin</a></li>
-                            <li><a href="{{route('suppliers.changePassword')}}">Cập nhật mật khẩu</a></li>
+                            <li><a href="{{route('suppliers.edit')}}">Cập nhật thông tin</a></li>
+                            <li><a href="{{route('suppliers.changePassword')}}">Đổi mật khẩu</a></li>
                         </ul>
                     </li>
                     <li>
@@ -87,11 +88,11 @@
                         </ul>
                     </li>
                     <li>
-                        <a><i class="fa fa-clone"></i>Layouts
+                        <a><i class="fa fa-clone"></i>Mã giảm giá
                             <span class="fa fa-chevron-down"></span></a>
                         <ul class="nav child_menu">
-                            <li><a href="fixed_sidebar.html">Fixed Sidebar</a></li>
-                            <li><a href="fixed_footer.html">Fixed Footer</a></li>
+                            <li><a href="{{route('discounts.index')}}">Danh sách mã giảm giá</a></li>
+                            <li><a href="{{route('discounts.create')}}">Tạo mã giảm giá mới</a></li>
                         </ul>
                     </li>
                 </ul>

@@ -18,7 +18,7 @@ class CreateSuppliersTable extends Migration
             $table->string('name');
             $table->string('email');
 
-            $table->string('avatar');
+            $table->string('avatar')->default('assets/images/avatar-placeholder.gif');
             $table->string('phone');
             $table->string('password');
 
@@ -26,6 +26,7 @@ class CreateSuppliersTable extends Migration
             $table->string('slug')->nullable();
             $table->string('address')->nullable();
             $table->enum('role',['supplier','admin']); // default is supplier
+            $table->enum('isActive',[1,0]); // default is 1 (is activated)
             $table->timestamps();
         });
     }

@@ -45,12 +45,14 @@ class WebRequest extends FormRequest
 
             // supplier
             'name' => 'Tên',
-            'email' => 'email',
+            'email' => 'Địa chỉ email',
             'avatar' => 'Ảnh đại diện',
             'phone' => 'Số điện thoại',
             'password' => 'Mật khẩu',
             'nameOfShop' => 'Tên của cửa hàng',
-            'address'=> 'Địa chỉ'
+            'address'=> 'Địa chỉ',
+            'password'=>'Mật khẩu',
+            'new_password'=>'Mật khẩu mới'
 
         ];
     }
@@ -68,7 +70,10 @@ class WebRequest extends FormRequest
             'unique' => ':attribute đã tồn tại trên hệ thống.',
             'in' => ':attribute không hợp lệ.',
             'numeric' => ':attribute phải là một số.',
-            'after'=>':attribute phải sau ngày bắt đầu.'
+            'after'=>':attribute phải sau ngày bắt đầu.',
+            'regex'=>':attribute định dạng không hợp lệ.',
+            'min'=>':attribute tối thiểu :min kí tự.',
+            'max'=>':attribute tối đa :max kí tự.',
         ];
     }
 }

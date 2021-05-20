@@ -36,6 +36,16 @@
 <body class="nav-md">
     <div class="container body">
         <div class="main_container">
+            @if (session('success'))
+                <?php if (session('success')) {
+                echo '<script>
+                    swal("' .
+                            session('success').
+                            '", "", "success");
+
+                </script>';
+                } ?>
+            @endif
             @include('layouts.sidebar')
 
             <!-- top navigation -->

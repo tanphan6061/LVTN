@@ -9,10 +9,6 @@ class SupplierRequest extends WebRequest
      *
      * @return bool
      */
-    public function authorize()
-    {
-        return false;
-    }
 
     /**
      * Get the validation rules that apply to the request.
@@ -23,10 +19,10 @@ class SupplierRequest extends WebRequest
     {
         return [
             //
-            'name'=>'requried',
-            'email'=>'required|regex:/^([a-z0-9\+_\-]+)(\.[a-z0-9\+_\-]+)*@([a-z0-9\-]+\.)+[a-z]{2,6}$/ix',
-            'avatar'=>'required',
-            'phone'=>'required|regex:/(84|0[3|5|7|8|9])+([0-9]{8})\b/g',
+            'name'=>'required',
+            // 'email'=>'required|regex:/^([a-z0-9\+_\-]+)(\.[a-z0-9\+_\-]+)*@([a-z0-9\-]+\.)+[a-z]{2,6}$/ix',
+            'avatar' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'phone'=>['required','regex:/^((84|0[3|5|7|8|9])+[0-9]{8})$/i'],
             'nameOfShop' =>'required',
             'address'=>'required'
         ];

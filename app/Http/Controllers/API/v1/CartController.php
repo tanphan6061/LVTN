@@ -82,32 +82,24 @@ class CartController extends ApiController
      * @param \App\Models\Cart $cart
      * @return \Illuminate\Http\Response
      */
-    public function update(CartEditRequest $request, Cart $cart)
+    public function update(CartEditRequest $request)
     {
+        $user = $this->user;
         $validated = $request->validated();
-        if ($this->user->id != $cart->user_id) {
-            return $this->respondedError("Invalid");
+        if (!$product = Product::find($validated['product_id'])) {
+            return $this->respondedError('Product invalid');
+        }
+        if (!$cart = $user->carts->where('product_id', $validated['product_id'])->first()) {
+            return $this->responded("Cart invalid");
+        }
+        if ($validated['amount'] <= 0) {
+            $cart->is_deleted = 1;
+            $cart->save();
+            return $this->responded("Update cart item successfully");
         }
 
-        if ($validated['amount']) {
-            $cart->update($validated);
-            return $this->responded("Update cart item successfully", $cart);
-        }
+        $cart->update($validated);
+        return $this->responded("Update cart item successfully", $cart);
 
-        $cart->is_deleted = 1;
-        $cart->save();
-        return $this->responded("Update cart item successfully");
-
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param \App\Models\Cart $cart
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Cart $cart)
-    {
-        //
     }
 }

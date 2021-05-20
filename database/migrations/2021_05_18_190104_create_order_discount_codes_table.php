@@ -15,11 +15,11 @@ class CreateOrderDiscountCodesTable extends Migration
     {
         Schema::create('order_discount_codes', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('order_id');
-            $table->bigInteger('discount_code_id');
+            $table->bigInteger('order_id')->unsigned();
+            $table->bigInteger('discount_code_id')->unsigned();
             $table->timestamps();
-            //$table->foreign('order_id')->references('id')->on('orders');
-            //$table->foreign('discount_code_id')->references('id')->on('discount_codes');
+            $table->foreign('order_id')->references('id')->on('orders');
+            $table->foreign('discount_code_id')->references('id')->on('discount_codes');
 
         });
     }

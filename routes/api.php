@@ -36,14 +36,19 @@ Route::group(['prefix' => 'v1', 'middleware' => ['api', 'cors']], function () {
 
 Route::group(['prefix' => 'v1', 'middleware' => ['jwt.verify', 'api', 'cors']], function () {
     route::delete('me/favourites', [FavouriteController::class, 'destroy']);
+
+    route::put('me/carts', [CartController::class, 'update']);
+
     route::get('me/getListWaitingReview', [ReviewController::class, 'getListWaitingReview']);
 
+    route::get('me/addresses/active', [AddressController::class, 'showActive']);
+
     route::resource('addresses', AddressController::class)
-        ->only(['index', 'destroy', 'store', 'update']);
+        ->only(['index', 'destroy', 'store', 'update','show']);
     route::resource('me/favourites', FavouriteController::class)
         ->only(['index', 'store', 'destroy']);
     route::resource('me/orders', OrderController::class)
         ->only(['index', 'show']);
     route::resource('me/carts', CartController::class)
-        ->only(['index', 'destroy', 'store', 'update']);
+        ->only(['index', 'store']);
 });

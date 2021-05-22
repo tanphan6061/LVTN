@@ -10,8 +10,10 @@ use App\Http\Resources\CartProductItemR;
 use App\Http\Resources\CartSupplierItemR;
 use App\Http\Resources\SupplierR;
 use App\Models\Cart;
+use App\Models\Discount_code;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class CartController extends ApiController
 {
@@ -39,12 +41,14 @@ class CartController extends ApiController
             $supplier->items = $products->filter(function ($product) use ($supplier) {
                 return $product->supplier->id == $supplier->id;
             });
+            $supplier->discount_codes = $supplier->discount_codes()->available()->get();
             return collect($supplier);
         })->unique();
 
 
         $data = [
             'suppliers' => CartSupplierItemR::collection($suppliers),
+            'discount_codes' => [],
             'total_count' => $cart_items->sum('amount')
         ];
         return $this->responded("Get cart successfully", $data);
@@ -62,10 +66,18 @@ class CartController extends ApiController
         $validated = $request->validated();
         $cart_item = $this->user->carts;
         if (!$product = Product::find($validated['product_id'])) {
-            return $this->respondedError('product_id invalid');
+            $messages = [
+                'product_id' => ['Sản phẩm không hợp lệ']
+            ];
+            return $this->respondedError('product_id invalid', $messages);
         }
-
-        if ($item = $cart_item->where('product_id', $validated['product_id'])->first()) {
+        $item = $cart_item->where('product_id', $validated['product_id'])->first();
+        if ($item && $item->amount + $validated['amount'] > $product->amount) {
+            $messages = [
+                'amount' => ['Số lượng mua lớn hơn số sản phẩm hiện có']
+            ];
+            return $this->respondedError('amount invalid', $messages);
+        } else {
             $item->amount += $validated['amount'];
             $item->save();
             return $this->responded("Update quality cart item successfully", $item);

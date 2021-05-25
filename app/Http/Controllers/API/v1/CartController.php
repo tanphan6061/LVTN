@@ -77,7 +77,9 @@ class CartController extends ApiController
                 'amount' => ['Số lượng mua lớn hơn số sản phẩm hiện có']
             ];
             return $this->respondedError('amount invalid', $messages);
-        } else {
+        }
+
+        if ($item) {
             $item->amount += $validated['amount'];
             $item->save();
             return $this->responded("Update quality cart item successfully", $item);

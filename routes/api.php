@@ -8,6 +8,7 @@ use App\Http\Controllers\API\v1\ReviewController;
 use App\Http\Controllers\API\v1\UserController;
 use \App\Http\Controllers\API\v1\ProductController;
 use App\Http\Controllers\API\v1\AddressController;
+use App\Http\Controllers\DiscountCodeController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -43,6 +44,8 @@ Route::group(['prefix' => 'v1', 'middleware' => ['jwt.verify', 'api', 'cors']], 
 
     route::get('me/addresses/active', [AddressController::class, 'showActive']);
 
+    route::get('me/cart/discounts', [DiscountCodeController::class, 'getDiscountCodeInCart']);
+
     route::resource('addresses', AddressController::class)
         ->only(['index', 'destroy', 'store', 'update','show']);
     route::resource('me/favourites', FavouriteController::class)
@@ -51,4 +54,6 @@ Route::group(['prefix' => 'v1', 'middleware' => ['jwt.verify', 'api', 'cors']], 
         ->only(['index', 'show']);
     route::resource('me/carts', CartController::class)
         ->only(['index', 'store']);
+    route::resource('discounts', AddressController::class)
+        ->only(['index']);
 });

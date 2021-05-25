@@ -9,14 +9,16 @@ class CategoryR extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return array
      */
     public function toArray($request)
     {
         $exceptions = [
-            'created_at', 'updated_at', 'is_deleted', 'parent_category_id '
+            'created_at', 'updated_at', 'is_deleted'
         ];
-        return collect($this->resource)->except($exceptions);
+        $data = collect($this->resource)->except($exceptions);
+        $data['childs'] = CategoryR::collection($this->childs);
+        return $data;
     }
 }

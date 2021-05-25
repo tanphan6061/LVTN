@@ -21,8 +21,18 @@ class Category extends Model
         return $this->belongsTo(Category::class, 'parent_category_id', 'id');
     }
 
+    public function childs()
+    {
+        return $this->hasMany(Category::class, 'parent_category_id');
+    }
+
     public function products()
     {
         return $this->hasMany(Product::class);
+    }
+
+    public function scopeGetChilds($query)
+    {
+
     }
 }

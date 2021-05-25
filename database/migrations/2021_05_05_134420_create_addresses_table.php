@@ -20,6 +20,7 @@ class CreateAddressesTable extends Migration
             $table->string('phone');
             $table->string('address');
             $table->boolean('active')->default(0);
+            $table->boolean('is_deleted')->default(0);
             $table->timestamps();
             $table->foreign('user_id')->references('id')->on('users');
         });

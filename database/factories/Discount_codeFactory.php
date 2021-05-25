@@ -32,9 +32,9 @@ class Discount_codeFactory extends Factory
         return [
             'code' => Str::random(16),
             'supplier_id'=> rand(1, Supplier::count()),
-            'start_date'=>'2021-02-03',
-            'end_date'=>'2021-03-09',
-            'amount'=>rand(0,20),
+            'start_date'=>'2021-05-20',
+            'end_date'=>'2021-06-30',
+            'amount'=>rand(1,20),
             'percent'=>rand(0,20),
             'from_price'=>rand(1,50)*1000,
             'max_price'=>rand(1,90)*1000,

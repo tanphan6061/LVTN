@@ -28,8 +28,11 @@ class FavouriteController extends ApiController
         $_productIds = Product::where('is_deleted', 0)->whereIn('id', $productIds)->pluck('id');
         $favourites = $this->user->favourites->where('is_deleted', 0)
             ->whereIn('product_id', $_productIds)->sortBy('created_at');*/
-        $favourites = $this->user->favourites->where('is_deleted', 0);
-        $data = FavouriteR::collection($favourites);
+        $favourites = $this->user->favourites;
+        $data = [
+            'data' => FavouriteR::collection($favourites),
+            'total_count' => $favourites->count()
+        ];
         return $this->responded('Get list favourites successfully', $data);
     }
 
@@ -70,40 +73,6 @@ class FavouriteController extends ApiController
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param \App\Models\Favourite $favourite
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Favourite $favourite)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param \App\Models\Favourite $favourite
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Favourite $favourite)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @param \App\Models\Favourite $favourite
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Favourite $favourite)
-    {
-        //
-    }
-
-    /**
      * Remove the specified resource from storage.
      *
      * @param FavouriteCreateRequest $request
@@ -113,7 +82,7 @@ class FavouriteController extends ApiController
     {
         //
         $validated = $request->validated();
-        $favourite = $this->user->favourites->where('is_deleted', 0)->where('product_id', $validated['product_id'])->first();
+        $favourite = $this->user->favourites->where('product_id', $validated['product_id'])->first();
         if (!$favourite) {
             return $this->respondedError('Not authorizated');
         }

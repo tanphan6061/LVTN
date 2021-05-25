@@ -45,7 +45,7 @@ class DatabaseSeeder extends Seeder
         ]);
 
         Product::factory()->count(50)->create();
-        Discount_code::factory()->count(50)->create();
+        Discount_code::factory()->count(10)->create();
         Product_image::factory()->count(50)->create();
         Favourite::factory()->count(30)->create();
         Review::factory()->count(60)->create();

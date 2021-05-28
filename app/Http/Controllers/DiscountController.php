@@ -132,6 +132,6 @@ class DiscountController extends Controller
         if (!$discount_code)
             return abort('404');
         $discount_code->update(['is_deleted' => true]);
-        return redirect()->back()->with('success', 'Xóa mã giảm giá thành công');;
+        return redirect()->back()->with('success', 'Xóa mã giảm giá thành công');
     }
 }

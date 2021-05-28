@@ -11,14 +11,14 @@
                         <img src="{{ url(Auth::user()->avatar) }}" alt="" />{{ Auth::user()->name }}
                     </a>
                     <div class="dropdown-menu dropdown-usermenu pull-right" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="javascript:;"> Profile</a>
-                        <a class="dropdown-item" href="javascript:;">
-                            <span class="badge bg-red pull-right">50%</span>
-                            <span>Settings</span>
+                        <a class="dropdown-item" href="{{route('suppliers.index')}}"> Thông tin tài khoản</a>
+                        <a class="dropdown-item"href="{{route('suppliers.edit')}}">
+                            {{-- <span class="badge bg-red pull-right">50%</span> --}}
+                            <span>Đổi mật khẩu</span>
                         </a>
                         <a class="dropdown-item" href="javascript:;">Help</a>
                         <a onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();" class="dropdown-item" href="login.html"><i class="fa fa-sign-out pull-right"></i> Log Out</a>
+                                                     document.getElementById('logout-form').submit();" class="dropdown-item" href="login.html"><i class="fa fa-sign-out pull-right"></i> Đăng xuất</a>
                          <form method="post" id="logout-form" action="{{ route('logout') }}" style="display: none;">
                 @csrf
             </form>

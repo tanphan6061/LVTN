@@ -6,6 +6,7 @@ use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Discount_code;
 use App\Models\Favourite;
+use App\Models\History_order;
 use App\Models\Order;
 use App\Models\Order_detail;
 use App\Models\Product;
@@ -49,9 +50,10 @@ class DatabaseSeeder extends Seeder
         Product_image::factory()->count(50)->create();
         Favourite::factory()->count(30)->create();
         Review::factory()->count(60)->create();
-        Order::factory()->count(1)->create();
+        Order::factory()->count(2)->create();
         Order_detail::factory()->count(5)->create();
         Shipping_address::factory()->count(1)->create();
+        History_order::factory()->count(3)->create();
     }
 
 }

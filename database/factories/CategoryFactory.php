@@ -22,9 +22,9 @@ class CategoryFactory extends Factory
      */
     private function generateId()
     {
-        $id = rand(1, Category::count());
-        if ($id == Category::count() || $id == 0)
+        if(Category::count()==0)
             return null;
+        $id = rand(1, Category::count());
         return $id;
     }
 

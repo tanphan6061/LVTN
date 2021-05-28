@@ -37,19 +37,7 @@ class DiscountCodeController extends ApiController
 
     public function getGlobalCouponAvailable()
     {
-        $cart_items = $this->user->carts;
-        $categoryIDs = $cart_items->map(function ($item) {
-            return $item->product->category->id;
-        });
-        $discounts = Discount_code::available()->where('is_global', 1)->get();
-        return $discounts->filter(function ($discount) use ($categoryIDs) {
-            $category = $discount->category;
-            if ($categoryIDs->contains($category->id)) return true;
-            $childIds = $category->childs->pluck('id');
-            return $categoryIDs->contains(function ($categoryID) use ($childIds) {
-                return $childIds->contains($categoryID);
-            });
-        });
+        return Discount_code::available()->getGlobalCouponAvailable();
     }
 
     public function show($code)

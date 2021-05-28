@@ -3,9 +3,8 @@
 namespace App\Http\Requests\Api;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
-class CartCreateRequest extends ApiRequest
+class OrderCreateRequest extends ApiRequest
 {
     /**
      * Get the validation rules that apply to the request.
@@ -14,10 +13,11 @@ class CartCreateRequest extends ApiRequest
      */
     public function rules()
     {
-        $product_id = $this->request->get('product_id');
         return [
-            'product_id' => 'required',
-            'quantity' => 'required|numeric|min:1'
+            'address_id' => 'numeric|nullable',
+            'payment_type' => 'required',
+            'coupon_global_use' => 'nullable',
+            'coupon_suppliers_use' => 'nullable|array'
         ];
     }
 }

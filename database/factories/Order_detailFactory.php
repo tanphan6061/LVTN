@@ -36,10 +36,10 @@ class Order_detailFactory extends Factory
         return [
             'order_id' => 1,
             'product_id' => $product_id,
-            'amount' => rand(1, 5),
-            'price' => Product::find($product_id)->currentPrice,
+            'quantity' => rand(1, 5),
+            'price' => Product::find($product_id)->price,
             'discount' => 0,
-            'grand_total' => Product::find($product_id)->currentPrice,
+            //'grand_total' => Product::find($product_id)->currentPrice,
         ];
     }
 }

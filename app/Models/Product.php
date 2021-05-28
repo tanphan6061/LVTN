@@ -50,9 +50,9 @@ class Product extends Model
         return $this->hasMany(Cart::class);
     }
 
-    public function getCurrentPriceAttribute()
+    public function getGrandTotalAttribute()
     {
-        return $this->price * (100 - $this->discount);
+        return $this->price * (100 - $this->discount) / 100;
     }
 
     public function scopeGetElementRelation($query, $relation)
@@ -66,6 +66,4 @@ class Product extends Model
     {
         static::addGlobalScope(new ActiveScope);
     }
-
-
 }

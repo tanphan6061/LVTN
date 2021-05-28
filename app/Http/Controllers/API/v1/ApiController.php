@@ -39,4 +39,11 @@ class ApiController extends Controller
             ]
         );
     }
+
+    protected function toCollection($array)
+    {
+        return collect($array)->map(function ($item) {
+            return (object)$item;
+        });
+    }
 }

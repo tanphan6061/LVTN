@@ -32,7 +32,7 @@ class CartController extends ApiController
         $cart_items = $this->user->carts;
         $products = $suppliers = $cart_items->map(function ($item) {
             $product = $item->product;
-            $product->quantity = $item->amount;
+            $product->quantity = $item->quantity;
             return $product;
         });
 
@@ -49,7 +49,7 @@ class CartController extends ApiController
         $data = [
             'suppliers' => CartSupplierItemR::collection($suppliers),
             'discount_codes' => [],
-            'total_count' => $cart_items->sum('amount')
+            'total_count' => $cart_items->sum('quantity')
         ];
         return $this->responded("Get cart successfully", $data);
     }
@@ -72,15 +72,15 @@ class CartController extends ApiController
             return $this->respondedError('product_id invalid', $messages);
         }
         $item = $cart_item->where('product_id', $validated['product_id'])->first();
-        if ($item && $item->amount + $validated['amount'] > $product->amount) {
+        if ($item && $item->quantity + $validated['quantity'] > $product->amount) {
             $messages = [
-                'amount' => ['Số lượng mua lớn hơn số sản phẩm hiện có']
+                'quantity' => ['Số lượng mua lớn hơn số sản phẩm hiện có']
             ];
-            return $this->respondedError('amount invalid', $messages);
+            return $this->respondedError('quantity invalid', $messages);
         }
 
         if ($item) {
-            $item->amount += $validated['amount'];
+            $item->quantity += $validated['quantity'];
             $item->save();
             return $this->responded("Update quality cart item successfully", $item);
         }
@@ -106,7 +106,7 @@ class CartController extends ApiController
         if (!$cart = $user->carts->where('product_id', $validated['product_id'])->first()) {
             return $this->responded("Cart invalid");
         }
-        if ($validated['amount'] <= 0) {
+        if ($validated['quantity'] <= 0) {
             $cart->is_deleted = 1;
             $cart->save();
             return $this->responded("Update cart item successfully");

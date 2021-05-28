@@ -47,6 +47,8 @@ class AddressController extends ApiController
     {
         //
         $isActive = $request->active ? 1 : 0;
+        $addressCount = $this->user->addresses->where('active', 1)->count();
+        if (!$addressCount) $isActive = 1;
         $validated = $request->validated();
         $ext_rules = [
             'active' => $isActive,

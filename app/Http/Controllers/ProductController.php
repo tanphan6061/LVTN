@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Brand;
 use App\Models\Category;
+use App\Models\Order;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -16,11 +17,14 @@ class ProductController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         //
-        $products = Auth::user()->products()->paginate(6);
-        return view('products.list',compact('products'));
+        $products = Auth::user()->products()->filterQ()->paginate(12);
+        if ($request->q) {
+            $products->setPath('?q=' . $request->q);
+        }
+        return view('products.list', compact('products'));
     }
 
     /**
@@ -89,6 +93,12 @@ class ProductController extends Controller
     public function show(Product $product)
     {
         //
+        $count = 0;
+        foreach ($product->reviews as $review){
+            $count += $review->star;
+        }
+        $product->numberOfReview = number_format((float)round($count/$product->reviews->count(),1), 1, '.', '');
+        return view('products.detail',compact('product'));
     }
 
     /**
@@ -123,5 +133,16 @@ class ProductController extends Controller
     public function destroy(Product $product)
     {
         //
+        $orders = Order::where('status', '!=', 'cancel')->get();
+
+        $orders = $orders->filter(function ($order) use($product) {
+            return $order->order_details()->where('product_id',$product->id)->count() > 0;
+        });
+        //cancel order;
+        foreach ($orders as $order) {
+            $order->update(['status'=>'cancel']);
+        }
+        $product->update(['is_deleted' => 1]);
+        return redirect()->back()->with('success', 'Xóa sản phẩm thành công');
     }
 }

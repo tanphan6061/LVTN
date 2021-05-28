@@ -1,7 +1,7 @@
 <div class="col-md-3 left_col">
     <div class="left_col scroll-view">
         <div class="navbar nav_title" style="border: 0">
-            <a href="index.html" class="site_title"><i class="fa fa-paw"></i> <span>Seller Center!</span></a>
+            <a href="/" class="site_title"><i class="fa fa-paw"></i> <span>Seller Center!</span></a>
         </div>
 
         <div class="clearfix"></div>
@@ -12,7 +12,7 @@
                 <img src="{{ url(Auth::user()->avatar) }}" alt="..." class="img-circle profile_img" />
             </div>
             <div class="profile_info">
-                <span>Welcome,</span>
+                <span>Xin chào,</span>
                 <h2>{{ Auth::user()->name }}</h2>
             </div>
         </div>
@@ -38,7 +38,7 @@
                         <a><i class="fa fa-edit"></i> Đơn Hàng
                             <span class="fa fa-chevron-down"></span></a>
                         <ul class="nav child_menu">
-                            <li><a href="form.html">General Form</a></li>
+                            <li><a href="form.html">Danh sách đơn hàng</a></li>
                             <li>
                                 <a href="form_advanced.html">Advanced Components</a>
                             </li>
@@ -59,19 +59,13 @@
                             </li>
                             <li><a href="{{route('products.create')}}">Tạo mới/ Đăng sản phẩm</a></li>
                             <li><a href="typography.html">Đánh giá sản phẩm</a></li>
-                            <li><a href="icons.html">Báo cáo tồn kho</a></li>
-                            <li><a href="glyphicons.html">Glyphicons</a></li>
-                            <li><a href="widgets.html">Widgets</a></li>
-                            <li><a href="invoice.html">Invoice</a></li>
-                            <li><a href="inbox.html">Inbox</a></li>
-                            <li><a href="calendar.html">Calendar</a></li>
                         </ul>
                     </li>
                     <li>
                         <a><i class="fa fa-table"></i> Thông tin cửa hàng
                             <span class="fa fa-chevron-down"></span></a>
                         <ul class="nav child_menu">
-                            <li><a href="{{route('suppliers.edit')}}">Xem thông tin</a></li>
+                            <li><a href="{{route('suppliers.index')}}">Xem thông tin</a></li>
                             <li><a href="{{route('suppliers.edit')}}">Cập nhật thông tin</a></li>
                             <li><a href="{{route('suppliers.changePassword')}}">Đổi mật khẩu</a></li>
                         </ul>
@@ -97,7 +91,7 @@
                     </li>
                 </ul>
             </div>
-            <div class="menu_section">
+            {{-- <div class="menu_section">
                 <h3>Live On</h3>
                 <ul class="nav side-menu">
                     <li>
@@ -146,7 +140,7 @@
                             <span class="label label-success pull-right">Coming Soon</span></a>
                     </li>
                 </ul>
-            </div>
+            </div> --}}
         </div>
         <!-- /sidebar menu -->
 

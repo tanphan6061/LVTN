@@ -4,7 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class CategoryR extends JsonResource
+class DiscountCodeR extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -14,11 +14,8 @@ class CategoryR extends JsonResource
      */
     public function toArray($request)
     {
-        $exceptions = [
-            'created_at', 'updated_at', 'is_deleted'
-        ];
-        $data = collect($this->resource)->except($exceptions);
-        $data['childs'] = CategoryR::collection($this->childs);
+        $accepts = ['code', 'start_date', 'end_date', 'percent', 'from_price', 'max_price'];
+        $data = collect($this->resource)->only($accepts);
         return $data;
     }
 }

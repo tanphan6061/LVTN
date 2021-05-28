@@ -36,5 +36,10 @@ class Order extends Model
         return $this->hasOne(Shipping_address::class);
     }
 
+    public function order_discount_codes()
+    {
+        return $this->hasMany(Order_Discount_code::class);
+    }
+
 
 }

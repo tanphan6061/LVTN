@@ -42,7 +42,9 @@ class ApiRequest extends FormRequest
             'email' => 'Email',
             'old_password' => 'Mật khẩu cũ',
             'new_password' => 'Mật khẩu mới',
-            'comment' => 'Bình luận'
+            'comment' => 'Bình luận',
+            'product_id' => 'Sản phẩm',
+            'amount' => 'Số lượng',
         ];
     }
 
@@ -57,7 +59,9 @@ class ApiRequest extends FormRequest
             'date_format' => 'Không đúng định dạng.',
             'before' => 'Ngày không hợp lệ.',
             'unique' => ':attribute đã tồn tại trên hệ thống.',
-            'in' => ':attribute không hợp lệ.'
+            'in' => ':attribute không hợp lệ.',
+            'exist' => ':attribute không tồn tại',
+            'min' => ':attribute tổi thiểu là :min'
         ];
     }
 

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Scopes\ActiveScope;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -16,9 +17,16 @@ class Cart extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function Product()
+    public function product()
     {
         return $this->belongsTo(Product::class);
+    }
+
+
+
+    protected static function booted()
+    {
+        static::addGlobalScope(new ActiveScope);
     }
 
 }

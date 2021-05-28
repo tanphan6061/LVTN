@@ -17,10 +17,10 @@ class CreateOrderDetailsTable extends Migration
             $table->id();
             $table->bigInteger('order_id')->unsigned();
             $table->bigInteger('product_id')->unsigned();
-            $table->integer('amount');
+            $table->integer('quantity');
             $table->integer('price');
             $table->integer('discount')->default(0);
-            $table->integer('grand_total'); // = price - discount
+            //$table->integer('grand_total'); // = price - discount
             $table->foreign('order_id')->references('id')->on('orders');
             $table->foreign('product_id')->references('id')->on('products');
             $table->timestamps();

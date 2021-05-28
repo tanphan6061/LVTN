@@ -28,17 +28,13 @@ class AddressController extends ApiController
         return $this->responded("Get list addresses", $data);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @param AddressCreateRequest $request
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+    public function showActive()
     {
-        //
-
-
+        $address = $this->user->addresses->where('active', 1)->first();
+        if (!$address) {
+            return $this->respondedError("Address not found");
+        }
+        return $this->responded("Show active address successfully", $address);
     }
 
     /**
@@ -51,6 +47,8 @@ class AddressController extends ApiController
     {
         //
         $isActive = $request->active ? 1 : 0;
+        $addressCount = $this->user->addresses->where('active', 1)->count();
+        if (!$addressCount) $isActive = 1;
         $validated = $request->validated();
         $ext_rules = [
             'active' => $isActive,
@@ -81,18 +79,6 @@ class AddressController extends ApiController
             return $this->responded('Get detail address', new AddressR($address));
         }
         return $this->respondedError("Invalid");
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param \App\Models\Address $address
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Address $address)
-    {
-        //
-
     }
 
     /**
@@ -137,11 +123,11 @@ class AddressController extends ApiController
     public function destroy(Address $address)
     {
         if ($address->user->id == $this->user->id) {
-            $address->delete();
+            $address->is_deleted = 1;
+            $address->save();
             return $this->responded("Remove address successfully");
         }
 
         return $this->respondedError("Invalid");
-
     }
 }

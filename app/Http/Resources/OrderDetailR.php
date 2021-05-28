@@ -18,7 +18,7 @@ class OrderDetailR extends JsonResource
         $data['description'] = $this->products->map(function ($product) {
             return $product->name;
         })->implode(', ');
-        $data['items'] = ProductR::collection($this->products);
+        $data['items'] = ProductOrderDetailR::collection($this->order_details);
         $data['shipping_address'] = new ShippingAddressR($this->shipping_address);
         //$data['status_histories'] = [];
         //$data['price_summary'] = [];

@@ -34,6 +34,30 @@ class Discount_code extends Model
 
     }
 
+    public function scopeGetGlobalCouponAvailable($query)
+    {
+        $user = auth('api')->user();
+        if (!$user) {
+            return null;
+        }
+
+        $cartItems = $user->carts;
+        $categoryIDs = $cartItems->map(function ($item) {
+            return $item->product->category->id;
+        });
+
+        $discounts = $query->where('is_global', 1)->get();
+
+        return $discounts->filter(function ($discount) use ($categoryIDs) {
+            $category = $discount->category;
+            if ($categoryIDs->contains($category->id)) return true;
+            $childIds = $category->childs->pluck('id');
+            return $categoryIDs->contains(function ($categoryID) use ($childIds) {
+                return $childIds->contains($categoryID);
+            });
+        });
+    }
+
     public static function booted()
     {
         static::addGlobalScope(new ActiveScope());

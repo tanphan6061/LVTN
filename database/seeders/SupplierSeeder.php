@@ -19,6 +19,7 @@ class SupplierSeeder extends Seeder
                 'name' => 'Phan Viet Tan',
                 'email' => 'admin@gmail.com',
                 'password' => bcrypt('12345'),
+                'nameOfShop' => 'Taka',
                 'phone' => '0923123123',
                 'role' => 'admin'
             ]

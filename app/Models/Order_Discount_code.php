@@ -16,4 +16,9 @@ class Order_Discount_code extends Model
     {
         return $this->belongsTo(Discount_code::class);
     }
+
+    public function order()
+    {
+        return $this->belongsTo(Order::class);
+    }
 }

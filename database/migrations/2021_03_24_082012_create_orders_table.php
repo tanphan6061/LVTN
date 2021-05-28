@@ -21,11 +21,9 @@ class CreateOrdersTable extends Migration
             $table->integer('price');
             $table->integer('discount')->default(0);
             $table->integer('grand_total'); // = price - discount
-            //$table->integer('discount_amount')->default(0);
-            $table->enum('status', ['cancel', 'delivered', 'shipping']);
+            $table->enum('status', ['processing', 'cancel', 'delivered', 'shipping']);
             $table->foreign('user_id')->references('id')->on('users');
             $table->foreign('supplier_id')->references('id')->on('suppliers');
-            //$table->foreign('shipping_address_id')->references('id')->on('shipping_addresses');
             $table->timestamps();
         });
     }

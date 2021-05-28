@@ -17,6 +17,8 @@ class CreateOrderDiscountCodesTable extends Migration
             $table->id();
             $table->bigInteger('order_id')->unsigned();
             $table->bigInteger('discount_code_id')->unsigned();
+            $table->text('description');
+            $table->integer('discount');
             $table->timestamps();
             $table->foreign('order_id')->references('id')->on('orders');
             $table->foreign('discount_code_id')->references('id')->on('discount_codes');

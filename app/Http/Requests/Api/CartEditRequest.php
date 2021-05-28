@@ -16,7 +16,7 @@ class CartEditRequest extends ApiRequest
     {
         return [
             'product_id' => 'required',
-            'amount' => 'required|numeric|min:0'
+            'quantity' => 'required|numeric|min:0'
         ];
     }
 }

@@ -51,7 +51,7 @@ Route::group(['prefix' => 'v1', 'middleware' => ['jwt.verify', 'api', 'cors']], 
     route::resource('me/favourites', FavouriteController::class)
         ->only(['index', 'store', 'destroy']);
     route::resource('me/orders', OrderController::class)
-        ->only(['index', 'show']);
+        ->only(['index', 'show','store']);
     route::resource('me/carts', CartController::class)
         ->only(['index', 'store']);
     route::resource('discounts', AddressController::class)

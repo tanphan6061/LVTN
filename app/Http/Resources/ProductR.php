@@ -22,7 +22,7 @@ class ProductR extends JsonResource
         ];
 
         $data = collect($this->resource)->except($exceptions);
-        $data['current_price'] = $this->currentPrice;
+        $data['grand_total'] = $this->grandTotal;
         $data['favourited'] = $this->favourited;
         $data['reviewed'] = $this->reviewed;
         $data['ratings'] = [

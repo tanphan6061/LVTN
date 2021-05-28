@@ -26,29 +26,22 @@
                 <h3>General</h3>
                 <ul class="nav side-menu">
                     <li>
-                        <a><i class="fa fa-home"></i> Trang Chủ
+                        {{-- <a><i class="fa fa-home"></i> Trang Chủ
                             <span class="fa fa-chevron-down"></span></a>
                         <ul class="nav child_menu">
                             <li><a href="index.html">Dashboard</a></li>
                             <li><a href="index2.html">Dashboard2</a></li>
                             <li><a href="index3.html">Dashboard3</a></li>
-                        </ul>
+                        </ul> --}}
+                        <a href="{{url('/')}}"><i class="fa fa-home"></i> Trang Chủ</a>
                     </li>
                     <li>
-                        <a><i class="fa fa-edit"></i> Đơn Hàng
-                            <span class="fa fa-chevron-down"></span></a>
-                        <ul class="nav child_menu">
+                        <a href="{{route('orders.index')}}">
+                            <i class="fa fa-edit"></i> Đơn Hàng
+                            </a>
+                        {{-- <ul class="nav child_menu">
                             <li><a href="form.html">Danh sách đơn hàng</a></li>
-                            <li>
-                                <a href="form_advanced.html">Advanced Components</a>
-                            </li>
-                            <li>
-                                <a href="form_validation.html">Form Validation</a>
-                            </li>
-                            <li><a href="form_wizards.html">Form Wizard</a></li>
-                            <li><a href="form_upload.html">Form Upload</a></li>
-                            <li><a href="form_buttons.html">Form Buttons</a></li>
-                        </ul>
+                        </ul> --}}
                     </li>
                     <li>
                         <a><i class="fa fa-desktop"></i> Sản phẩm
@@ -58,7 +51,15 @@
                                 <a href="{{route('products.index')}}">Danh sách sản phẩm</a>
                             </li>
                             <li><a href="{{route('products.create')}}">Tạo mới/ Đăng sản phẩm</a></li>
-                            <li><a href="typography.html">Đánh giá sản phẩm</a></li>
+                            {{-- <li><a href="typography.html">Đánh giá sản phẩm</a></li> --}}
+                        </ul>
+                    </li>
+                    <li>
+                        <a><i class="fa fa-clone"></i>Mã giảm giá
+                            <span class="fa fa-chevron-down"></span></a>
+                        <ul class="nav child_menu">
+                            <li><a href="{{route('discounts.index')}}">Danh sách mã giảm giá</a></li>
+                            <li><a href="{{route('discounts.create')}}">Tạo mã giảm giá mới</a></li>
                         </ul>
                     </li>
                     <li>
@@ -70,25 +71,7 @@
                             <li><a href="{{route('suppliers.changePassword')}}">Đổi mật khẩu</a></li>
                         </ul>
                     </li>
-                    <li>
-                        <a><i class="fa fa-bar-chart-o"></i> Data Presentation
-                            <span class="fa fa-chevron-down"></span></a>
-                        <ul class="nav child_menu">
-                            <li><a href="chartjs.html">Chart JS</a></li>
-                            <li><a href="chartjs2.html">Chart JS2</a></li>
-                            <li><a href="morisjs.html">Moris JS</a></li>
-                            <li><a href="echarts.html">ECharts</a></li>
-                            <li><a href="other_charts.html">Other Charts</a></li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a><i class="fa fa-clone"></i>Mã giảm giá
-                            <span class="fa fa-chevron-down"></span></a>
-                        <ul class="nav child_menu">
-                            <li><a href="{{route('discounts.index')}}">Danh sách mã giảm giá</a></li>
-                            <li><a href="{{route('discounts.create')}}">Tạo mã giảm giá mới</a></li>
-                        </ul>
-                    </li>
+
                 </ul>
             </div>
             {{-- <div class="menu_section">

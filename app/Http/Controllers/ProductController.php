@@ -110,6 +110,9 @@ class ProductController extends Controller
     public function edit(Product $product)
     {
         //
+        $categories = Category::all();
+        $brands = Brand::all();
+        return view ('products.edit',compact('categories','brands','product'));
     }
 
     /**

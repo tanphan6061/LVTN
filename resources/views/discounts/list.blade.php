@@ -13,6 +13,13 @@
         </div>
     </div>
     <div class="table-responsive">
+        <form action="" class="mb-2">
+            <div class="form-group d-flex">
+                <input value="{{ request()->get('q') }}" name="q" placeholder="Nhập từ khoá cần tìm" type="text"
+                    class="form-control" id="usr" autofocus>
+                <button class="btn btn-primary px-4 ml-1">Tìm</button>
+            </div>
+        </form>
         <table class="table table-striped table-hover table-bordered">
             <thead>
                 <tr>

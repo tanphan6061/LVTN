@@ -17,11 +17,46 @@
                     1. Thông tin chung
                 </div>
                 <div class="p-4">
-                    <button type="button" data-toggle="modal" data-target="#myModal" class="btn-primary btn">Thêm ảnh sản
-                        phẩm</button>
+                    <div class="d-flex justify-content-between mb-3">
+                        <h2>Ảnh sản phẩm</h2>
+                        <button type="button" data-toggle="modal" data-target="#myModal" class="btn-primary btn">Quản lý ảnh sản
+                            phẩm
+                        </button>
+                    </div>
+                    <div>
+                        <div id="demo" class="carousel slide" data-ride="carousel">
+                            <!-- Indicators -->
+                            <ul class="carousel-indicators">
+                                <li data-target="#demo" data-slide-to="0" class="active"></li>
+                                <li data-target="#demo" data-slide-to="1"></li>
+                                <li data-target="#demo" data-slide-to="2"></li>
+                            </ul>
+
+                            <!-- The slideshow -->
+                            <div class="carousel-inner">
+                                <div class="carousel-item active">
+                                    <img src="https://www.w3schools.com/bootstrap4/chicago.jpg" alt="Los Angeles">
+                                </div>
+                                <div class="carousel-item active">
+                                    <img src="https://www.w3schools.com/bootstrap4/la.jpg" alt="Los Angeles">
+                                </div>
+                                <div class="carousel-item active">
+                                    <img src="https://www.w3schools.com/bootstrap4/ny.jpg" alt="Los Angeles">
+                                </div>
+                            </div>
+
+                            <!-- Left and right controls -->
+                            <a class="carousel-control-prev" href="#demo" data-slide="prev">
+                                <span class="carousel-control-prev-icon"></span>
+                            </a>
+                            <a class="carousel-control-next" href="#demo" data-slide="next">
+                                <span class="carousel-control-next-icon"></span>
+                            </a>
+                        </div>
+                    </div>
                     <div class="form-group mt-4">
                         <label for="name"><span class="text-danger">*</span> Tên sản phẩm:</label>
-                        <input type="name" name="name" value="{{ old('name') }}"
+                        <input type="name" name="name" value="{{ old('name') ?? $product->name }}"
                             class="form-control {{ $errors->has('name') ? 'is-invalid' : '' }}"
                             placeholder="Nhập tên sản phẩm" id="name">
                         @if ($errors->has('name'))
@@ -33,8 +68,9 @@
                     <div class="row mt-4 ">
                         <div class="form-group col-6">
                             <label for="price"><span class="text-danger">*</span> Giá:</label>
-                            <input name="price" type="number" value="{{ old('price') ?? 1000 }}" type="number" min="1000"
-                                step="1000" class="form-control {{ $errors->has('price') ? 'is-invalid' : '' }}"
+                            <input name="price" type="number" value="{{ old('price') ?? $product->price }}" type="number"
+                                min="1000" step="1000"
+                                class="form-control {{ $errors->has('price') ? 'is-invalid' : '' }}"
                                 placeholder="Nhập giá sản phẩm" id="price">
                             @if ($errors->has('price'))
                                 <div class="invalid-feedback">
@@ -44,8 +80,9 @@
                         </div>
                         <div class="form-group col-6">
                             <label for="discount"><span class="text-danger">*</span> Giảm (%):</label>
-                            <input name="discount" type="number" value="{{ old('discount') ?? 0 }}" type="number" min="0"
-                                step="1" class="form-control {{ $errors->has('discount') ? 'is-invalid' : '' }}"
+                            <input name="discount" type="number" value="{{ old('discount') ?? $product->discount }}"
+                                type="number" min="0" step="1"
+                                class="form-control {{ $errors->has('discount') ? 'is-invalid' : '' }}"
                                 placeholder="Nhập số tiền sản phẩm được giảm mặc định" id="discount">
                             @if ($errors->has('discount'))
                                 <div class="invalid-feedback">
@@ -139,7 +176,8 @@
                         <label for="description"><span class="text-danger">*</span> Mô tả sản phẩm:</label>
                         <textarea style="min-height:200px" name="description" type="number" value="1" type="number" min="1"
                             step="1" class="form-control {{ $errors->has('description') ? 'is-invalid' : '' }}"
-                            placeholder="Nhập mô tả sản phẩm" id="description"></textarea>
+                            placeholder="Nhập mô tả sản phẩm"
+                            id="description">{{ old('description') ?? $product->description }}</textarea>
                         @if ($errors->has('description'))
                             <div class="invalid-feedback">
                                 {{ $errors->first('description') }}
@@ -191,13 +229,13 @@
         const categoryData = @json($categories);
         let subCategoryData = [];
         const defaultItem = `
-                <td><input name="key[]" type="text" value=""
-                        class="form-control {{ $errors->has('key') ? 'is-invalid' : '' }}"
-                        placeholder="Nhập tên thuộc tính"></td>
-                <td><input name="value[]" type="text" value=""
-                        class="form-control {{ $errors->has('value') ? 'is-invalid' : '' }}"
-                        placeholder="Nhập chi tiết"></td>
-            `;
+                    <td><input name="key[]" type="text" value=""
+                            class="form-control {{ $errors->has('key') ? 'is-invalid' : '' }}"
+                            placeholder="Nhập tên thuộc tính"></td>
+                    <td><input name="value[]" type="text" value=""
+                            class="form-control {{ $errors->has('value') ? 'is-invalid' : '' }}"
+                            placeholder="Nhập chi tiết"></td>
+                `;
         const details = [defaultItem];
 
         const parentCategoryDOM = document.getElementById('parent_category');
@@ -233,7 +271,7 @@
         document.getElementById('customFile').addEventListener('change', (e) => {
             const listImageProduct = document.getElementById('list-image-product');
             const files = e.target.files;
-            listImageProduct.innerHTML =''
+            listImageProduct.innerHTML = ''
             const label = document.getElementById('custom-file-label');
             label.setAttribute('class', 'custom-file-label selected');
             label.innerHTML = files.length > 1 ? `${files[0].name} và ${files.length -1} ảnh khác` : files[0].name

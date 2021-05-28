@@ -48,7 +48,7 @@
     width: 100%;
     height: 200px;
 }
-.product-img img {
+.product-img img, .list-image-product img {
     display: block;
     width: 100%;
     height: 100%;
@@ -61,4 +61,17 @@
     grid-template-columns:repeat(4, 1fr);
     grid-gap: 1.2rem;
     margin-top:1.5rem;
+}
+
+
+.list-image-product{
+    height:350px;
+    overflow-y: auto;
+    display: grid;
+    grid-template-columns:repeat(4, 1fr);
+    grid-gap: 1.2rem;
+    margin-top:1.5rem;
+}
+.list-image-product img{
+    height:200px
 }

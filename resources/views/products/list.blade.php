@@ -21,7 +21,7 @@
         </form>
         <div class="container-list">
             @foreach ($products as $product)
-                <div onclick="changeRoute('{{ route('products.show', $product) }}')" class="border rounded product shadow">
+                <div onclick="changeRoute(this,'{{ route('products.show', $product) }}')" class="border rounded product shadow">
                 {{-- <div class="border rounded product shadow"> --}}
 
                     <a href="#" class="product-name text-truncate">{{ $product->name }}</a>
@@ -31,9 +31,9 @@
                             src="{{ $product->images[0]->url ?? url('assets/images/placeholder-images.png') }}" alt="">
                     </div>
                     <div class="d-flex justify-content-between mt-2">
-                        <button class="btn-warning btn text-white">Edit <i class="fa fa-edit"></i></button>
+                        <a href="{{route('products.edit',$product)}}" class="btn-warning btn text-white">Sửa <i class="fa fa-edit"></i></a>
                         <button data-nameProduct="{{ $product->name }}" data-id="{{ $product->id }}" data-toggle="modal"
-                            data-target="#modalDelete" class="btn btn-danger delete-product">Delete <i
+                            data-target="#modalDelete" class="btn btn-danger delete-product">Xoá <i
                                 class="fa fa-trash"></i>
                         </button>
                     </div>
@@ -74,7 +74,7 @@
         <div>
 
             <script>
-                const changeRoute = (route) => {
+                const changeRoute = (e,route) => {
                     window.location.href = route;
                 }
 
@@ -84,7 +84,6 @@
                         nameproduct,
                         id
                     } = e.target.dataset;
-                    console.log(nameproduct, id,e.target.dataset);
 
                     const messDelete = document.getElementById('mess-delete');
                     messDelete.innerHTML = `Bạn muốn xóa sản phẩm: ${nameproduct}?`;

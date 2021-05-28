@@ -9,117 +9,130 @@
         <div>
             <div>
                 <h1>{{ $product->name }}</h1>
-
                 <div>Đánh giá: {{ $product->numberOfReview }}/5.0 <i class="fas fa-star text-warning"></i></div>
             </div>
 
         </div>
     </div>
-    <div class="mt-4">
-        <h2>Thông tin chung:</h2>
+
+    <div class="my-4">
+        <div>
+            <h2>Ảnh sản phẩm:</h2>
+            <div id="demo" class="carousel slide" data-ride="carousel">
+                <!-- Indicators -->
+                <ul class="carousel-indicators">
+                    <li data-target="#demo" data-slide-to="0" class="active"></li>
+                    <li data-target="#demo" data-slide-to="1"></li>
+                    <li data-target="#demo" data-slide-to="2"></li>
+                </ul>
+
+                <!-- The slideshow -->
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <img src="https://www.w3schools.com/bootstrap4/chicago.jpg" alt="Los Angeles">
+                    </div>
+                    <div class="carousel-item active">
+                        <img src="https://www.w3schools.com/bootstrap4/la.jpg" alt="Los Angeles">
+                    </div>
+                    <div class="carousel-item active">
+                        <img src="https://www.w3schools.com/bootstrap4/ny.jpg" alt="Los Angeles">
+                    </div>
+                </div>
+
+                <!-- Left and right controls -->
+                <a class="carousel-control-prev" href="#demo" data-slide="prev">
+                    <span class="carousel-control-prev-icon"></span>
+                </a>
+                <a class="carousel-control-next" href="#demo" data-slide="next">
+                    <span class="carousel-control-next-icon"></span>
+                </a>
+            </div>
+        </div>
+        <h2 class="mt-4">Thông tin chung:</h2>
         <div class="d-flex">
-            <div class="w-25 font-weight-bold">Giá sản phẩm:</div>
+            <div class="w-25 mt-2  font-weight-bold">Giá sản phẩm:</div>
             <div>{{ number_format($product->price, 0, '', ',') }} vnđ</div>
         </div>
         <div class="d-flex">
-            <div class="w-25 font-weight-bold">Giảm:</div>
+            <div class="w-25 mt-2  font-weight-bold">Giảm:</div>
             <div>{{ $product->discount }} %</div>
         </div>
         <div class="d-flex">
-            <div class="w-25 font-weight-bold">Số lượng:</div>
+            <div class="w-25  mt-2 font-weight-bold">Số lượng:</div>
             <div>{{ $product->amount }}</div>
         </div>
         <div class="d-flex">
-            <div class="w-25 font-weight-bold">Nhãn hiệu:</div>
+            <div class="w-25 mt-2  font-weight-bold">Nhãn hiệu:</div>
             <div>{{ $product->brand->name }}</div>
         </div>
         <div class="d-flex">
-            <div class="w-25 font-weight-bold">Doanh mục:</div>
+            <div class="w-25 mt-2  font-weight-bold">Doanh mục:</div>
             <div>{{ $product->category->name }}</div>
+        </div>
+        <div class="d-flex">
+            <div class="w-25 mt-2  font-weight-bold">Trạng thái:</div>
+            <div>{{ $product->status==='' }}</div>
         </div>
 
 
-        <h2>Thông tin chi tiết:</h2>
+        <h2 class="mt-4">Thông tin chi tiết:</h2>
         <table class="table table-hover border table-striped">
             <thead>
                 <tr>
-                    <th>Firstname</th>
-                    <th>Lastname</th>
-                    <th>Email</th>
+                    <th>Thuộc tính</th>
+                    <th>Chi tiết</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
-                    <td>John</td>
-                    <td>Doe</td>
-                    <td>john@example.com</td>
+                    <td>Cân nặng</td>
+                    <td>60kg</td>
                 </tr>
                 <tr>
-                    <td>Mary</td>
-                    <td>Moe</td>
-                    <td>mary@example.com</td>
+                    <td>Khích thước</td>
+                    <td>20x30x32</td>
                 </tr>
                 <tr>
-                    <td>July</td>
-                    <td>Dooley</td>
-                    <td>july@example.com</td>
+                    <td>Chất liệu</td>
+                    <td>silicon</td>
                 </tr>
             </tbody>
         </table>
 
-        <h2>Mô tả sản phẩm: </h2>
-        <div class="border rounded background-white p-4" style="min-height:200px">
+        <h2 class="mt-4">Mô tả sản phẩm: </h2>
+        <div class="shadow border rounded background-white p-4" style="min-height:200px">
             {{ $product->description }}
         </div>
 
-        <div data-slick='{"slidesToShow": 4, "slidesToScroll": 4}'>
-            <div>
-                <h3>1</h3>
+        <h2 class="mt-4">Đánh giá:</h2>
+        <div class="border rounded background-white p-4 shadow" style="height:400px; overflow-y: auto">
+           <div class="mb-4">Tổng: {{$product->reviews->count()}} đánh giá</div>
+            @foreach($product->reviews as $review)
+            <div class="d-flex border my-2 p-3 rounded">
+                <div class="d-flex align-items-center border-right" style="width:180px; font-size:1.001rem">
+                   <div>{{$review->user->name}}</div>
+                </div>
+                <div class="ml-3">
+                    <div>{{$review->star}}</div>
+                    <div class="my-2">{{$review->comment}}</div>
+                    <div class="text-secondary" style="font-size:0.76rem">Nhận xét vào lúc: {{date_format($review->updated_at,'H:i:s, d/m/Y')}}</div>
+                </div>
             </div>
-            <div>
-                <h3>2</h3>
+            <div class="d-flex border my-2 p-3 rounded">
+                <div class="d-flex align-items-center border-right" style="width:180px; font-size:1.001rem">
+                   <div>{{$review->user->name}}</div>
+                </div>
+                <div class="ml-3">
+                    <div>{{$review->star}}</div>
+                    <div class="my-2">{{$review->comment}}</div>
+                    <div class="text-secondary" style="font-size:0.76rem">Nhận xét vào lúc: {{date_format($review->updated_at,'H:i:s, d/m/Y')}}</div>
+                </div>
             </div>
-            <div>
-                <h3>3</h3>
-            </div>
-            <div>
-                <h3>4</h3>
-            </div>
-            <div>
-                <h3>5</h3>
-            </div>
-            <div>
-                <h3>6</h3>
-            </div>
+            @endforeach
         </div>
     </div>
 
+@endsection
 
-    <script>
-        $('.center').slick({
-            centerMode: true,
-            centerPadding: '60px',
-            slidesToShow: 3,
-            responsive: [{
-                    breakpoint: 768,
-                    settings: {
-                        arrows: false,
-                        centerMode: true,
-                        centerPadding: '40px',
-                        slidesToShow: 3
-                    }
-                },
-                {
-                    breakpoint: 480,
-                    settings: {
-                        arrows: false,
-                        centerMode: true,
-                        centerPadding: '40px',
-                        slidesToShow: 1
-                    }
-                }
-            ]
-        });
-
-    </script>
+@section('javascript')
 @endsection

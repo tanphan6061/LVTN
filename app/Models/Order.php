@@ -26,6 +26,12 @@ class Order extends Model
         return $this->hasMany(Order_detail::class);
     }
 
+    public function history_orders()
+    {
+        return $this->hasMany(History_order::class);
+    }
+
+
     public function products()
     {
         return $this->belongsToMany(Product::class, Order_detail::class);

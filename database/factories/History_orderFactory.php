@@ -2,34 +2,31 @@
 
 namespace Database\Factories;
 
+use App\Models\History_order;
 use App\Models\Order;
-use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Str;
 
-class OrderFactory extends Factory
+class History_orderFactory extends Factory
 {
     /**
      * The name of the factory's corresponding model.
      *
      * @var string
      */
-    protected $model = Order::class;
+    protected $model = History_order::class;
 
     /**
      * Define the model's default state.
      *
      * @return array
      */
+
     public function definition()
     {
-        $user = User::find(1);
         return [
-            'user_id' => 1,
-            'supplier_id' => 1,
-            'payment_type' => 'COD',
-            'price' => rand(1000000, 100000000),
-            'discount' => 0,
-            'grand_total' => rand(1000000, 100000000),
+            'order_id' =>  rand(1, Order::count()),
+            'status' => 'processing',
         ];
     }
 }

@@ -1,8 +1,10 @@
 <?php
 
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\DiscountController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SupplierController;
+use App\Models\Order;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -25,6 +27,7 @@ Auth::routes();
 Route::group(['prefix' => '/admin', 'middleware' => ['auth']], function () {
     Route::resource('products', ProductController::class);
     Route::resource('discounts', DiscountController::class);
+    Route::resource('orders', OrderController::class);
     // suppliers
     Route::get('view-profile', [SupplierController::class, 'index'])->name('suppliers.index');
     Route::get('edit-profile', [SupplierController::class, 'edit'])->name('suppliers.edit');

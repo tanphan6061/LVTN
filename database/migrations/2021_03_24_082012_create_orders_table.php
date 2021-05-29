@@ -21,6 +21,7 @@ class CreateOrdersTable extends Migration
             $table->integer('price');
             $table->integer('discount')->default(0);
             $table->integer('grand_total'); // = price - discount
+
             $table->foreign('user_id')->references('id')->on('users');
             $table->foreign('supplier_id')->references('id')->on('suppliers');
             $table->timestamps();

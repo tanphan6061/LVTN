@@ -1,4 +1,4 @@
-<div class="top_nav">
+<div class="top_nav sticky-top">
     <div class="nav_menu">
         <div class="nav toggle">
             <a id="menu_toggle"><i class="fa fa-bars"></i></a>
@@ -25,7 +25,7 @@
                     </div>
                 </li>
 
-                <li role="presentation" class="nav-item dropdown open">
+                {{-- <li role="presentation" class="nav-item dropdown open">
                     <a href="javascript:;" class="dropdown-toggle info-number" id="navbarDropdown1"
                         data-toggle="dropdown" aria-expanded="false">
                         <i class="fa fa-envelope-o"></i>
@@ -93,7 +93,7 @@
                             </div>
                         </li>
                     </ul>
-                </li>
+                </li> --}}
             </ul>
         </nav>
     </div>

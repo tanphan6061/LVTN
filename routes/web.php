@@ -35,4 +35,4 @@ Route::group(['prefix' => '/admin', 'middleware' => ['auth']], function () {
     Route::get('change-password', [SupplierController::class, 'changePassword'])->name('suppliers.changePassword');
     Route::post('change-password', [SupplierController::class, 'updatePassword'])->name('suppliers.updatePassword');
 });
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/admin', [App\Http\Controllers\HomeController::class, 'index'])->name('admin');

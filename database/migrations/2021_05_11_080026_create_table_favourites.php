@@ -19,6 +19,7 @@ class CreateTableFavourites extends Migration
             $table->bigInteger('product_id')->unsigned();
             $table->boolean('is_deleted')->default(0);
             $table->timestamps();
+
             $table->foreign('product_id')->references('id')->on('products');
             $table->foreign('user_id')->references('id')->on('users');
         });

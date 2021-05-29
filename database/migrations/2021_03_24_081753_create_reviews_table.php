@@ -20,6 +20,7 @@ class CreateReviewsTable extends Migration
             $table->integer('star');
             $table->string('comment',500);
             $table->boolean('is_deleted')->default(0);
+
             $table->foreign('product_id')->references('id')->on('products');
             $table->foreign('user_id')->references('id')->on('users');
             $table->timestamps();

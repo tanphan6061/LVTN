@@ -1,4 +1,4 @@
-<div class="col-md-3 left_col">
+<div class="col-md-3 left_col sticky-top" style="position:sticky">
     <div class="left_col scroll-view">
         <div class="navbar nav_title" style="border: 0">
             <a href="/" class="site_title"><i class="fa fa-paw"></i> <span>Seller Center!</span></a>
@@ -23,7 +23,7 @@
         <!-- sidebar menu -->
         <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
             <div class="menu_section">
-                <h3>General</h3>
+                <h3>Quản lý cửa hàng</h3>
                 <ul class="nav side-menu">
                     <li>
                         {{-- <a><i class="fa fa-home"></i> Trang Chủ
@@ -33,15 +33,18 @@
                             <li><a href="index2.html">Dashboard2</a></li>
                             <li><a href="index3.html">Dashboard3</a></li>
                         </ul> --}}
-                        <a href="{{url('/')}}"><i class="fa fa-home"></i> Trang Chủ</a>
+                        <a href="{{route('admin')}}"><i class="fa fa-home"></i> Trang Chủ</a>
                     </li>
                     <li>
-                        <a href="{{route('orders.index')}}">
-                            <i class="fa fa-edit"></i> Đơn Hàng
+                        <a>
+                            <i class="fa fa-edit"></i> Đơn Hàng <span class="fa fa-chevron-down"></span>
                             </a>
-                        {{-- <ul class="nav child_menu">
-                            <li><a href="form.html">Danh sách đơn hàng</a></li>
-                        </ul> --}}
+                        <ul class="nav child_menu">
+                            <li><a href="{{route('orders.index')}}">Đơn chưa xác nhận</a></li>
+                            <li><a href="{{route('orders.index')}}">Đơn đang giao</a></li>
+                            <li><a href="{{route('orders.index')}}">Đơn đã giao</a></li>
+                            <li><a href="{{route('orders.index')}}">Đơn đã huỷ</a></li>
+                        </ul>
                     </li>
                     <li>
                         <a><i class="fa fa-desktop"></i> Sản phẩm
@@ -74,11 +77,11 @@
 
                 </ul>
             </div>
-            {{-- <div class="menu_section">
-                <h3>Live On</h3>
+            <div class="menu_section">
+                <h3>Quản lý hệ thống</h3>
                 <ul class="nav side-menu">
                     <li>
-                        <a><i class="fa fa-bug"></i> Additional Pages
+                        <a><i class="fa fa-bug"></i> Quản lý các đối tác
                             <span class="fa fa-chevron-down"></span></a>
                         <ul class="nav child_menu">
                             <li><a href="e_commerce.html">E-commerce</a></li>
@@ -89,7 +92,7 @@
                         </ul>
                     </li>
                     <li>
-                        <a><i class="fa fa-windows"></i> Extras
+                        <a><i class="fa fa-windows"></i> Mã giảm giá hệ thống
                             <span class="fa fa-chevron-down"></span></a>
                         <ul class="nav child_menu">
                             <li><a href="page_403.html">403 Error</a></li>
@@ -101,7 +104,7 @@
                         </ul>
                     </li>
                     <li>
-                        <a><i class="fa fa-sitemap"></i> Multilevel Menu
+                        <a><i class="fa fa-sitemap"></i> Loại sản phẩm
                             <span class="fa fa-chevron-down"></span></a>
                         <ul class="nav child_menu">
                             <li><a href="#level1_1">Level One</a></li>
@@ -118,16 +121,12 @@
                             <li><a href="#level1_2">Level One</a></li>
                         </ul>
                     </li>
-                    <li>
-                        <a href="javascript:void(0)"><i class="fa fa-laptop"></i> Landing Page
-                            <span class="label label-success pull-right">Coming Soon</span></a>
-                    </li>
                 </ul>
-            </div> --}}
+            </div>
         </div>
         <!-- /sidebar menu -->
 
-        <!-- /menu footer buttons -->
+        {{-- <!-- /menu footer buttons -->
         <div class="sidebar-footer hidden-small">
             <a data-toggle="tooltip" data-placement="top" title="Settings">
                 <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
@@ -141,7 +140,7 @@
             <a data-toggle="tooltip" data-placement="top" title="Logout" href="login.html">
                 <span class="glyphicon glyphicon-off" aria-hidden="true"></span>
             </a>
-        </div>
+        </div> --}}
         <!-- /menu footer buttons -->
     </div>
 </div>

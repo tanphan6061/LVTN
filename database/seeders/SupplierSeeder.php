@@ -16,16 +16,6 @@ class SupplierSeeder extends Seeder
     {
         DB::table('suppliers')->insert(
             [
-                'name' => 'Phan Viet Tan',
-                'email' => 'admin@gmail.com',
-                'password' => bcrypt('12345'),
-                'nameOfShop' => 'Taka',
-                'phone' => '0923123123',
-                'role' => 'admin'
-            ]
-        );
-        DB::table('suppliers')->insert(
-            [
                 'name' => 'Nguyen van A',
                 'email' => 'supplier@gmail.com',
                 'password' => bcrypt('12345'),
@@ -35,5 +25,16 @@ class SupplierSeeder extends Seeder
                 'address' => '70/10 Tô Ký, quận 12, tp. HCM',
             ]
         );
+        DB::table('suppliers')->insert(
+            [
+                'name' => 'Phan Viet Tan',
+                'email' => 'admin@gmail.com',
+                'password' => bcrypt('12345'),
+                'nameOfShop' => 'Taka',
+                'phone' => '0923123123',
+                'role' => 'admin'
+            ]
+        );
+
     }
 }

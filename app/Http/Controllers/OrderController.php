@@ -21,6 +21,7 @@ class OrderController extends Controller
             $orders = Auth::user()->orders()->where('id', 'like', "%$request->q%")->paginate(12);
             $orders->setPath('?q=' . $request->q);
         }
+
         return view('orders.list', compact('orders'));
     }
 
@@ -54,6 +55,7 @@ class OrderController extends Controller
     public function show(Order $order)
     {
         //
+        return view('orders.detail',compact('order'));
     }
 
     /**

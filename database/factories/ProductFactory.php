@@ -34,7 +34,7 @@ class ProductFactory extends Factory
             'price' => rand(10000, 9000000),
             'amount' => rand(0, 20),
             'description' => $this->faker->paragraph,
-            'detail' => $this->faker->text(500),
+            // 'detail' => $this->faker->text(500),
             'status' => 'available',
             'discount' => 0
         ];

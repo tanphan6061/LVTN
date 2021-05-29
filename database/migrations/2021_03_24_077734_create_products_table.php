@@ -23,7 +23,7 @@ class CreateProductsTable extends Migration
             $table->bigInteger('supplier_id')->unsigned();
             $table->integer('amount');
             $table->text('description');
-            $table->text('detail');
+            // $table->text('detail');
             $table->enum('status', ['available', 'out_of_stock']);
             $table->integer('discount')->default(0);
             $table->boolean('is_deleted')->default(0);

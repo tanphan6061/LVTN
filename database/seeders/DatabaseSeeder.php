@@ -50,7 +50,7 @@ class DatabaseSeeder extends Seeder
         Product_image::factory()->count(50)->create();
         Favourite::factory()->count(30)->create();
         Review::factory()->count(60)->create();
-        Order::factory()->count(2)->create();
+        Order::factory()->count(1)->create();
         Order_detail::factory()->count(5)->create();
         Shipping_address::factory()->count(1)->create();
         History_order::factory()->count(3)->create();

@@ -1192,8 +1192,17 @@
 }
 
 .menu_section {
-    margin-bottom: 35px;
+    margin-bottom: 25px;
 }
+
+/* .menu_section::after{
+    content:'';
+    height:2px;
+    background:#ccc;
+    position:absolute;
+    width:70%;
+    left:10%
+} */
 
 .menu_section h3 {
     padding-left: 23px;
@@ -1515,7 +1524,7 @@ body .container.body .right_col {
 
 body {
     color: #73879c;
-    background: #2a3f54;
+    /* background: #2a3f54; */
     font-family: "Helvetica Neue", Roboto, Arial, "Droid Sans", sans-serif;
     font-size: 13px;
     font-weight: 400;

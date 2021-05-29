@@ -16,7 +16,7 @@ class CreateSuppliersTable extends Migration
         Schema::create('suppliers', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('email');
+            $table->string('email')->unique();
 
             $table->string('avatar')->default('assets/images/avatar-placeholder.gif');
             $table->string('phone');
@@ -26,7 +26,7 @@ class CreateSuppliersTable extends Migration
             $table->string('slug')->nullable();
             $table->string('address')->nullable();
             $table->enum('role',['supplier','admin']); // default is supplier
-            $table->enum('isActive',[1,0]); // default is 1 (is activated)
+            $table->enum('is_activated',[1,0]); // default is 1 (is activated)
             $table->timestamps();
         });
     }

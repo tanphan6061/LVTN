@@ -12,7 +12,7 @@
         </div>
     </div>
     <div>
-        <form action="">
+        <form style="height:50px" action="">
             <div class="form-group d-flex">
                 <input value="{{ request()->get('q') }}" name="q" placeholder="Nhập từ khoá cần tìm" type="text"
                     class="form-control" id="usr" autofocus>

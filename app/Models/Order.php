@@ -31,7 +31,6 @@ class Order extends Model
         return $this->hasMany(History_order::class);
     }
 
-
     public function products()
     {
         return $this->belongsToMany(Product::class, Order_detail::class);
@@ -47,5 +46,7 @@ class Order extends Model
         return $this->hasMany(Order_Discount_code::class);
     }
 
-
+    public function currentStatus(){
+        return $this->history_orders()->latest()->first()->status;
+    }
 }

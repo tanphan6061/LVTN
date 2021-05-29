@@ -40,6 +40,11 @@ class Product extends Model
         return $this->hasMany(Product_image::class);
     }
 
+    public function product_details()
+    {
+        return $this->hasMany(Product_detail::class);
+    }
+
     public function favourites()
     {
         return $this->hasMany(Favourite::class);

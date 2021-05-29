@@ -73,27 +73,41 @@
                 <div id="register" class="animate form registration_form">
                     <section class="login_content">
                         <form>
-                            <h1>Create Account</h1>
+                            <h1>Tạo tài khoản</h1>
                             <div>
-                                <input type="text" class="form-control" placeholder="Username" required="" />
+                                <input type="text" name="name" class="form-control" placeholder="Họ tên" required="" />
                             </div>
                             <div>
-                                <input type="email" class="form-control" placeholder="Email" required="" />
+                                <input type="email" name="email" class="form-control" placeholder="Email" required="" />
                             </div>
                             <div>
-                                <input type="password" class="form-control" placeholder="Password" required="" />
+                                <input type="text" name="phone" class="form-control" placeholder="Số điện thoại"
+                                    required="" />
                             </div>
                             <div>
-                                <a class="btn btn-default submit" href="index.html">Submit</a>
+                                <input type="text" name="nameOfShop" class="form-control" placeholder="Tên shop" required="" />
+                            </div>
+                            <div>
+                                <input type="text" name="address" class="form-control" placeholder="Địa chỉ" required="" />
+                            </div>
+                            <div>
+                                <input type="password" name="password" class="form-control" placeholder="Mật khẩu" required="" />
+                            </div>
+                            <div>
+                                <input type="password" class="form-control" placeholder="Nhập lại mật khẩu" required="" />
+                            </div>
+                            <div>
+                                <a class="btn btn-primary submit" href="index.html">Đăng ký</a>
                             </div>
 
-                            <div class="clearfix"></div>
+                            <div class="clearfix text-danger mt-2">
+                                *Lưu ý: Sau khi bạn đăng ký tài khoản, bạn cần đợi admin hệ thống duyệt tài khoản để khách hàng có thể tìm và mua sản phẩm từ bạn
+                            </div>
 
                             <div class="separator">
-                                <p class="change_link">Already a member ?
-                                    <a href="#signin" class="to_register"> Log in </a>
+                                <p class="change_link">Bạn đã có tài khoản?
+                                    <a href="#signin" class="to_register">Đăng nhập</a>
                                 </p>
-
                                 <div class="clearfix"></div>
                                 <br />
 

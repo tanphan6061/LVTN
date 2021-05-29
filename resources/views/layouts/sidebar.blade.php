@@ -33,17 +33,17 @@
                             <li><a href="index2.html">Dashboard2</a></li>
                             <li><a href="index3.html">Dashboard3</a></li>
                         </ul> --}}
-                        <a href="{{route('admin')}}"><i class="fa fa-home"></i> Trang Chủ</a>
+                        <a href="{{ route('admin') }}"><i class="fa fa-home"></i> Trang Chủ</a>
                     </li>
                     <li>
                         <a>
                             <i class="fa fa-edit"></i> Đơn Hàng <span class="fa fa-chevron-down"></span>
-                            </a>
+                        </a>
                         <ul class="nav child_menu">
-                            <li><a href="{{route('orders.index')}}">Đơn chưa xác nhận</a></li>
-                            <li><a href="{{route('orders.index')}}">Đơn đang giao</a></li>
-                            <li><a href="{{route('orders.index')}}">Đơn đã giao</a></li>
-                            <li><a href="{{route('orders.index')}}">Đơn đã huỷ</a></li>
+                            <li><a href="{{ route('orders.index') }}">Đơn chưa xác nhận</a></li>
+                            <li><a href="{{ route('orders.index') }}">Đơn đang giao</a></li>
+                            <li><a href="{{ route('orders.index') }}">Đơn đã giao</a></li>
+                            <li><a href="{{ route('orders.index') }}">Đơn đã huỷ</a></li>
                         </ul>
                     </li>
                     <li>
@@ -51,9 +51,9 @@
                             <span class="fa fa-chevron-down"></span></a>
                         <ul class="nav child_menu">
                             <li>
-                                <a href="{{route('products.index')}}">Danh sách sản phẩm</a>
+                                <a href="{{ route('products.index') }}">Danh sách sản phẩm</a>
                             </li>
-                            <li><a href="{{route('products.create')}}">Tạo mới/ Đăng sản phẩm</a></li>
+                            <li><a href="{{ route('products.create') }}">Tạo mới/ Đăng sản phẩm</a></li>
                             {{-- <li><a href="typography.html">Đánh giá sản phẩm</a></li> --}}
                         </ul>
                     </li>
@@ -61,17 +61,17 @@
                         <a><i class="fa fa-clone"></i>Mã giảm giá
                             <span class="fa fa-chevron-down"></span></a>
                         <ul class="nav child_menu">
-                            <li><a href="{{route('discounts.index')}}">Danh sách mã giảm giá</a></li>
-                            <li><a href="{{route('discounts.create')}}">Tạo mã giảm giá mới</a></li>
+                            <li><a href="{{ route('discounts.index') }}">Danh sách mã giảm giá</a></li>
+                            <li><a href="{{ route('discounts.create') }}">Tạo mã giảm giá mới</a></li>
                         </ul>
                     </li>
                     <li>
                         <a><i class="fa fa-table"></i> Thông tin cửa hàng
                             <span class="fa fa-chevron-down"></span></a>
                         <ul class="nav child_menu">
-                            <li><a href="{{route('suppliers.index')}}">Xem thông tin</a></li>
-                            <li><a href="{{route('suppliers.edit')}}">Cập nhật thông tin</a></li>
-                            <li><a href="{{route('suppliers.changePassword')}}">Đổi mật khẩu</a></li>
+                            <li><a href="{{ route('suppliers.index') }}">Xem thông tin</a></li>
+                            <li><a href="{{ route('suppliers.edit') }}">Cập nhật thông tin</a></li>
+                            <li><a href="{{ route('suppliers.changePassword') }}">Đổi mật khẩu</a></li>
                         </ul>
                     </li>
 
@@ -81,14 +81,11 @@
                 <h3>Quản lý hệ thống</h3>
                 <ul class="nav side-menu">
                     <li>
-                        <a><i class="fa fa-bug"></i> Quản lý các đối tác
+                        <a><i class="fa fa-bug"></i> Quản lý các cửa hàng
                             <span class="fa fa-chevron-down"></span></a>
                         <ul class="nav child_menu">
-                            <li><a href="e_commerce.html">E-commerce</a></li>
-                            <li><a href="projects.html">Projects</a></li>
-                            <li><a href="project_detail.html">Project Detail</a></li>
-                            <li><a href="contacts.html">Contacts</a></li>
-                            <li><a href="profile.html">Profile</a></li>
+                            <li><a href="e_commerce.html">Chưa hoạt hoạt động</a></li>
+                            <li><a href="projects.html">Đang hoạt động</a></li>
                         </ul>
                     </li>
                     <li>
@@ -105,6 +102,24 @@
                     </li>
                     <li>
                         <a><i class="fa fa-sitemap"></i> Loại sản phẩm
+                            <span class="fa fa-chevron-down"></span></a>
+                        <ul class="nav child_menu">
+                            <li><a href="#level1_1">Level One</a></li>
+                            <li>
+                                <a>Level One<span class="fa fa-chevron-down"></span></a>
+                                <ul class="nav child_menu">
+                                    <li class="sub_menu">
+                                        <a href="level2.html">Level Two</a>
+                                    </li>
+                                    <li><a href="#level2_1">Level Two</a></li>
+                                    <li><a href="#level2_2">Level Two</a></li>
+                                </ul>
+                            </li>
+                            <li><a href="#level1_2">Level One</a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a><i class="fa fa-sitemap"></i> Thương hiệu
                             <span class="fa fa-chevron-down"></span></a>
                         <ul class="nav child_menu">
                             <li><a href="#level1_1">Level One</a></li>

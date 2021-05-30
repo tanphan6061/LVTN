@@ -69,7 +69,7 @@
                         <a><i class="fa fa-table"></i> Thông tin cửa hàng
                             <span class="fa fa-chevron-down"></span></a>
                         <ul class="nav child_menu">
-                            <li><a href="{{ route('suppliers.index') }}">Xem thông tin</a></li>
+                            <li><a href="{{ route('suppliers.show') }}">Xem thông tin</a></li>
                             <li><a href="{{ route('suppliers.edit') }}">Cập nhật thông tin</a></li>
                             <li><a href="{{ route('suppliers.changePassword') }}">Đổi mật khẩu</a></li>
                         </ul>
@@ -81,23 +81,19 @@
                 <h3>Quản lý hệ thống</h3>
                 <ul class="nav side-menu">
                     <li>
-                        <a><i class="fa fa-bug"></i> Quản lý các cửa hàng
+                        <a><i class="fa fa-users"></i> Quản lý các cửa hàng
                             <span class="fa fa-chevron-down"></span></a>
                         <ul class="nav child_menu">
-                            <li><a href="e_commerce.html">Chưa hoạt hoạt động</a></li>
-                            <li><a href="projects.html">Đang hoạt động</a></li>
+                            <li><a href="{{route('suppliers.index')}}">Chưa hoạt hoạt động</a></li>
+                            <li><a href="{{route('suppliers.index',['type'=>'is_activated'])}}">Đang hoạt động</a></li>
                         </ul>
                     </li>
                     <li>
-                        <a><i class="fa fa-windows"></i> Mã giảm giá hệ thống
+                        <a><i class="fa fa-clone"></i> Mã giảm giá hệ thống
                             <span class="fa fa-chevron-down"></span></a>
                         <ul class="nav child_menu">
-                            <li><a href="page_403.html">403 Error</a></li>
-                            <li><a href="page_404.html">404 Error</a></li>
-                            <li><a href="page_500.html">500 Error</a></li>
-                            <li><a href="plain_page.html">Plain Page</a></li>
-                            <li><a href="login.html">Login Page</a></li>
-                            <li><a href="pricing_tables.html">Pricing Tables</a></li>
+                            <li><a href="page_403.html">Danh sách mã giảm giá</a></li>
+                            <li><a href="page_404.html">Tạo mã giảm giá mới</a></li>
                         </ul>
                     </li>
                     <li>

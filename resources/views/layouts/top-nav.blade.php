@@ -11,7 +11,7 @@
                         <img src="{{ url(Auth::user()->avatar) }}" alt="" />{{ Auth::user()->name }}
                     </a>
                     <div class="dropdown-menu dropdown-usermenu pull-right" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="{{route('suppliers.index')}}"> Thông tin tài khoản</a>
+                        <a class="dropdown-item" href="{{route('suppliers.show')}}"> Thông tin tài khoản</a>
                         <a class="dropdown-item"href="{{route('suppliers.edit')}}">
                             {{-- <span class="badge bg-red pull-right">50%</span> --}}
                             <span>Đổi mật khẩu</span>

@@ -29,10 +29,12 @@ Route::group(['prefix' => '/admin', 'middleware' => ['auth']], function () {
     Route::resource('discounts', DiscountController::class);
     Route::resource('orders', OrderController::class);
     // suppliers
-    Route::get('view-profile', [SupplierController::class, 'index'])->name('suppliers.index');
+    Route::get('view-profile', [SupplierController::class, 'show'])->name('suppliers.show');
     Route::get('edit-profile', [SupplierController::class, 'edit'])->name('suppliers.edit');
     Route::put('edit-profile', [SupplierController::class, 'update'])->name('suppliers.update');
     Route::get('change-password', [SupplierController::class, 'changePassword'])->name('suppliers.changePassword');
     Route::post('change-password', [SupplierController::class, 'updatePassword'])->name('suppliers.updatePassword');
+
+    Route::get('manage-suppliers',[SupplierController::class, 'index'])->name('suppliers.index');
 });
 Route::get('/admin', [App\Http\Controllers\HomeController::class, 'index'])->name('admin');

@@ -17,10 +17,20 @@ class SupplierController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         //
-        return view('suppliers.index');
+        // Auth::user();
+        // not activated yet
+
+        $suppliers = Supplier::where('id', '!=', Auth::user()->id)->where('is_activated', $request->type == 'is_activated' ? true : false)->where('name', 'like', "%$request->q%")->paginate(1);
+
+        if ($request->q) {
+            $suppliers->setPath('?q=' . $request->q);
+        }
+        if ($request->type && $request->type == 'is_activated')
+            $suppliers->setPath('?type=' . $request->type);
+        return view('supper-admin.suppliers.list', compact('suppliers'));
     }
 
     /**
@@ -52,7 +62,8 @@ class SupplierController extends Controller
      */
     public function show(Supplier $supplier)
     {
-        //
+        // show info of a supplỉer
+        return view('suppliers.index');
     }
 
     /**
@@ -100,7 +111,7 @@ class SupplierController extends Controller
             $data['avatar'] = $dir . "/" . $imageName;
         }
         Auth::user()->update($data);
-        return redirect()->route('suppliers.index')->with('success', 'Cập nhật thông tin thành công');
+        return redirect()->route('suppliers.show')->with('success', 'Cập nhật thông tin thành công');
     }
 
     /**
@@ -136,7 +147,7 @@ class SupplierController extends Controller
         }
 
         Auth::user()->update(['password' => bcrypt($data['new_password'])]);
-        return redirect()->route('suppliers.index')->with('success', 'Thay đổi mật khẩu thành công');
+        return redirect()->route('suppliers.show')->with('success', 'Thay đổi mật khẩu thành công');
     }
 
     public function destroy(Supplier $supplier)

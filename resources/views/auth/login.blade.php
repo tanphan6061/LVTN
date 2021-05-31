@@ -42,12 +42,11 @@
                                         {{-- {{ __('Login') }} --}}
                                         Đăng nhập
                                     </button>
-
-                                    @if (Route::has('password.request'))
+                                    {{-- @if (Route::has('password.request'))
                                         <a class="btn btn-link" href="{{ route('password.request') }}">
                                             {{ __('Forgot Your Password?') }}
                                         </a>
-                                    @endif
+                                    @endif --}}
                                 </div>
                             </div>
 
@@ -62,7 +61,10 @@
                                 <br />
 
                                 <div>
-                                    <h1><i class="fa fa-paw"></i>Taka admin</h1>
+                                    <h1>
+                                        <img src="{{ url('assets/logo.png') }}" alt="">
+                                        Taka Seller
+                                    </h1>
                                     <p>Taka copyright @2021</p>
                                 </div>
                             </div>
@@ -85,13 +87,15 @@
                                     required="" />
                             </div>
                             <div>
-                                <input type="text" name="nameOfShop" class="form-control" placeholder="Tên shop" required="" />
+                                <input type="text" name="nameOfShop" class="form-control" placeholder="Tên shop"
+                                    required="" />
                             </div>
                             <div>
                                 <input type="text" name="address" class="form-control" placeholder="Địa chỉ" required="" />
                             </div>
                             <div>
-                                <input type="password" name="password" class="form-control" placeholder="Mật khẩu" required="" />
+                                <input type="password" name="password" class="form-control" placeholder="Mật khẩu"
+                                    required="" />
                             </div>
                             <div>
                                 <input type="password" class="form-control" placeholder="Nhập lại mật khẩu" required="" />
@@ -101,7 +105,8 @@
                             </div>
 
                             <div class="clearfix text-danger mt-2">
-                                *Lưu ý: Sau khi bạn đăng ký tài khoản, bạn cần đợi admin hệ thống duyệt tài khoản để khách hàng có thể tìm và mua sản phẩm từ bạn
+                                *Lưu ý: Sau khi bạn đăng ký tài khoản, bạn cần đợi admin hệ thống duyệt tài khoản để khách
+                                hàng có thể tìm và mua sản phẩm từ bạn
                             </div>
 
                             <div class="separator">
@@ -110,8 +115,6 @@
                                 </p>
                                 <div class="clearfix"></div>
                                 <br />
-
-
                             </div>
                         </form>
                     </section>

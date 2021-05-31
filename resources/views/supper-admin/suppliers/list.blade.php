@@ -7,7 +7,7 @@
             <li><span>Cửa hàng chưa hoạt động</span></li>
         </ul>
         <div class="d-flex justify-content-between align-items-center">
-            <h1>Danh các cửa hàng</h1>
+            <h1>Danh sách các cửa hàng</h1>
         </div>
     </div>
     <div class="border-bottom pb-4">

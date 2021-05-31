@@ -1,7 +1,10 @@
 <div class="col-md-3 left_col sticky-top" style="position:sticky">
     <div class="left_col scroll-view">
         <div class="navbar nav_title" style="border: 0">
-            <a href="/" class="site_title"><i class="fa fa-paw"></i> <span>Seller Center!</span></a>
+            <a href="/" class="site_title d-flex align-items-center">
+                <img style="width:40px;" src="{{ asset('logo.png') }}" alt="">
+                <div class="margin: 50px">Taka Seller</div>
+            </a>
         </div>
 
         <div class="clearfix"></div>
@@ -19,9 +22,9 @@
         <!-- /menu profile quick info -->
 
         <br />
-
         <!-- sidebar menu -->
-        <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
+
+        <div id="sidebar-menu" style="height:100vh" class="main_menu_side hidden-print main_menu">
             <div class="menu_section">
                 <h3>Quản lý cửa hàng</h3>
                 <ul class="nav side-menu">
@@ -77,32 +80,50 @@
 
                 </ul>
             </div>
-            <div class="menu_section">
-                <h3>Quản lý hệ thống</h3>
-                <ul class="nav side-menu">
-                    <li>
-                        <a><i class="fa fa-users"></i> Quản lý các cửa hàng
-                            <span class="fa fa-chevron-down"></span></a>
-                        <ul class="nav child_menu">
-                            <li><a href="{{route('suppliers.index')}}">Chưa hoạt hoạt động</a></li>
-                            <li><a href="{{route('suppliers.index',['type'=>'is_activated'])}}">Đang hoạt động</a></li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a><i class="fa fa-clone"></i> Mã giảm giá hệ thống
-                            <span class="fa fa-chevron-down"></span></a>
-                        <ul class="nav child_menu">
-                            <li><a href="page_403.html">Danh sách mã giảm giá</a></li>
-                            <li><a href="page_404.html">Tạo mã giảm giá mới</a></li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a><i class="fa fa-sitemap"></i> Loại sản phẩm
-                            <span class="fa fa-chevron-down"></span></a>
-                        <ul class="nav child_menu">
-                            <li><a href="#level1_1">Level One</a></li>
-                            <li>
-                                <a>Level One<span class="fa fa-chevron-down"></span></a>
+
+
+            @if (Auth::user()->role === 'admin')
+                <div class="menu_section">
+                    <h3>Quản lý hệ thống</h3>
+                    <ul class="nav side-menu">
+                        <li>
+                            <a><i class="fa fa-users"></i> Quản lý các cửa hàng
+                                <span class="fa fa-chevron-down"></span></a>
+                            <ul class="nav child_menu">
+                                <li><a href="{{ route('suppliers.index') }}">Chưa hoạt hoạt động</a></li>
+                                <li><a href="{{ route('suppliers.index', ['type' => 'is_activated']) }}">Đang hoạt
+                                        động</a></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a><i class="fa fa-clone"></i> Mã giảm giá hệ thống
+                                <span class="fa fa-chevron-down"></span></a>
+                            <ul class="nav child_menu">
+                                <li><a href="{{ route('discounts.indexAdmin') }}">Danh sách mã giảm giá</a></li>
+                                {{-- <li><a href="{{route('('discounts.createAdmin')')}}">Tạo mã giảm giá mới</a></li> --}}
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="{{ route('manage-categories.index') }}"><i class="fa fa-sitemap"></i> Loại sản
+                                phẩm
+                                {{-- <span class="fa fa-chevron-down"></span> --}}
+                            </a>
+                            {{-- <ul class="nav child_menu">
+                            <li><a href="#level1_1">Danh sách loại sản phẩm</a></li>
+                        </ul> --}}
+                        </li>
+                        <li>
+                            <a href="{{ route('manage-brands.index') }}"><i class="fa fa-sitemap"></i> Danh sách
+                                thương
+                                hiệu
+                                {{-- <span class="fa fa-chevron-down"></span></a> --}}
+                                {{-- <ul class="nav child_menu">
+                            <li><a href="#level1_1">Danh sách thương hiệu</a></li>
+
+                                <li>
+                                <a>Danh sách thương hiệu
+                                    <span class="fa fa-chevron-down"></span>
+                                </a>
                                 <ul class="nav child_menu">
                                     <li class="sub_menu">
                                         <a href="level2.html">Level Two</a>
@@ -110,30 +131,15 @@
                                     <li><a href="#level2_1">Level Two</a></li>
                                     <li><a href="#level2_2">Level Two</a></li>
                                 </ul>
-                            </li>
-                            <li><a href="#level1_2">Level One</a></li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a><i class="fa fa-sitemap"></i> Thương hiệu
-                            <span class="fa fa-chevron-down"></span></a>
-                        <ul class="nav child_menu">
-                            <li><a href="#level1_1">Level One</a></li>
-                            <li>
-                                <a>Level One<span class="fa fa-chevron-down"></span></a>
-                                <ul class="nav child_menu">
-                                    <li class="sub_menu">
-                                        <a href="level2.html">Level Two</a>
-                                    </li>
-                                    <li><a href="#level2_1">Level Two</a></li>
-                                    <li><a href="#level2_2">Level Two</a></li>
-                                </ul>
-                            </li>
-                            <li><a href="#level1_2">Level One</a></li>
-                        </ul>
-                    </li>
-                </ul>
-            </div>
+                                </li>
+
+                            {{-- <li><a href="#level1_2">Level One</a></li>
+                        </ul> --}}
+                        </li>
+                    </ul>
+                </div>
+            @endif
+
         </div>
         <!-- /sidebar menu -->
 

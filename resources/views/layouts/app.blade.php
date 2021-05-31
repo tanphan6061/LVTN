@@ -40,9 +40,10 @@
     {{-- slick --}}
     <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css" />
     <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css" />
+    @yield('css')
 </head>
 
-<body class="nav-md">
+<body spellCheck="false" style="background:#2a3f54" class="nav-md">
     <div class="container body">
         <div class="main_container">
             @if (session('success'))

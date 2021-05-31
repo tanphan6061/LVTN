@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\BrandController;
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\DiscountController;
 use App\Http\Controllers\ProductController;
@@ -20,7 +22,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-   return redirect()->route('login');
+    return redirect()->route('login');
 });
 
 Auth::routes();
@@ -35,6 +37,9 @@ Route::group(['prefix' => '/admin', 'middleware' => ['auth']], function () {
     Route::get('change-password', [SupplierController::class, 'changePassword'])->name('suppliers.changePassword');
     Route::post('change-password', [SupplierController::class, 'updatePassword'])->name('suppliers.updatePassword');
 
-    Route::get('manage-suppliers',[SupplierController::class, 'index'])->name('suppliers.index');
+    Route::get('manage-suppliers', [SupplierController::class, 'index'])->name('suppliers.index');
+    Route::get('manage-discounts', [DiscountController::class, 'indexAdmin'])->name('discounts.indexAdmin');
+    Route::resource('manage-categories', CategoryController::class);
+    Route::resource('manage-brands', BrandController::class);
 });
 Route::get('/admin', [App\Http\Controllers\HomeController::class, 'index'])->name('admin');

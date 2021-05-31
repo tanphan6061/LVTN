@@ -4,9 +4,9 @@
         <ul class="nav--header">
             <li><a href="#">Trang chủ</a></li>
             <li><span>Sản phẩm</span></li>
-            <li><span>Tạo mới</span></li>
+            <li><span>Sửa sản phẩm</span></li>
         </ul>
-        <h1>Tạo sản phẩm</h1>
+        <h1>Sửa sản phẩm</h1>
     </div>
     <div class="mt-4">
         <form method="post" enctype="multipart/form-data" class="needs-validation" novalidate

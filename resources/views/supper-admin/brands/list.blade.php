@@ -1,15 +1,13 @@
 @extends('layouts.app')
-@section('content')
 
+@section('content')
     <div class="border-bottom mb-5">
         <ul class="nav--header">
-            <li><a href="#">Trang chủ</a></li>
-            <li><span>Mã giảm giá</span></li>
-            <li><span>Danh sách mã giảm giá</span></li>
+            <li><span>Danh sách thương hiệu</span></li>
         </ul>
         <div class="d-flex justify-content-between align-items-center">
-            <h1>Danh sách mã giảm giá</h1>
-            <a href="{{route('discounts.create')}}" class="btn btn-primary">Tạo mã giảm giá mới</a>
+            <h1>Danh sách loại sản phẩm</h1>
+            <button class="btn btn-primary">Tạo thương hiệu mới</button>
         </div>
     </div>
     <div class="table-responsive">
@@ -20,36 +18,22 @@
                 <button class="btn btn-primary px-4 ml-1">Tìm</button>
             </div>
         </form>
-        <table class="table table-striped table-hover table-bordered">
+        <table class="table">
             <thead>
                 <tr>
                     <th>STT</th>
-                    <th>Mã</th>
-                    <th>Số lượng</th>
-                    <th>Ngày bắt đầu</th>
-                    <th>Ngày kết thúc</th>
-                    <th>Giảm (%)</th>
-                    <th>Tối thiểu</th>
-                    <th>Tối đa</th>
-                    <th>Hoạt động</th>
+                    <th>Tên thương hiệu</th>
+                    <th>Hành động</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach ($discount_codes as $key => $discount_code)
+                @foreach ($brands as $key => $brand)
                     <tr>
                         <td>{{ $key + 1 }}</td>
-                        <td>{{ $discount_code->code }}</td>
-                        <td>{{ $discount_code->amount }}</td>
-                        <td>{{ $discount_code->start_date }}</td>
-                        <td>{{ $discount_code->end_date }}</td>
-                        <td>{{ $discount_code->percent }}</td>
-                        <td>{{ $discount_code->from_price }}</td>
-                        <td>{{ $discount_code->max_price }}</td>
+                        <td>{{ $brand->name }}</td>
                         <td>
-                            <a href="{{route('discounts.edit',$discount_code)}}" class="btn btn-warning">Sửa</a>
-                            <button data-code="{{ $discount_code->code }}" data-id="{{ $discount_code->id }}"
-                                data-toggle="modal" data-target="#modalDelete"
-                                class="btn btn-danger delete-discount-code">Xóa</button>
+                            <button class="btn btn-primary">Sửa</button>
+                            <button class="btn btn-danger">Xoá</button>
                         </td>
                     </tr>
                 @endforeach
@@ -57,12 +41,13 @@
         </table>
     </div>
     <div class="d-flex justify-content-center mt-4">
-        {!! $discount_codes->render('pagination::bootstrap-4') !!}
+        {!! $brands->render('pagination::bootstrap-4') !!}
     </div>
 
     <div class="modal" id="modalDelete">
         <div class="modal-dialog">
             <div class="modal-content">
+
                 <!-- Modal Header -->
                 <div class="modal-header">
                     <h4 id="header-modal-delete" class="modal-title">Xóa mã giảm giá</h4>
@@ -104,6 +89,19 @@
             const deleteForm = document.getElementById('delete-form');
             deleteForm.setAttribute('action', `${location.pathname}/${id}`)
         }))
+
+    </script>
+
+    <script>
+        var toggler = document.getElementsByClassName("caret");
+        var i;
+
+        for (i = 0; i < toggler.length; i++) {
+            toggler[i].addEventListener("click", function() {
+                this.parentElement.querySelector(".nested").classList.toggle("active");
+                this.classList.toggle("caret-down");
+            });
+        }
 
     </script>
 @endsection

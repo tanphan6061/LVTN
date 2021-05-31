@@ -22,6 +22,17 @@ class DiscountController extends Controller
     }
 
     /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function indexAdmin()
+    {
+        $discount_codes = Discount_code::where('is_deleted', false)->where('is_global', true)->orderBy('created_at', 'DESC')->paginate(10);
+        return view('discounts.list', compact('discount_codes'));
+    }
+
+    /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
@@ -30,7 +41,7 @@ class DiscountController extends Controller
     {
         //
         $categories = Category::where('is_deleted', false)->where('parent_category_id', '!=', null)->get();
-        return view('discounts.create',compact('categories'));
+        return view('discounts.create', compact('categories'));
     }
 
     /**
@@ -82,7 +93,7 @@ class DiscountController extends Controller
             return abort('404');
 
         $categories = Category::where('is_deleted', false)->where('parent_category_id', '!=', null)->get();
-        return view('discounts.edit', compact('discount_code','categories'));
+        return view('discounts.edit', compact('discount_code', 'categories'));
         //
     }
 

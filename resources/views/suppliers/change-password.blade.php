@@ -45,7 +45,7 @@
 
                 </div>
                 <div class="d-flex justify-content-end">
-                    <a href="{{ route('suppliers.index') }}" class="mt-3 px-5 btn btn-secondary">Huỷ</a>
+                    <a href="{{ route('suppliers.show') }}" class="mt-3 px-5 btn btn-secondary">Huỷ</a>
                     <button disabled style="cursor:not-allowed" id="btn-submit" type="submit" class="btn btn-primary mt-3 px-5">Đổi mật khẩu</button>
                 </div>
             </div>

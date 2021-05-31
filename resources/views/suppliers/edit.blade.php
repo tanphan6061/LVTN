@@ -91,7 +91,7 @@
                     @endif
                 </div>
                 <div class="d-flex justify-content-end">
-                    <a href="{{ route('suppliers.index') }}" class="mt-3 px-5 btn btn-secondary">Huỷ</a>
+                    <a href="{{ route('suppliers.show') }}" class="mt-3 px-5 btn btn-secondary">Huỷ</a>
                     <button type="submit" class="btn btn-primary mt-3 px-5">Cập nhật</button>
                 </div>
             </div>

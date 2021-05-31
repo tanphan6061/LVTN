@@ -1,8 +1,8 @@
 <div class="border-bottom pb-4">
     <ul class="nav nav-tabs">
         <li class="nav-item">
-            <a class="nav-link active {{ Route::currentRouteName() == 'suppliers.index' ? 'active' : '' }}"
-                href="{{ route('suppliers.index') }}">Đơn chưa xác nhận</a>
+            <a class="nav-link active {{ Route::currentRouteName() == 'suppliers.show' ? 'active' : '' }}"
+                href="{{ route('suppliers.show') }}">Đơn chưa xác nhận</a>
         </li>
         <li class="nav-item">
             <a class="nav-link {{ Route::currentRouteName() == 'suppliers.edit' ? 'active' : '' }}"

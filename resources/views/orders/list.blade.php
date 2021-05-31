@@ -74,26 +74,30 @@
         {!! $orders->render('pagination::bootstrap-4') !!}
     </div>
 
-    {{-- <div class="modal" id="modalDelete">
+    <div class="modal" id="modalDelete">
         <div class="modal-dialog">
             <div class="modal-content">
 
                 <!-- Modal Header -->
                 <div class="modal-header">
-                    <h4 id="header-modal-delete" class="modal-title">Xóa mã giảm giá</h4>
+                    <h4 id="header-modal-delete" class="modal-title">Thay đổi trạng thái đơn: 1</h4>
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
 
                 <!-- Modal body -->
                 <div class="modal-body">
-                    <h2 id="mess-delete"></h2>
+                    <h2 id="mess-delete">
+                        <select class="form-control" id="sel1">
+                            <option>Đang giao</option>
+                          </select>
+                    </h2>
                 </div>
 
                 <!-- Modal footer -->
                 <div class="modal-footer">
                     <button data-dismiss="modal" class="btn btn-secondary border">Hủy</button>
                     <button onclick="document.getElementById('delete-form').submit()" id="accept-delete-btn" type="button"
-                        class="btn btn-danger">Xóa</button>
+                        class="btn btn-primary">Cập nhật</button>
                     <form method="post" id="delete-form" style="display: none;">
                         @csrf
                         @method('DELETE')
@@ -101,10 +105,10 @@
                 </div>
             </div>
         </div>
-    </div> --}}
+    </div>
 
 
-    {{-- <script>
+  <script>
         const btns = document.querySelectorAll('.delete-discount-code');
         btns.forEach(btn => btn.addEventListener('click', (e) => {
             const {
@@ -114,11 +118,11 @@
             console.log(code, id);
 
             const messDelete = document.getElementById('mess-delete');
-            messDelete.innerHTML = `Bạn muốn xóa mã giảm giá: ${code}?`;
+            // messDelete.innerHTML = `Bạn muốn huỷ đơn: ${1}?`;
 
             const deleteForm = document.getElementById('delete-form');
             deleteForm.setAttribute('action', `${location.pathname}/${id}`)
         }))
 
-    </script> --}}
+    </script>
 @endsection

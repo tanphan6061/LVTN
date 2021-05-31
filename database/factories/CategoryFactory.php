@@ -33,7 +33,7 @@ class CategoryFactory extends Factory
         return [
             'name' => $this->faker->unique()->company,
             'slug' => Str::random(16),
-            'image' => url('assets/images/placeholder-images.png'),
+            'image' => 'assets/images/placeholder-images.png',
             'parent_category_id' => $this->generateId()
         ];
     }

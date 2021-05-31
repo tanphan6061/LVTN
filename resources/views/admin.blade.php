@@ -52,7 +52,7 @@
         </div>
         <div class="my-5">
             <div class="d-flex  justify-content-between align-items-center">
-                <div>Tổng doanh thu: 1,278,000,000 vnđ</div>
+                <div>Tổng doanh thu: 264,000,000 vnđ</div>
             </div>
             <canvas width="400" id="revenueYear"></canvas>
             <div style="text-align: center;font-weight:bold">Biểu đồ doanh thu theo từng năm</div>
@@ -144,7 +144,7 @@
             labels: [2018, 2019, 2020, 2021],
             datasets: [{
                 label: 'Doanh thu',
-                data: [5000000, 6000000, 7000000, 12000000],
+                data: [53000000, 62000000, 71000000, 78000000],
                 fill: false,
                 borderColor: 'rgb(75, 192, 192)',
                 tension: 0.1

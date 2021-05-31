@@ -63,6 +63,7 @@
     <div class="modal" id="modalDelete">
         <div class="modal-dialog">
             <div class="modal-content">
+
                 <!-- Modal Header -->
                 <div class="modal-header">
                     <h4 id="header-modal-delete" class="modal-title">Xóa mã giảm giá</h4>

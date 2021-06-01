@@ -33,6 +33,9 @@ Route::group(['prefix' => 'v1', 'middleware' => ['api', 'cors']], function () {
         ->only(['index', 'show']);
     route::resource('reviews', ReviewController::class)
         ->only(['index', 'store', 'update']);
+
+    route::resource('suppliers', \App\Http\Controllers\API\v1\SupplierController::class)
+        ->only(['show']);
 });
 
 Route::group(['prefix' => 'v1', 'middleware' => ['jwt.verify', 'api', 'cors']], function () {
@@ -47,11 +50,11 @@ Route::group(['prefix' => 'v1', 'middleware' => ['jwt.verify', 'api', 'cors']], 
     route::get('me/cart/discounts', [DiscountCodeController::class, 'getDiscountCodeInCart']);
 
     route::resource('addresses', AddressController::class)
-        ->only(['index', 'destroy', 'store', 'update','show']);
+        ->only(['index', 'destroy', 'store', 'update', 'show']);
     route::resource('me/favourites', FavouriteController::class)
         ->only(['index', 'store', 'destroy']);
     route::resource('me/orders', OrderController::class)
-        ->only(['index', 'show','store']);
+        ->only(['index', 'show', 'store']);
     route::resource('me/carts', CartController::class)
         ->only(['index', 'store']);
     route::resource('discounts', AddressController::class)

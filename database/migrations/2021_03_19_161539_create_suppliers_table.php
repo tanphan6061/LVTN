@@ -17,11 +17,10 @@ class CreateSuppliersTable extends Migration
             $table->id();
             $table->string('name');
             $table->string('email')->unique();
-
-            $table->string('avatar')->default('assets/images/avatar-placeholder.gif');
-            $table->string('phone');
             $table->string('password');
-
+            $table->string('avatar')->default('http://localhost:8000/assets/images/avatar-placeholder.gif');
+            $table->string('phone');
+            $table->string('description', 500);
             $table->string('nameOfShop')->nullable();
             $table->string('slug')->nullable();
             $table->string('address')->nullable();

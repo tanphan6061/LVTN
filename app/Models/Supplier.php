@@ -6,6 +6,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\DB;
 use function Symfony\Component\Translation\t;
 
 class Supplier extends Authenticatable
@@ -18,7 +19,7 @@ class Supplier extends Authenticatable
      * @var array
      */
     protected $guarded = [];
-     // protected $fillable = [
+    // protected $fillable = [
     //     'name',
     //     'email',
     //     'password',
@@ -56,7 +57,15 @@ class Supplier extends Authenticatable
         return $this->hasMany(Product::class);
     }
 
-    public function orders(){
+    public function orders()
+    {
         return $this->hasMany(Order::class);
+    }
+
+    public function getCancellationOrdersAttribute()
+    {
+        return $this->orders->filter(function ($order) {
+            return $order->currentStatus() == "cancel";
+        })->count();
     }
 }

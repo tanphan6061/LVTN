@@ -10,6 +10,12 @@ class ActiveScope implements Scope
 {
     public function apply(Builder $builder, Model $model)
     {
-        $builder->where('is_deleted', 0);
+        $class_name = class_basename($model);
+        if ($class_name == "Product") {
+            $builder->where('products.is_deleted', 0);
+        } else {
+            $builder->where('is_deleted', 0);
+        }
+
     }
 }

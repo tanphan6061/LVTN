@@ -3,6 +3,7 @@
 namespace App\Taka\Filters;
 
 use App\Models\Brand;
+use App\Models\Category;
 use App\Models\Product;
 use App\Models\Supplier;
 use Illuminate\Support\Facades\DB;
@@ -18,17 +19,17 @@ class ProductFilter extends Filter
 
     public function suppliers($list)
     {
-        $ar_suppliers = explode(",", $list);
-        $supplierIDs = Brand::getAvailable()->whereIn('id', $ar_suppliers)->pluck('id') ?? [];
-        return $this->builder->whereIn('brand_id', $supplierIDs);
+        $arraySuppliers = explode(",", $list);
+        $supplierIDs = Brand::getAvailable()->whereIn('id', $arraySuppliers)->pluck('id') ?? [];
+        return $this->builder->whereIn('supplier_id', $supplierIDs);
     }
 
     public function brands($list)
     {
-        $ar_brands = explode(",", $list);
+        $arrayBrands = explode(",", $list);
         /*$brand = Brand::where('slug', $slug)->first();
         $productIDs = ($brand) ? $brand->products->pluck('id') : [];*/
-        $brandIDs = Brand::getAvailable()->whereIn('id', $ar_brands)->pluck('id') ?? [];
+        $brandIDs = Brand::getAvailable()->whereIn('id', $arrayBrands)->pluck('id') ?? [];
         return $this->builder->whereIn('brand_id', $brandIDs);
     }
 
@@ -48,7 +49,7 @@ class ProductFilter extends Filter
 
 
         $builder = $this->builder->where('price', '>=', $range[0]);
-        if ($range[1] > 0) {
+        if ($range[1] > 0 && $range[0] != $range[1]) {
             $builder = $builder->where('price', '<=', $range[1]);
         }
 
@@ -64,7 +65,8 @@ class ProductFilter extends Filter
                 'products.*',
             ])
             ->groupByRaw('name')
-            ->havingRaw('AVG(reviews.star) >= ?', [min($arr_star)]);
+            ->havingRaw('AVG(reviews.star) >= ?', [min($arr_star)])
+            ->havingRaw('AVG(reviews.star) <= ?', [max($arr_star)]);
         //return $this->builder;
     }
 
@@ -85,5 +87,17 @@ class ProductFilter extends Filter
         }
         //dd($builder);
         return $builder;
+    }
+
+    public function category($categoryID)
+    {
+        $category = Category::find($categoryID);
+        if (!$category) {
+            return $this->builder;
+        }
+
+        $arrayCategories = $category->childs->pluck('id');
+        $arrayCategories->push($category->id);
+        return $this->builder->whereIn('category_id', $arrayCategories);
     }
 }

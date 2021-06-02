@@ -27,7 +27,7 @@ class Filter
 
     public function getFilters()
     {
-        return array_filter($this->request->only($this->getMethods()));
+        return ($this->request->only($this->getMethods()));
     }
 
 

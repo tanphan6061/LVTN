@@ -2,9 +2,11 @@
 
 use App\Http\Controllers\API\v1\AuthController;
 use App\Http\Controllers\API\v1\CartController;
+use App\Http\Controllers\API\v1\CategoryController;
 use App\Http\Controllers\API\v1\FavouriteController;
 use App\Http\Controllers\API\v1\OrderController;
 use App\Http\Controllers\API\v1\ReviewController;
+use App\Http\Controllers\API\v1\SupplierController;
 use App\Http\Controllers\API\v1\UserController;
 use \App\Http\Controllers\API\v1\ProductController;
 use App\Http\Controllers\API\v1\AddressController;
@@ -34,8 +36,11 @@ Route::group(['prefix' => 'v1', 'middleware' => ['api', 'cors']], function () {
     route::resource('reviews', ReviewController::class)
         ->only(['index', 'store', 'update']);
 
-    route::resource('suppliers', \App\Http\Controllers\API\v1\SupplierController::class)
+    route::resource('suppliers', SupplierController::class)
         ->only(['show']);
+
+    route::resource('categories', CategoryController::class)
+        ->only(['show','index']);
 });
 
 Route::group(['prefix' => 'v1', 'middleware' => ['jwt.verify', 'api', 'cors']], function () {

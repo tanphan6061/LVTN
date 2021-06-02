@@ -30,7 +30,7 @@ class ProductR extends JsonResource
             'rating_count' => $this->reviews()->count(),
             'stars' => $this->stars
         ];
-        $data['category'] = new CategoryR($this->category);
+        $data['category'] = new CategoryOverviewR($this->category);
         $data['supplier'] = new SupplierR($this->supplier);
         $data['brand'] = new BrandR($this->brand);
         $data['images'] = ProductImageR::collection($this->images);

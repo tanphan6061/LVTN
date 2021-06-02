@@ -24,7 +24,7 @@ class ProductController extends ApiController
      */
     public function index(ProductFilter $filter)
     {
-        DB::enableQueryLog();
+        //DB::enableQueryLog();
         $builder = Product::filterQ();
         //dd($builder);
 

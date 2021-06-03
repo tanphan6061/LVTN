@@ -18,7 +18,7 @@ class CategoryR extends JsonResource
             'created_at', 'updated_at', 'is_deleted', 'parent_category_id'
         ];
         $data = collect($this->resource)->except($exceptions);
-        $data['parent'] = new CategoryOverviewR($this->parent_category);
+        $data['parent'] = $this->parent_category ? new CategoryOverviewR($this->parent_category) : null;
         $data['childs'] = CategoryR::collection($this->childs);
         return $data;
     }

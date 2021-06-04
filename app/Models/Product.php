@@ -60,6 +60,11 @@ class Product extends Model
         return $this->price * (100 - $this->discount) / 100;
     }
 
+    public function getisAvailableAttribute()
+    {
+        return $this->status == 'available' && $this->amount > 0;
+    }
+
     public function scopeGetElementRelation($query, $relation)
     {
         return $query->with($relation)->get()->map(function ($product) use ($relation) {

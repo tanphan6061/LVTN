@@ -25,7 +25,8 @@ class CartProductItemR extends JsonResource
             'discount', 'quantity', 'amount',
             'status', 'created_at', 'updated_at'];
         $data = collect($this->resource)->only($accepts);
-        $data['current_price'] = $this->currentPrice;
+        $data['is_available'] = $this->isAvailable;
+        $data['grand_total'] = $this->grandTotal;
         $data['favourited'] = $this->favourited;
         $data['reviewed'] = $this->reviewed;
         $data['category'] = new CategoryR($this->category);

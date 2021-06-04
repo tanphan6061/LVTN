@@ -46,7 +46,14 @@ class Order extends Model
         return $this->hasMany(Order_Discount_code::class);
     }
 
-    public function currentStatus(){
+    public function currentStatus()
+    {
         return $this->history_orders()->latest()->first()->status;
+    }
+
+    public function getCurrentStatusAttribute()
+    {
+        $status = $this->history_orders()->latest()->first();
+        return $status ? $status->status : null;
     }
 }

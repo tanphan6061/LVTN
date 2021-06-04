@@ -48,7 +48,8 @@ class Order extends Model
 
     public function currentStatus()
     {
-        return $this->history_orders()->latest()->first()->status;
+        $status = $this->history_orders()->latest()->first();
+        return $status ? $status->status : null;
     }
 
     public function getCurrentStatusAttribute()

@@ -7,6 +7,7 @@ use App\Http\Resources\OrderDetailR;
 use App\Http\Resources\OrderR;
 use App\Models\Discount_code;
 use App\Models\Order;
+use App\Models\Product;
 use App\Models\Shipping_address;
 use App\Taka\Paginate\Paginate;
 use Illuminate\Http\Request;
@@ -36,7 +37,6 @@ class OrderController extends ApiController
             'total_count' => $orders->getTotal()
         ];
         return $this->responded("Get list orders successfully", $data);
-
     }
 
     /**
@@ -74,18 +74,41 @@ class OrderController extends ApiController
 
         if (!$addressShipping) {
             return $this->respondedError("Address shipping invalid", [
-                'address_id' => ['Địa chỉ không hợp lệ!']
+                'address_id' => ['Chưa thêm địa chỉ nhận hàng!']
             ]);
         }
 
-        $validated['coupon_suppliers_use'] = $this->toCollection($validated['coupon_suppliers_use']);
-
+        $validated['coupon_suppliers_use'] = $this->toObjectCollection($validated['coupon_suppliers_use']);
         $cartItems = $this->user->carts;
         if (!$cartItems->count()) {
             return $this->respondedError("Cart Empty", [
                 'cart' => ['Giỏ hàng đang trống!']
             ]);
         }
+
+        $isAvailable = $cartItems->every(function ($item) {
+            $product = $item->product;
+            return $product->isAvailable;
+        });
+
+        $isValidAmount = $cartItems->every(function ($item) {
+            $product = $item->product;
+            return $product->amount >= $item->quantity;
+        });
+
+
+        if (!$isAvailable) {
+            return $this->respondedError("Cart Empty", [
+                'cart' => ['Giỏ hàng đang chứa sản phẩm không có sẵn!']
+            ]);
+        }
+
+        if (!$isValidAmount) {
+            return $this->respondedError("Cart Empty", [
+                'cart' => ['Giỏ hàng không hợp lệ, vui lòng thanh toán lại!']
+            ]);
+        }
+
         $listDiscountAvailable = Discount_code::available()->getGlobalCouponAvailable();
 
         $discountGlobal = $listDiscountAvailable->where('code', $request->coupon_global_use)->first();
@@ -96,13 +119,16 @@ class OrderController extends ApiController
         $suppliers = $this->getListSuppliers($cartItems, $products);
 
         $orders = collect($suppliers)->map(function ($supplier) use ($discountGlobalUsed, $discountGlobal, $validated, $addressShipping) {
+            $discountSupplier = null;
+            $deductCouponSupplier = 0;
 
             $grandTotal = $supplier['grandTotal'];
-
             $itemCouponSupplier = $validated['coupon_suppliers_use']->where('supplier_id', $supplier['id'])->first();
-            $discountSupplier = $supplier['discount_codes']->where('code', $itemCouponSupplier->discount_code)->first();
+            if ($itemCouponSupplier) {
+                $discountSupplier = $supplier['discount_codes']->where('code', $itemCouponSupplier->discount_code)->first();
+                $deductCouponSupplier = $this->getDeductCouponSupplier($supplier, $itemCouponSupplier);
+            }
 
-            $deductCouponSupplier = $this->getDeductCouponSupplier($supplier, $itemCouponSupplier);
             $deductCouponGlobal = $this->getDeductCouponGlobal($supplier, $discountGlobal);
 
             $order = $this->user->orders()->create(
@@ -114,6 +140,7 @@ class OrderController extends ApiController
                     'grand_total' => $grandTotal - ($deductCouponGlobal + $deductCouponSupplier)
                 ]
             );
+
 
             $this->createOrderDetails($order, $supplier);
 
@@ -127,9 +154,8 @@ class OrderController extends ApiController
             }
 
             $this->createShippingAddress($order, $addressShipping);
-
+            $order->history_orders()->create();
             $this->updateCart($supplier);
-
             return $order;
         });
 
@@ -147,8 +173,17 @@ class OrderController extends ApiController
                 'discount' => $product->discount,
                 'quantity' => $product->quantity
             ];
+
+            $this->updateProduct($product->id, $product->quantity);
             return $order->order_details()->create($data);
         });
+    }
+
+    private function updateProduct($id, $quantity)
+    {
+        $product = Product::find($id);
+        $product->amount = $product->amount - $quantity;
+        $product->save();
     }
 
 

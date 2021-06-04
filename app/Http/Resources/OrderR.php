@@ -15,6 +15,7 @@ class OrderR extends JsonResource
     public function toArray($request)
     {
         $data = collect($this->resource)->except(['user_id', 'updated_at']);
+        $data['status'] = $this->currentStatus;
         $data['description'] = $this->products->map(function ($product) {
             return $product->name;
         })->implode(', ');

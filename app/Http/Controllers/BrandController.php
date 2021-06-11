@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\BrandRequest;
 use App\Models\Brand;
 use Illuminate\Http\Request;
 
@@ -41,9 +42,10 @@ class BrandController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(BrandRequest $request)
     {
-        //
+        $data = $request->validated();
+        return $data;
     }
 
     /**
@@ -75,9 +77,15 @@ class BrandController extends Controller
      * @param  \App\Models\Brand  $brand
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Brand $brand)
+    public function update(BrandRequest $request, $id)
     {
-        //
+        $brand = Brand::find($id);
+        if (!$brand)
+            return redirect()->back()->with('error', 'Thương hiệu không tồn tại');
+        $data = $request->validated();
+        $brand->update($data);
+        session(['success' => 'Cập nhật thương hiệu thành công']);
+        return $this->responded('Cập nhật thương hiệu thành công');
     }
 
     /**
@@ -86,8 +94,14 @@ class BrandController extends Controller
      * @param  \App\Models\Brand  $brand
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Brand $brand)
+    public function destroy($id)
     {
-        //
+        $brand = Brand::find($id);
+        if (!$brand)
+            return abort('404');
+        if ($brand->products->count() > 0)
+            return redirect()->back()->with('error', 'Không thể xoá thương hiệu đã có sản phẩm');
+        $brand->update(['is_deleted' => true]);
+        return redirect()->back()->with('success', 'Xóa thương hiệu thành công');
     }
 }

@@ -65,7 +65,7 @@
         </ul>
         <div class="d-flex justify-content-between align-items-center">
             <h1>Danh sách loại sản phẩm</h1>
-            <a href="{{ route('discounts.create') }}" class="btn btn-primary">Tạo loại sản phẩm mới</a>
+            <button id="btn-modal-add" class="btn btn-primary" data-target="#modal-handle" data-toggle="modal">Tạo loại sản phẩm mới</button>
         </div>
     </div>
     <div class="table-responsive">
@@ -83,14 +83,22 @@
                         <div class="caret d-flex align-items-center">
                             <div class="treeView__item flex-grow-1">
                                 <div>
-                                    <img class="img-thumbnail mr-2"  width="45px" height="45px" src="{{url($category->image)}}" alt="">
-                                    {{ $category->name }}</div>
+                                    <img class="img-thumbnail mr-2" width="45px" height="45px"
+                                        src="{{ url($category->image) }}" alt="">
+                                    {{ $category->name }}
+                                </div>
                                 <div class="d-flex">
-                                    <div style="font-size:1.05rem" class="text-primary">
+                                    <div style="font-size:1.05rem; cursor: pointer;" class="text-primary">
                                         <i class="fa fa-plus"></i></i>
                                     </div>
-                                    <div style="font-size:1.05rem" class="text-warning mx-3"><i class="fa fa-edit"></i></div>
-                                    <div style="font-size:1.05rem" class="text-danger"><i class="fa fa-trash"></i></div>
+                                    <div style="font-size:1.05rem; cursor: pointer;" class="text-warning mx-3"><i
+                                            class="fa fa-edit"></i>
+                                    </div>
+                                    <div style="font-size:1.05rem; cursor: pointer;" class='text-danger'>
+                                        <i data-target="#modal-delete" data-id="{{ $category->id }}"
+                                            data-name="{{ $category->name }}" data-toggle="modal"
+                                            class="btn-modal-delete  fa fa-trash"></i>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -100,12 +108,18 @@
                                 <li>
                                     <div class="treeView__item">
                                         <div>
-                                            <img class="img-thumbnail mr-2"  width="45px" height="45px" src="{{url($child->image)}}" alt="">
+                                            <img class="img-thumbnail mr-2" width="45px" height="45px"
+                                                src="{{ url($child->image) }}" alt="">
                                             {{ $child->name }}
                                         </div>
                                         <div class="d-flex">
-                                            <div style="font-size:1.05rem" class="text-warning mx-3"><i class="fa fa-edit"></i></div>
-                                            <div style="font-size:1.05rem" class="text-danger"><i class="fa fa-trash"></i></div>
+                                            <div style="font-size:1.05rem; cursor: pointer;" class="text-warning mx-3"><i
+                                                    class="fa fa-edit"></i></div>
+                                            <div style="font-size:1.05rem; cursor: pointer;" class='text-danger'>
+                                                <i data-target="#modal-delete" data-id="{{ $child->id }}"
+                                                    data-name="{{ $child->name }}" data-toggle="modal"
+                                                    class="btn-modal-delete  fa fa-trash"></i>
+                                            </div>
                                         </div>
                                     </div>
 
@@ -121,59 +135,23 @@
         {!! $categories->render('pagination::bootstrap-4') !!}
     </div>
 
-    <div class="modal" id="modalDelete">
-        <div class="modal-dialog">
-            <div class="modal-content">
+@endsection
 
-                <!-- Modal Header -->
-                <div class="modal-header">
-                    <h4 id="header-modal-delete" class="modal-title">Xóa mã giảm giá</h4>
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                </div>
-
-                <!-- Modal body -->
-                <div class="modal-body">
-                    <h2 id="mess-delete"></h2>
-                </div>
-
-                <!-- Modal footer -->
-                <div class="modal-footer">
-                    <button data-dismiss="modal" class="btn btn-secondary border">Hủy</button>
-                    <button onclick="document.getElementById('delete-form').submit()" id="accept-delete-btn" type="button"
-                        class="btn btn-danger">Xóa</button>
-                    <form method="post" id="delete-form" style="display: none;">
-                        @csrf
-                        @method('DELETE')
-                    </form>
-                </div>
-            </div>
-        </div>
+@section('bodyModalHandle')
+    <div class="form-group">
+        <label for="name">Tên loại sản phẩm:</label>
+        <input type="name" class="form-control" placeholder="Nhập tên loại sản phẩm" name="name" id="name">
     </div>
+@endsection
 
-
+@section('bodyScript')
     <script>
-        const btns = document.querySelectorAll('.delete-discount-code');
-        btns.forEach(btn => btn.addEventListener('click', (e) => {
-            const {
-                code,
-                id
-            } = e.target.dataset;
-            console.log(code, id);
+        const namePage = 'loại sản phẩm';
+        setModalDeleteInListPage(namePage);
+        setModalHandle(namePage);
 
-            const messDelete = document.getElementById('mess-delete');
-            messDelete.innerHTML = `Bạn muốn xóa mã giảm giá: ${code}?`;
-
-            const deleteForm = document.getElementById('delete-form');
-            deleteForm.setAttribute('action', `${location.pathname}/${id}`)
-        }))
-
-    </script>
-
-    <script>
-        var toggler = document.getElementsByClassName("caret");
-        var i;
-
-        for (i = 0; i < toggler.length; i++) {
+        const toggler = document.getElementsByClassName("caret");
+        for (let i = 0; i < toggler.length; i++) {
             toggler[i].addEventListener("click", function() {
                 this.parentElement.querySelector(".nested").classList.toggle("active");
                 this.classList.toggle("caret-down");

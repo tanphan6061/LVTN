@@ -46,28 +46,38 @@
 <body spellCheck="false" style="background:#2a3f54" class="nav-md">
     <div class="container body">
         <div class="main_container">
-            @if (session('success'))
-                <?php if (session('success')) {
-                echo '<script>
-                    swal("' .
-                            session('success').
-                            '", "", "success");
+            <?php if (session('success')) {
+            echo '<script>
+                swal("' .
+                        session('success').
+                        '", "", "success");
 
-                </script>';
-                } ?>
-            @endif
+            </script>';
+            } elseif (session('error')) {
+            echo '<script>
+                swal("' .
+                        session('error').
+                        '", "", "error");
+
+            </script>';
+            } ?>
+            {{ request()->session()->forget('error') }}
+            {{ request()->session()->forget('success') }}
+
+            {{-- sidebar --}}
+            @include('components.modal.delete')
+            {{-- handle modal --}}
+            @include('components.modal.handle')
+            {{-- sidebar --}}
             @include('layouts.sidebar')
-
             <!-- top navigation -->
             @include('layouts.top-nav')
-            <!-- /top navigation -->
-
             <!-- page content -->
             <div class="right_col pb-5 px-4" role="main">
                 @yield('content')
             </div>
-            <!-- /page content -->
 
+            @yield('bodyScript')
         </div>
     </div>
 
@@ -115,12 +125,13 @@
     {{-- slick --}}
     <script type="text/javascript" src="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
     <script>
-        $(document).ready(function(){
+        $(document).ready(function() {
             $('[data-toggle="tooltip"]').tooltip();
         });
+
     </script>
 
-@yield('script')
+    @yield('script')
 </body>
 
 </html>

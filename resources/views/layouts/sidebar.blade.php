@@ -3,7 +3,7 @@
         <div class="navbar nav_title" style="border: 0">
             <a href="/" class="site_title d-flex align-items-center">
                 <img style="width:40px;" src="{{ asset('logo.png') }}" alt="">
-                <div class="margin: 50px">Taka Seller</div>
+                <div style="margin-left : 20px">Taka Seller</div>
             </a>
         </div>
 

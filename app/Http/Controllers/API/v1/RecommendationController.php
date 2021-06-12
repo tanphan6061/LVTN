@@ -20,8 +20,8 @@ class RecommendationController extends ApiController
 
     public function index()
     {
+        $limit = 10;
         $productIDs = $this->getRecommendProducts($limit);
-
         $products = $productIDs->reduce(function ($acc, $productID) {
             $product = Product::find($productID);
             return $acc->push($product);
@@ -30,7 +30,7 @@ class RecommendationController extends ApiController
         return $this->responded('Get list recommend successfully', ProductR::collection($products));
     }
 
-    private function getRecommendProducts($limit)
+    private function getRecommendProducts($limit = 10)
     {
         $currentUser = $this->user;
         $matrix = $this->initTheMatrix();

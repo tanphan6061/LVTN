@@ -5,6 +5,7 @@ use App\Http\Controllers\API\v1\CartController;
 use App\Http\Controllers\API\v1\CategoryController;
 use App\Http\Controllers\API\v1\FavouriteController;
 use App\Http\Controllers\API\v1\OrderController;
+use App\Http\Controllers\API\v1\RecommendationController;
 use App\Http\Controllers\API\v1\ReviewController;
 use App\Http\Controllers\API\v1\SupplierController;
 use App\Http\Controllers\API\v1\UserController;
@@ -40,7 +41,7 @@ Route::group(['prefix' => 'v1', 'middleware' => ['api', 'cors']], function () {
         ->only(['show']);
 
     route::resource('categories', CategoryController::class)
-        ->only(['show','index']);
+        ->only(['show', 'index']);
 });
 
 Route::group(['prefix' => 'v1', 'middleware' => ['jwt.verify', 'api', 'cors']], function () {
@@ -53,6 +54,8 @@ Route::group(['prefix' => 'v1', 'middleware' => ['jwt.verify', 'api', 'cors']], 
     route::get('me/addresses/active', [AddressController::class, 'showActive']);
 
     route::get('me/cart/discounts', [DiscountCodeController::class, 'getDiscountCodeInCart']);
+
+    route::get('recommendations', [RecommendationController::class, 'index']);
 
     route::resource('addresses', AddressController::class)
         ->only(['index', 'destroy', 'store', 'update', 'show']);

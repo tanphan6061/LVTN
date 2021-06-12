@@ -41,10 +41,7 @@ Route::group(['prefix' => 'v1', 'middleware' => ['api', 'cors']], function () {
         ->only(['show']);
 
     route::resource('categories', CategoryController::class)
-        ->only(['show','index']);
-
-    route::resource('recommendations', RecommendationController::class)
-        ->only(['index']);
+        ->only(['show', 'index']);
 });
 
 Route::group(['prefix' => 'v1', 'middleware' => ['jwt.verify', 'api', 'cors']], function () {
@@ -57,6 +54,8 @@ Route::group(['prefix' => 'v1', 'middleware' => ['jwt.verify', 'api', 'cors']], 
     route::get('me/addresses/active', [AddressController::class, 'showActive']);
 
     route::get('me/cart/discounts', [DiscountCodeController::class, 'getDiscountCodeInCart']);
+
+    route::get('recommendations', [RecommendationController::class, 'index']);
 
     route::resource('addresses', AddressController::class)
         ->only(['index', 'destroy', 'store', 'update', 'show']);

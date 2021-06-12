@@ -4,12 +4,12 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class CategoryR extends JsonResource
+class ParentCategoryR extends JsonResource
 {
     /**
      * Transform the resource into an array.
      *
-     * @param \Illuminate\Http\Request $request
+     * @param  \Illuminate\Http\Request  $request
      * @return array
      */
     public function toArray($request)
@@ -19,7 +19,6 @@ class CategoryR extends JsonResource
         ];
         $data = collect($this->resource)->except($exceptions);
         $data['parent'] = $this->parent_category ? new ParentCategoryR($this->parent_category) : null;
-        $data['childs'] = CategoryR::collection($this->childs);
         return $data;
     }
 }

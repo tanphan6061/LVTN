@@ -5,6 +5,7 @@ use App\Http\Controllers\API\v1\CartController;
 use App\Http\Controllers\API\v1\CategoryController;
 use App\Http\Controllers\API\v1\FavouriteController;
 use App\Http\Controllers\API\v1\OrderController;
+use App\Http\Controllers\API\v1\RecommendationController;
 use App\Http\Controllers\API\v1\ReviewController;
 use App\Http\Controllers\API\v1\SupplierController;
 use App\Http\Controllers\API\v1\UserController;
@@ -41,6 +42,9 @@ Route::group(['prefix' => 'v1', 'middleware' => ['api', 'cors']], function () {
 
     route::resource('categories', CategoryController::class)
         ->only(['show','index']);
+
+    route::resource('recommendations', RecommendationController::class)
+        ->only(['index']);
 });
 
 Route::group(['prefix' => 'v1', 'middleware' => ['jwt.verify', 'api', 'cors']], function () {

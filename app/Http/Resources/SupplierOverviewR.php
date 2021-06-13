@@ -17,6 +17,10 @@ class SupplierOverviewR extends JsonResource
         $exceptions = ['email', 'name', 'updated_at'];
         $data = collect($this->resource)->except($exceptions);
         $data['total_products'] = $this->products->count();
+        $data['ratings'] = [
+            'rating_count' => $this->reviews->count(),
+            'rating_average' => $this->reviews->avg('star')
+        ];
         $data['cancellation_info'] = [
             'total' => $this->cancellationOrders,
             'rate' => $this->orders->count() > 1 ? $this->cancellationOrders / $this->orders()->count() * 100 : 0,

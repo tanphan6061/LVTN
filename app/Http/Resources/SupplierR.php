@@ -15,6 +15,11 @@ class SupplierR extends JsonResource
     public function toArray($request)
     {
         $exceptions = ['email','updated_at'];
-        return collect($this->resource)->except($exceptions);
+        $data = collect($this->resource)->except($exceptions);
+        $data['ratings'] = [
+            'rating_count' => $this->reviews->count(),
+            'rating_average' => $this->reviews->avg('star')
+        ];
+        return $data;
     }
 }

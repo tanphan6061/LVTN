@@ -101,13 +101,12 @@ class ProductFilter extends Filter
         $temp = collect([$category]);
         while ($temp->count() != 0) {
             $category = $temp->pop();
-            $listCategories->push($category);
+            $listCategories->push($category->id);
             $category->childs->each(function ($item) use ($temp) {
                 $temp->push($item);
             });
         }
-        $arrayCategories = $listCategories->pluck('id');
-        $arrayCategories->push($category->id);
-        return $this->builder->whereIn('category_id', $arrayCategories);
+
+        return $this->builder->whereIn('category_id', $listCategories);
     }
 }

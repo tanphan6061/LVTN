@@ -21,7 +21,7 @@ class ProductFilter extends Filter
     {
         $arraySuppliers = explode(",", $list);
         $supplierIDs = Brand::getAvailable()->whereIn('id', $arraySuppliers)->pluck('id') ?? [];
-        return $this->builder->whereIn('supplier_id', $supplierIDs);
+        return $this->builder->whereIn('products.supplier_id', $supplierIDs);
     }
 
     public function brands($list)
@@ -30,7 +30,7 @@ class ProductFilter extends Filter
         /*$brand = Brand::where('slug', $slug)->first();
         $productIDs = ($brand) ? $brand->products->pluck('id') : [];*/
         $brandIDs = Brand::getAvailable()->whereIn('id', $arrayBrands)->pluck('id') ?? [];
-        return $this->builder->whereIn('brand_id', $brandIDs);
+        return $this->builder->whereIn('products.brand_id', $brandIDs);
     }
 
     public function price($range_string)
@@ -48,9 +48,9 @@ class ProductFilter extends Filter
         }
 
 
-        $builder = $this->builder->where('price', '>=', $range[0]);
+        $builder = $this->builder->where('products.price', '>=', $range[0]);
         if ($range[1] > 0 && $range[0] != $range[1]) {
-            $builder = $builder->where('price', '<=', $range[1]);
+            $builder = $builder->where('products.price', '<=', $range[1]);
         }
 
         return $builder;
@@ -72,6 +72,7 @@ class ProductFilter extends Filter
 
     public function sortBy($type = "default")
     {
+        DB::enableQueryLog();
         switch ($type) {
             case "new_products":
                 $builder = $this->builder->orderBy('products.updated_at', 'desc');
@@ -83,9 +84,24 @@ class ProductFilter extends Filter
                 $builder = $this->builder->orderByDesc('price');
                 break;
             default:
-                $builder = $this->builder;
+                $builder = $this->builder
+                    ->leftjoin('order_details', 'products.id', '=', 'order_details.product_id')
+                    ->leftjoin('history_orders', function ($join) {
+                        $join->on('order_details.order_id', '=', 'history_orders.order_id')
+                            ->where('history_orders.status', 'delivered')
+                            ->orWhereNull('history_orders.status');
+                    })
+                    ->select(
+                        'products.*',
+                        'history_orders.status',
+                        //DB::raw('count(history_orders.status) as count')
+                    )
+                    ->groupByRaw('products.id')
+                    ->orderByRaw('count(history_orders.status) DESC');
         }
-        //dd($builder);
+        //dd($builder->get());
+        //$builder->get();
+        //dd(DB::getQueryLog());
         return $builder;
     }
 
@@ -107,6 +123,6 @@ class ProductFilter extends Filter
             });
         }
 
-        return $this->builder->whereIn('category_id', $listCategories);
+        return $this->builder->whereIn('products.category_id', $listCategories);
     }
 }

@@ -17,15 +17,23 @@ class ProductFilter extends Filter
 //        return $this->builder->where('name', 'like', "%$name%");
 //    }
 
-    public function suppliers($list)
+    public function suppliers($list = null)
     {
+        if ($list == null) {
+            return $this->builder;
+        }
+
         $arraySuppliers = explode(",", $list);
         $supplierIDs = Brand::getAvailable()->whereIn('id', $arraySuppliers)->pluck('id') ?? [];
         return $this->builder->whereIn('products.supplier_id', $supplierIDs);
     }
 
-    public function brands($list)
+    public function brands($list = null)
     {
+        if ($list == null) {
+            return $this->builder;
+        }
+
         $arrayBrands = explode(",", $list);
         /*$brand = Brand::where('slug', $slug)->first();
         $productIDs = ($brand) ? $brand->products->pluck('id') : [];*/
@@ -33,8 +41,12 @@ class ProductFilter extends Filter
         return $this->builder->whereIn('products.brand_id', $brandIDs);
     }
 
-    public function price($range_string)
+    public function price($range_string = null)
     {
+        if ($range_string == null) {
+            return $this->builder;
+        }
+
         $range = explode(",", $range_string);
         $range[0] = isset($range[0]) ? intval($range[0]) : 0;
         $range[1] = isset($range[1]) ? intval($range[1]) : 0;
@@ -56,8 +68,12 @@ class ProductFilter extends Filter
         return $builder;
     }
 
-    public function stars($list)
+    public function stars($list = null)
     {
+        if ($list == null) {
+            return $this->builder;
+        }
+
         $arr_star = explode(",", $list);
         return $this->builder
             ->join('reviews', 'products.id', '=', 'reviews.product_id')
@@ -72,7 +88,7 @@ class ProductFilter extends Filter
 
     public function sortBy($type = "default")
     {
-        DB::enableQueryLog();
+        //DB::enableQueryLog();
         switch ($type) {
             case "new_products":
                 $builder = $this->builder->orderBy('products.updated_at', 'desc');
@@ -94,7 +110,7 @@ class ProductFilter extends Filter
                     ->select(
                         'products.*',
                         'history_orders.status',
-                        //DB::raw('count(history_orders.status) as count')
+                    //DB::raw('count(history_orders.status) as count')
                     )
                     ->groupByRaw('products.id')
                     ->orderByRaw('count(history_orders.status) DESC');
@@ -105,8 +121,9 @@ class ProductFilter extends Filter
         return $builder;
     }
 
-    public function category($categoryID)
+    public function category($categoryID = null)
     {
+
         $category = Category::find($categoryID);
         if (!$category) {
             return $this->builder;

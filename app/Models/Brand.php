@@ -16,6 +16,11 @@ class Brand extends Model
         return $this->hasMany(Product::class);
     }
 
+    public function getRouteKeyName()
+    {
+        return 'slug';
+    }
+
     public function scopeGetAvailable()
     {
         return $this->where('is_deleted', 0);

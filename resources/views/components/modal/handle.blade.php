@@ -9,7 +9,7 @@
 
             <!-- Modal body -->
             <div class="modal-body">
-                <form method="POST" action="" id="formHandle">
+                <form method="POST"  enctype="multipart/form-data" action="" id="formHandle">
                     @csrf
                     @method('put')
                     @yield('bodyModalHandle')
@@ -29,7 +29,49 @@
     const formHandle = document.getElementById('formHandle');
     const btnAcceptHandle = document.getElementById('accept-handle-btn');
 
+    formHandle.addEventListener('submit', event => {
+        event.preventDefault();
+        btnAcceptHandle.click();
+    });
 
+    // submit form
+    btnAcceptHandle.addEventListener('click', async (e) => {
+        e.preventDefault();
+        const response = await fetch(formHandle.action, {
+            body: new FormData(formHandle),
+            method: 'post'
+        });
+
+        const {
+            status_code,
+            data
+        } = await response.json();
+
+        // handle error
+        if (status_code === 200 || data['isRedirect']) {
+            window.location.reload();
+        }
+        if (status_code != 200) {
+            for (element of formHandle.elements) {
+                if (['_method', '_token'].includes(element.name)) {
+                    continue;
+                }
+                if (Object.keys(data).includes(element.name)) {
+                    element.setAttribute('class', 'form-control is-invalid')
+                    if (!element.nextElementSibling) {
+                        element.parentElement.innerHTML += `
+                            <div class="invalid-feedback">
+                            ${data[element.name].join(" - ")}
+                            </div>`
+                    } else {
+                        element.nextElementSibling.innerHTML = `${data[element.name].join(" - ")}`
+                    }
+                } else {
+                    resetValidForm(element);
+                }
+            }
+        }
+    })
 
     const resetValidForm = (element) => {
         element.setAttribute('class', 'form-control')
@@ -43,35 +85,53 @@
     const setModalHandle = (namePage) => {
         const btnAdd = document.getElementById('btn-modal-add');
         const btnEdits = document.querySelectorAll('.btn-modal-edit');
-
-        formHandle.addEventListener('submit', event => {
-            event.preventDefault();
-            btnAcceptHandle.click();
-        });
         // // open modal add
-        btnAdd.addEventListener('click', (e) => {
-            for (element of formHandle.elements) {
-                if (!['_method', '_token'].includes(element.name)) {
-                    element.value = '';
-                    resetValidForm(element);
+       if(btnAdd){
+            btnAdd.addEventListener('click', (e) => {
+                for (element of formHandle.elements) {
+                    if (!['_method', '_token'].includes(element.name)) {
+                        if(element.type==='file'){
+                            document.getElementById('avatar-image').setAttribute('src', `${location.protocol}//${location.host}/assets/images/placeholder-images.png`);
+                        }
+                        element.value = '';
+                        resetValidForm(element);
+                    }
                 }
-            }
-            headerModalHandle.innerHTML = `Thêm ${namePage}`;
-            btnAcceptHandle.innerHTML = 'Thêm';
-            formHandle.action = `${location.pathname}`
-            formHandle['_method'].value = 'POST'
-        })
+                headerModalHandle.innerHTML = `Thêm ${namePage}`;
+                btnAcceptHandle.innerHTML = 'Thêm';
+                formHandle.action = `${location.pathname}`
+                formHandle['_method'].value = 'POST'
+            })
+       }
 
         // open modal edit
         btnEdits.forEach(btn => btn.addEventListener('click', (e) => {
+            console.log("haha");
             let {
                 data
             } = e.target.dataset;
             data = JSON.parse(data)
-
+            console.log(data);
             for (element of formHandle.elements) {
                 if (!['_method', '_token'].includes(element.name)) {
-                    element.value = data[element.name];
+                    switch(element.type) {
+                        case 'file':
+                            document.getElementById('avatar-image').setAttribute('src', `${location.protocol}//${location.host}/${data[element.name]}`);
+                            break;
+                        case 'select-one':
+                            [...element.options].forEach(option =>option.setAttribute('style','display: block'));
+                            const indexOptionOfCurrentCategory = [...element.options].findIndex(i=>i.value== data.id);
+                            if(indexOptionOfCurrentCategory>-1){
+                                element.options[indexOptionOfCurrentCategory].setAttribute('style','display: none');
+                            }
+                            const indexOfOption = [...element.options].findIndex(i=>i.value== (data[element.name]?data[element.name]:'') );
+                            if(indexOfOption>-1){
+                                element.options.selectedIndex  = indexOfOption;
+                            }
+                            break;
+                        default:
+                            element.value = data[element.name];
+                    }
                     resetValidForm(element);
                 }
             }
@@ -80,46 +140,6 @@
             formHandle.action = `${location.pathname}/${data.id}`
             formHandle['_method'].value = 'PUT'
         }))
-
-        // submit form
-        btnAcceptHandle.addEventListener('click', async (e) => {
-            e.preventDefault();
-            const response = await fetch(formHandle.action, {
-                body: new FormData(formHandle),
-                method: 'post'
-            });
-
-            const {
-                status_code,
-                data
-            } = await response.json();
-
-            // handle error
-            if (status_code === 200) {
-                window.location.reload();
-            }
-            if (status_code != 200) {
-                for (element of formHandle.elements) {
-                    if (['_method', '_token'].includes(element.name)) {
-                        continue;
-                    }
-                    if (Object.keys(data).includes(element.name)) {
-                        element.setAttribute('class', 'form-control is-invalid')
-                        // console.log(element.nextS);
-                        if (!element.nextElementSibling) {
-                            element.parentElement.innerHTML += `
-                                <div class="invalid-feedback">
-                                ${data[element.name].join(" - ")}
-                                </div>`
-                        } else {
-                            element.nextElementSibling.innerHTML = `${data[element.name].join(" - ")}`
-                        }
-                    } else {
-                        resetValidForm(element);
-                    }
-                }
-            }
-        })
     }
 
 </script>

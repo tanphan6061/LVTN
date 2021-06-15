@@ -33,7 +33,7 @@
                             <label for="email"><span class="text-danger">*</span> Địa chỉ email:</label>
                             <input type="email" name="email" value="{{ old('email') ?? Auth::user()->email }}"
                                 class="form-control {{ $errors->has('email') ? 'is-invalid' : '' }}"
-                                placeholder="Nhập địa chỉ email" id="email">
+                                placeholder="Nhập địa chỉ email" id="email" disabled="disabled">
                             @if ($errors->has('email'))
                                 <div class="invalid-feedback">
                                     {{ $errors->first('email') }}

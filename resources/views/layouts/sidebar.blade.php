@@ -99,8 +99,8 @@
                             <a><i class="fa fa-clone"></i> Mã giảm giá hệ thống
                                 <span class="fa fa-chevron-down"></span></a>
                             <ul class="nav child_menu">
-                                <li><a href="{{ route('discounts.indexAdmin') }}">Danh sách mã giảm giá</a></li>
-                                {{-- <li><a href="{{route('('discounts.createAdmin')')}}">Tạo mã giảm giá mới</a></li> --}}
+                                <li><a href="{{ route('manage-discounts.index') }}">Danh sách mã giảm giá</a></li>
+                                <li><a href="{{route('manage-discounts.create')}}">Tạo mã giảm giá mới</a></li>
                             </ul>
                         </li>
                         <li>

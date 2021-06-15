@@ -97,7 +97,6 @@
                 code,
                 id
             } = e.target.dataset;
-            console.log(code, id);
 
             const messDelete = document.getElementById('mess-delete');
             messDelete.innerHTML = `Bạn muốn xóa mã giảm giá: ${code}?`;

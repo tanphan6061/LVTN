@@ -18,7 +18,7 @@ class BrandController extends Controller
         $brands = Brand::where([
             ['name', 'like', "%$request->q%"],
             ['is_deleted', false]
-        ])->paginate(12);
+        ])->orderBy('created_at', 'DESC')->paginate(12);
 
         if ($request->q) {
             $brands->setPath('?q=' . $request->q);
@@ -45,7 +45,9 @@ class BrandController extends Controller
     public function store(BrandRequest $request)
     {
         $data = $request->validated();
-        return $data;
+        Brand::create($data);
+        session(['success' => 'Tạo thương hiệu thành công']);
+        return $this->responded('Tạo thương hiệu thành công');
     }
 
     /**
@@ -79,13 +81,18 @@ class BrandController extends Controller
      */
     public function update(BrandRequest $request, $id)
     {
+        $message = 'Cập nhật thương hiệu thành công';
         $brand = Brand::find($id);
-        if (!$brand)
-            return redirect()->back()->with('error', 'Thương hiệu không tồn tại');
+        if (!$brand) {
+            $message = 'Thương hiệu không tồn tại';
+            session(['error' => $message]);
+            return $this->respondedError($message);
+        }
+
         $data = $request->validated();
         $brand->update($data);
-        session(['success' => 'Cập nhật thương hiệu thành công']);
-        return $this->responded('Cập nhật thương hiệu thành công');
+        session(['success' => $message]);
+        return $this->responded($message);
     }
 
     /**

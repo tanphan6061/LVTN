@@ -23,7 +23,7 @@ class SupplierController extends Controller
         // Auth::user();
         // not activated yet
 
-        $suppliers = Supplier::where('id', '!=', Auth::user()->id)->where('is_activated', $request->type == 'is_activated' ? true : false)->where('name', 'like', "%$request->q%")->paginate(1);
+        $suppliers = Supplier::where('id', '!=', Auth::user()->id)->where('is_activated', $request->type == 'is_activated' ? true : false)->where('name', 'like', "%$request->q%")->paginate(12);
 
         if ($request->q) {
             $suppliers->setPath('?q=' . $request->q);
@@ -87,22 +87,7 @@ class SupplierController extends Controller
      */
     public function update(SupplierRequest $request)
     {
-        $data = $request->validate(
-            array_merge(
-                $request->rules(),
-                [
-                    'email' => [
-                        'required',
-                        'regex:/^([a-z0-9\+_\-]+)(\.[a-z0-9\+_\-]+)*@([a-z0-9\-]+\.)+[a-z]{2,6}$/ix',
-                        'unique' => Rule::unique('suppliers')->where(function ($query) {
-                            return $query->where('id', '!=', Auth::user()->id);
-                        })
-                    ]
-                ]
-            ),
-            $request->messages(),
-            $request->attributes()
-        );
+        $data = $request->validated();
 
         if (array_key_exists('avatar', $data)) {
             $imageName = time() . '.' . $data['avatar']->extension();
@@ -112,6 +97,25 @@ class SupplierController extends Controller
         }
         Auth::user()->update($data);
         return redirect()->route('suppliers.show')->with('success', 'Cập nhật thông tin thành công');
+    }
+
+    public function changeActiveStatus(Request $request, $id)
+    {
+        $supplier = Supplier::find($id);
+        if (!$supplier) {
+            return redirect()->back()->with('error', 'Cửa hàng không tồn tại');
+        }
+
+        if (!$request->is_activated) {
+            return redirect()->back()->with('error', 'Trạng thái cửa hàng không được trống');
+        }
+
+        $message = 'Tạm ngưng hoạt động cửa hàng thành công';
+        if ($request->is_activated == "true") {
+            $message = 'Duyệt hoạt động cửa hàng thành công';
+        }
+        $supplier->update(['is_activated' => $request->is_activated == 'true' ? true : false]);
+        return redirect()->back()->with('success', $message);
     }
 
     /**

@@ -76,10 +76,9 @@
             <div class="right_col pb-5 px-4" role="main">
                 @yield('content')
             </div>
-
-            @yield('bodyScript')
         </div>
     </div>
+    @yield('bodyScript')
 
     <!-- jQuery -->
     <script src="{{ asset('assets/vendors/jquery/dist/jquery.min.js') }}"></script>

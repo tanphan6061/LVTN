@@ -8,7 +8,7 @@ use App\Models\Discount_code;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
 
-class DiscountController extends Controller
+class DiscountAdminController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -17,9 +17,10 @@ class DiscountController extends Controller
      */
     public function index()
     {
-        $discount_codes = Auth::user()->discount_codes()->where('is_deleted', false)->orderBy('created_at', 'DESC')->paginate(10);
+        $discount_codes = Discount_code::where('is_deleted', false)->where('is_global', true)->orderBy('created_at', 'DESC')->paginate(10);
         return view('discounts.list', compact('discount_codes'));
     }
+
 
     /**
      * Show the form for creating a new resource.
@@ -54,8 +55,9 @@ class DiscountController extends Controller
             $request->messages(),
             $request->attributes()
         );
+        $data['is_global'] = true;
         $discount = Auth::user()->discount_codes()->create($data);
-        return redirect()->route('discounts.index')->with('success', 'Thêm mã giảm giá thành công');
+        return redirect()->route('manage-discounts.index')->with('success', 'Thêm mã giảm giá thành công');
     }
 
     /**
@@ -116,7 +118,7 @@ class DiscountController extends Controller
         );
 
         $discount_code->update($data);
-        return redirect()->route('discounts.index')->with('success', 'Cập nhật mã giảm giá thành công');
+        return redirect()->route('manage-discounts.index')->with('success', 'Cập nhật mã giảm giá thành công');
     }
 
     /**

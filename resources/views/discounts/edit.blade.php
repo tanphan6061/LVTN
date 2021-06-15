@@ -11,7 +11,7 @@
         </div>
     </div>
     <div>
-        <form method="post" action="{{route('discounts.update',$discount_code)}}">
+        <form method="post" action="{{route(str_replace('edit','update',Route::currentRouteName()),$discount_code)}}">
             @method('put')
             @csrf
             <div class="row mt-4 ">

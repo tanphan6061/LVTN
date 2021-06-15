@@ -89,10 +89,14 @@
                                 </div>
                                 <div class="d-flex">
                                     <div style="font-size:1.05rem; cursor: pointer;" class="text-primary">
-                                        <i class="fa fa-plus"></i></i>
+                                        <i class="fa fa-plus btn-modal-add-sub"
+                                        data-data='@json($category)'
+                                        data-target="#modal-handle" data-toggle="modal"></i>
                                     </div>
-                                    <div style="font-size:1.05rem; cursor: pointer;" class="text-warning mx-3"><i
-                                            class="fa fa-edit"></i>
+                                    <div style="font-size:1.05rem; cursor: pointer;" class="text-warning mx-3">
+                                        <i data-data='@json($category)' data-target="#modal-handle" data-toggle="modal"
+                                            class="fa fa-edit btn-modal-edit"></i>
+
                                     </div>
                                     <div style="font-size:1.05rem; cursor: pointer;" class='text-danger'>
                                         <i data-target="#modal-delete" data-id="{{ $category->id }}"
@@ -113,8 +117,10 @@
                                             {{ $child->name }}
                                         </div>
                                         <div class="d-flex">
-                                            <div style="font-size:1.05rem; cursor: pointer;" class="text-warning mx-3"><i
-                                                    class="fa fa-edit"></i></div>
+                                            <div style="font-size:1.05rem; cursor: pointer;" class="text-warning mx-3">
+                                                <i data-data='@json($child)' data-target="#modal-handle" data-toggle="modal"
+                                            class="fa fa-edit btn-modal-edit"></i>
+                                                </div>
                                             <div style="font-size:1.05rem; cursor: pointer;" class='text-danger'>
                                                 <i data-target="#modal-delete" data-id="{{ $child->id }}"
                                                     data-name="{{ $child->name }}" data-toggle="modal"
@@ -138,25 +144,86 @@
 @endsection
 
 @section('bodyModalHandle')
-    <div class="form-group">
-        <label for="name">Tên loại sản phẩm:</label>
-        <input type="name" class="form-control" placeholder="Nhập tên loại sản phẩm" name="name" id="name">
+<div class="row">
+    {{-- <div class="col-8 d-flex flex-column justify-content-around"> --}}
+    <div class="col-8">
+         <div class="form-group">
+             <label for="name"><span class="text-danger">*</span> Tên loại sản phẩm:</label>
+             <input type="name" class="form-control" placeholder="Nhập tên loại sản phẩm" name="name" id="name">
+         </div>
+         <div class="form-group">
+             <label for="parent_category_id"><span class="text-danger">*</span> Thuộc danh mục:</label>
+             <select name="parent_category_id" class="form-control" id="parent_category_id">
+                <option value=''>Không có</option>
+                @foreach ($categories as $category)
+                <option value="{{$category->id}}">{{$category->name}}</option>
+                @endforeach
+              </select>
+         </div>
     </div>
+    <div class="col-4">
+        <div class="form-group">
+            <label for="name" style="text-align: center;display:block">Ảnh loại sản phẩm:</label>
+            <img id="avatar-image" class="border edit-avatar">
+            <input type="file" accept="image/png, image/gif, image/jpeg" id="image" class="form-control-file border" name="image">
+        </div>
+    </div>
+</div>
+
 @endsection
 
 @section('bodyScript')
     <script>
-        const namePage = 'loại sản phẩm';
-        setModalDeleteInListPage(namePage);
-        setModalHandle(namePage);
 
-        const toggler = document.getElementsByClassName("caret");
-        for (let i = 0; i < toggler.length; i++) {
-            toggler[i].addEventListener("click", function() {
-                this.parentElement.querySelector(".nested").classList.toggle("active");
-                this.classList.toggle("caret-down");
-            });
+    const namePage = 'loại sản phẩm';
+    setModalDeleteInListPage(namePage);
+    setModalHandle(namePage);
+    document.getElementById('image').addEventListener('change', (e) => {
+        const urlImage = URL.createObjectURL(e.target.files[0]);
+        document.getElementById('avatar-image').setAttribute('src', urlImage);
+    })
+
+
+    const btnAdds = document.querySelectorAll('.btn-modal-add-sub');
+    // open modal add sub
+    btnAdds.forEach(btn=> btn.addEventListener('click', (e)=>{
+        let {
+                data
+            } = e.target.dataset;
+        data = JSON.parse(data)
+        for (element of formHandle.elements) {
+            if (!['_method', '_token'].includes(element.name)) {
+                switch(element.type) {
+                    case 'file':
+                        document.getElementById('avatar-image').setAttribute('src', `${location.protocol}//${location.host}/assets/images/placeholder-images.png`);
+                        break;
+                    case 'select-one':
+                        const indexOfOption = [...element.options].findIndex(i=>i.value== data.id );
+                        if(indexOfOption>-1){
+                            element.options.selectedIndex  = indexOfOption;
+                        }
+                        break;
+                    default:
+                        element.value = '';
+                }
+                resetValidForm(element);
+            }
         }
+        headerModalHandle.innerHTML = `Thêm ${namePage}`;
+        btnAcceptHandle.innerHTML = 'Thêm';
+        formHandle.action = `${location.pathname}`
+        formHandle['_method'].value = 'POST';
+    }))
+
+
+
+    const toggler = document.getElementsByClassName("caret");
+    for (let i = 0; i < toggler.length; i++) {
+        toggler[i].addEventListener("click", function() {
+            this.parentElement.querySelector(".nested").classList.toggle("active");
+            this.classList.toggle("caret-down");
+        });
+    }
 
     </script>
 @endsection

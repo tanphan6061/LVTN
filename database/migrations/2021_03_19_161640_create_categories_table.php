@@ -16,7 +16,7 @@ class CreateCategoriesTable extends Migration
         Schema::create('categories', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('image');
+            $table->string('image')->default('assets/images/placeholder-images.png');
             $table->string('slug');
             $table->boolean('is_deleted')->default(0);
             $table->bigInteger('parent_category_id')->unsigned()->nullable();

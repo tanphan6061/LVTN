@@ -4,7 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class SupplierR extends JsonResource
+class ParentCategoryR extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -14,12 +14,11 @@ class SupplierR extends JsonResource
      */
     public function toArray($request)
     {
-        $exceptions = ['email','updated_at'];
-        $data = collect($this->resource)->except($exceptions);
-        $data['ratings'] = [
-            'rating_count' => $this->reviews->count(),
-            'rating_average' => $this->reviews->avg('star')
+        $exceptions = [
+            'created_at', 'updated_at', 'is_deleted', 'parent_category_id'
         ];
+        $data = collect($this->resource)->except($exceptions);
+        $data['parent'] = $this->parent_category ? new ParentCategoryR($this->parent_category) : null;
         return $data;
     }
 }

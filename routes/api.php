@@ -1,10 +1,12 @@
 <?php
 
 use App\Http\Controllers\API\v1\AuthController;
+use App\Http\Controllers\API\v1\BrandController;
 use App\Http\Controllers\API\v1\CartController;
 use App\Http\Controllers\API\v1\CategoryController;
 use App\Http\Controllers\API\v1\FavouriteController;
 use App\Http\Controllers\API\v1\OrderController;
+use App\Http\Controllers\API\v1\RecommendationController;
 use App\Http\Controllers\API\v1\ReviewController;
 use App\Http\Controllers\API\v1\SupplierController;
 use App\Http\Controllers\API\v1\UserController;
@@ -26,13 +28,11 @@ use Illuminate\Support\Facades\Route;
 
 Route::group(['prefix' => 'v1', 'middleware' => ['api', 'cors']], function () {
     route::post('login', [AuthController::class, 'login']);
-    route::post('logout', [AuthController::class, 'logout']);
     route::post('register', [AuthController::class, 'register']);
-    route::post('refresh', [AuthController::class, 'refresh']);
-    route::get('me', [AuthController::class, 'show']);
-    route::put('me', [AuthController::class, 'update']);
+
     route::resource('products', ProductController::class)
         ->only(['index', 'show']);
+
     route::resource('reviews', ReviewController::class)
         ->only(['index', 'store', 'update']);
 
@@ -40,10 +40,21 @@ Route::group(['prefix' => 'v1', 'middleware' => ['api', 'cors']], function () {
         ->only(['show']);
 
     route::resource('categories', CategoryController::class)
-        ->only(['show','index']);
+        ->only(['show', 'index']);
+
+    route::resource('brands', BrandController::class)
+        ->only(['show']);
 });
 
 Route::group(['prefix' => 'v1', 'middleware' => ['jwt.verify', 'api', 'cors']], function () {
+    route::post('refresh', [AuthController::class, 'refresh']);
+
+    route::post('logout', [AuthController::class, 'logout']);
+
+    route::get('me', [AuthController::class, 'show']);
+
+    route::put('me', [AuthController::class, 'update']);
+
     route::delete('me/favourites', [FavouriteController::class, 'destroy']);
 
     route::put('me/carts', [CartController::class, 'update']);
@@ -53,6 +64,8 @@ Route::group(['prefix' => 'v1', 'middleware' => ['jwt.verify', 'api', 'cors']], 
     route::get('me/addresses/active', [AddressController::class, 'showActive']);
 
     route::get('me/cart/discounts', [DiscountCodeController::class, 'getDiscountCodeInCart']);
+
+    route::get('recommendations', [RecommendationController::class, 'index']);
 
     route::resource('addresses', AddressController::class)
         ->only(['index', 'destroy', 'store', 'update', 'show']);

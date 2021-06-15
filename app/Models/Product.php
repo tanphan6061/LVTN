@@ -72,6 +72,11 @@ class Product extends Model
         })->unique()->sortBy('id');
     }
 
+    public function getRouteKeyName()
+    {
+        return 'slug';
+    }
+
     protected static function booted()
     {
         static::addGlobalScope(new ActiveScope);

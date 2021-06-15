@@ -62,10 +62,21 @@ class Supplier extends Authenticatable
         return $this->hasMany(Order::class);
     }
 
+    public function reviews()
+    {
+        return $this->hasManyThrough(Review::class, Product::class);
+    }
+
     public function getCancellationOrdersAttribute()
     {
         return $this->orders->filter(function ($order) {
             return $order->currentStatus() == "cancel";
         })->count();
+    }
+
+
+    public function getRouteKeyName()
+    {
+        return 'slug';
     }
 }

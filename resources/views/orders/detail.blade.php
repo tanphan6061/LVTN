@@ -12,8 +12,13 @@
                 <div class="mb-2">Trạng thái hiện tại: {{ $order->currentStatus() }}</div>
             </div>
             <div>
-                <button class="btn btn-primary">Thay đổi trạng thái</button>
-                <button class="btn btn-danger">Huỷ đơn</button>
+                @if ($order->currentStatus() !== 'cancel')
+                    <button class="btn btn-primary">Thay đổi trạng thái</button>
+                @endif
+
+                @if ($order->currentStatus() === 'processing')
+                    <button class="btn btn-danger">Huỷ đơn</button>
+                @endif
             </div>
         </div>
     </div>
@@ -90,8 +95,8 @@
                         <td>
                             <div style="width:50px;height:50px">
                                 <img style="width: 100%;
-                                    height: 100%;
-                                    object-fit: cover;" class="img-thumbnail"
+                                            height: 100%;
+                                            object-fit: cover;" class="img-thumbnail"
                                     src="{{ $order_detail->product->images[0]->url ?? url('assets/images/placeholder-images.png') }}"
                                     alt="">
                             </div>

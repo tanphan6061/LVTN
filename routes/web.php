@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\DiscountAdminController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\DiscountController;
 use App\Http\Controllers\ProductController;
@@ -25,7 +26,11 @@ Route::get('/', function () {
     return redirect()->route('login');
 });
 
+
 Auth::routes();
+Route::get('/register', [SupplierController::class, 'create'])->name('suppliers.create');
+Route::post('/register', [SupplierController::class, 'store'])->name('suppliers.store');
+
 Route::group(['prefix' => '/admin', 'middleware' => ['auth']], function () {
     Route::resource('products', ProductController::class);
     Route::resource('discounts', DiscountController::class);
@@ -38,7 +43,8 @@ Route::group(['prefix' => '/admin', 'middleware' => ['auth']], function () {
     Route::post('change-password', [SupplierController::class, 'updatePassword'])->name('suppliers.updatePassword');
 
     Route::get('manage-suppliers', [SupplierController::class, 'index'])->name('suppliers.index');
-    Route::get('manage-discounts', [DiscountController::class, 'indexAdmin'])->name('discounts.indexAdmin');
+    Route::put('manage-suppliers/{id}', [SupplierController::class, 'changeActiveStatus'])->name('suppliers.changeActiveStatus');
+    Route::resource('manage-discounts', DiscountAdminController::class);
     Route::resource('manage-categories', CategoryController::class);
     Route::resource('manage-brands', BrandController::class);
 });

@@ -20,6 +20,7 @@ class CreateOrderDetailsTable extends Migration
             $table->integer('quantity');
             $table->integer('price');
             $table->integer('discount')->default(0);
+            $table->text('temp_product')->default('');
             //$table->integer('grand_total'); // = price - discount
             $table->foreign('order_id')->references('id')->on('orders');
             $table->foreign('product_id')->references('id')->on('products');

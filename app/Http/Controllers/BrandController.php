@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\BrandRequest;
 use App\Models\Brand;
 use Illuminate\Http\Request;
 
@@ -17,7 +18,7 @@ class BrandController extends Controller
         $brands = Brand::where([
             ['name', 'like', "%$request->q%"],
             ['is_deleted', false]
-        ])->paginate(12);
+        ])->orderBy('created_at', 'DESC')->paginate(12);
 
         if ($request->q) {
             $brands->setPath('?q=' . $request->q);
@@ -41,9 +42,12 @@ class BrandController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(BrandRequest $request)
     {
-        //
+        $data = $request->validated();
+        Brand::create($data);
+        session(['success' => 'Tạo thương hiệu thành công']);
+        return $this->responded('Tạo thương hiệu thành công');
     }
 
     /**
@@ -75,9 +79,20 @@ class BrandController extends Controller
      * @param  \App\Models\Brand  $brand
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Brand $brand)
+    public function update(BrandRequest $request, $id)
     {
-        //
+        $message = 'Cập nhật thương hiệu thành công';
+        $brand = Brand::find($id);
+        if (!$brand) {
+            $message = 'Thương hiệu không tồn tại';
+            session(['error' => $message]);
+            return $this->respondedError($message);
+        }
+
+        $data = $request->validated();
+        $brand->update($data);
+        session(['success' => $message]);
+        return $this->responded($message);
     }
 
     /**
@@ -86,8 +101,14 @@ class BrandController extends Controller
      * @param  \App\Models\Brand  $brand
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Brand $brand)
+    public function destroy($id)
     {
-        //
+        $brand = Brand::find($id);
+        if (!$brand)
+            return abort('404');
+        if ($brand->products->count() > 0)
+            return redirect()->back()->with('error', 'Không thể xoá thương hiệu đã có sản phẩm');
+        $brand->update(['is_deleted' => true]);
+        return redirect()->back()->with('success', 'Xóa thương hiệu thành công');
     }
 }

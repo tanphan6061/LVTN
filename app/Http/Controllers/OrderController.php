@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Order;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class OrderController extends Controller
 {
@@ -16,11 +17,36 @@ class OrderController extends Controller
     public function index(Request $request)
     {
         //
-        $orders = Auth::user()->orders()->paginate(12);
+        $type = 'processing'; //
+        if ($request->type) {
+            $type = $request->type;
+        }
+
+        DB::enableQueryLog();
+        $orders = Auth::user()->orders()
+            ->select(
+                'orders.*',
+                'history_orders.status',
+                // 'users.name'
+            )
+            ->leftJoin(DB::raw('history_orders'), function ($query) use ($type) {
+                $query->on('orders.id', '=', 'history_orders.order_id');
+            })
+            ->where('history_orders.status', $type)
+            ->where('history_orders.created_at', function ($query) {
+                return $query->selectRaw('max(h2.created_at)')
+                    ->from('history_orders as h2')
+                    ->whereRaw('history_orders.order_id = h2.order_id');
+            })
+            ->leftjoin('users', 'users.id', '=', 'orders.user_id')
+            ->where(function ($query) use ($request) {
+                return  $query->where('users.name', 'like', '%' . $request->q . '%')
+                    ->orWhere('orders.id', $request->q);
+            })->paginate(12);
         if ($request->q) {
-            $orders = Auth::user()->orders()->where('id', 'like', "%$request->q%")->paginate(12);
             $orders->setPath('?q=' . $request->q);
         }
+        $orders->setPath('?type=' . $request->type);
 
         return view('orders.list', compact('orders'));
     }
@@ -55,7 +81,7 @@ class OrderController extends Controller
     public function show(Order $order)
     {
         //
-        return view('orders.detail',compact('order'));
+        return view('orders.detail', compact('order'));
     }
 
     /**
@@ -90,5 +116,10 @@ class OrderController extends Controller
     public function destroy(Order $order)
     {
         //
+        if ($order->currentStatus() !== 'processing')
+            return redirect()->back()->with('error', 'Không thể huỷ đơn đang ở trạng thái ' . $order->currentStatus());
+
+        $order->history_orders()->create(['status' => 'cancel']);
+        return redirect()->back()->with('success', 'Huỷ đơn thành công');
     }
 }

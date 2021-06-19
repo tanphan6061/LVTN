@@ -52,7 +52,8 @@ class WebRequest extends FormRequest
             'nameOfShop' => 'Tên của cửa hàng',
             'address'=> 'Địa chỉ',
             'password'=>'Mật khẩu',
-            'new_password'=>'Mật khẩu mới'
+            'new_password'=>'Mật khẩu mới',
+            'password_confirmation'=>'Nhập lại mật khẩu'
 
         ];
     }

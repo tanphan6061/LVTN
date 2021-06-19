@@ -12,8 +12,9 @@
         </div>
     </div>
     <div>
-        <form method="post" action="{{route('discounts.store')}}">
+        <form method="post" action="{{route(str_replace('create','store',Route::currentRouteName()))}}">
             @csrf
+            @method('post')
             <div class="row mt-4 ">
                 <div class="form-group col-6">
                     <label for="code"><span class="text-danger">*</span> Mã giảm giá:</label>

@@ -74,13 +74,19 @@
                             {{ $supplier->address }}
                         </th>
                         <th>
-                            {{ $supplier->is_activated ? 'Chưa hoạt động' : 'Đang hoạt đỘng' }}
+                            {{ $supplier->is_activated ? 'Đang hoạt động' : 'Chưa hoạt động' }}
                         </th>
                         <th>
                             @if ($supplier->is_activated)
-                            <button data-toggle="tooltip" data-placement="top" title="Tạm ngưng hoạt động cửa hàng" type="button" class="btn btn-danger">Tạm ngưng</button>
+                            <div  data-toggle="tooltip"  data-placement="top" title="Tạm ngưng hoạt động cửa hàng" >
+                                <button data-target="#modalUpdateSupplier" data-id="{{$supplier->id}}" data-nameOfShop="{{$supplier->nameOfShop}}"
+                                 data-type="deactivate"   data-toggle="modal" class="btn btn-danger btn-modal-update" type="button">Tạm ngưng</button>
+                            </div>
                             @else
-                            <button type="button" class="btn btn-primary"  data-toggle="tooltip" data-placement="top" title="Duyệt cửa hàng hoạt động" >Duyệt</button>
+                            <div  data-toggle="tooltip"  data-placement="top" title="Duyệt hoạt động cửa hàng" >
+                                <button data-target="#modalUpdateSupplier" data-id="{{$supplier->id}}" data-nameOfShop="{{$supplier->nameOfShop}}"
+                                 data-type="active"   data-toggle="modal" class="btn btn-primary btn-modal-update" type="button">Duyệt</button>
+                            </div>
                             @endif
                         </th>
                     </tr>
@@ -95,51 +101,67 @@
         {!! $suppliers->render('pagination::bootstrap-4') !!}
     </div>
 
-    {{-- <div class="modal" id="modalDelete">
+    <div class="modal" id="modalUpdateSupplier">
         <div class="modal-dialog">
             <div class="modal-content">
 
                 <!-- Modal Header -->
                 <div class="modal-header">
-                    <h4 id="header-modal-delete" class="modal-title">Xóa mã giảm giá</h4>
+                    <h4 id="header-modal-update" class="modal-title">Tạm ngưng cửa hàng</h4>
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
 
                 <!-- Modal body -->
                 <div class="modal-body">
-                    <h2 id="mess-delete"></h2>
+                    <h2 id="mess-modal"></h2>
                 </div>
 
                 <!-- Modal footer -->
                 <div class="modal-footer">
                     <button data-dismiss="modal" class="btn btn-secondary border">Hủy</button>
-                    <button onclick="document.getElementById('delete-form').submit()" id="accept-delete-btn" type="button"
-                        class="btn btn-danger">Xóa</button>
-                    <form method="post" id="delete-form" style="display: none;">
+                    <button onclick="document.getElementById('update-form').submit()" id="accept-update-btn" type="button"
+                        class="btn btn-danger">Tạm ngưng</button>
+                    <form method="post" id="update-form" style="display: none;">
                         @csrf
-                        @method('DELETE')
+                        @method('PUT')
+                        <input type="hidden" name="is_activated" id="is_activated">
                     </form>
                 </div>
             </div>
         </div>
-    </div> --}}
+    </div>
 
 
-    {{-- <script>
-        const btns = document.querySelectorAll('.delete-discount-code');
+    <script>
+        const acceptUpdateBtn = document.getElementById('accept-update-btn')
+        const btns = document.querySelectorAll('.btn-modal-update');
+        const headerModalUpdate = document.getElementById('header-modal-update');
         btns.forEach(btn => btn.addEventListener('click', (e) => {
             const {
-                code,
+                nameofshop: nameOfShop,
+                type,
                 id
             } = e.target.dataset;
-            console.log(code, id);
 
-            const messDelete = document.getElementById('mess-delete');
-            messDelete.innerHTML = `Bạn muốn xóa mã giảm giá: ${code}?`;
+            const messUpdate = document.getElementById('mess-modal');
+            if(type==="deactivate"){
+                messUpdate.innerHTML = `Bạn muốn tạm ngưng cửa hàng: ${nameOfShop}?`;
+                acceptUpdateBtn.innerHTML='Tạm ngưng';
+                acceptUpdateBtn.setAttribute('class','btn btn-danger');
+                headerModalUpdate.innerHTML = 'Tạm ngưng hoạt động cửa hàng';
+                document.getElementById('is_activated').value= false;
+            }
+            else{
+                messUpdate.innerHTML = `Bạn muốn duyệt cửa hàng: ${nameOfShop}?`;
+                acceptUpdateBtn.innerHTML='Duyệt';
+                acceptUpdateBtn.setAttribute('class','btn btn-primary');
+                headerModalUpdate.innerHTML = 'Duyệt hoạt động cửa hàng';
+                document.getElementById('is_activated').value= true;
+            }
 
-            const deleteForm = document.getElementById('delete-form');
-            deleteForm.setAttribute('action', `${location.pathname}/${id}`)
+            const updateForm = document.getElementById('update-form');
+            updateForm.setAttribute('action', `${location.pathname}/${id}`)
         }))
 
-    </script> --}}
+    </script>
 @endsection

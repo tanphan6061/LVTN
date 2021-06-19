@@ -3,7 +3,7 @@
         <div class="navbar nav_title" style="border: 0">
             <a href="/" class="site_title d-flex align-items-center">
                 <img style="width:40px;" src="{{ asset('logo.png') }}" alt="">
-                <div class="margin: 50px">Taka Seller</div>
+                <div style="margin-left : 20px">Taka Seller</div>
             </a>
         </div>
 
@@ -99,8 +99,8 @@
                             <a><i class="fa fa-clone"></i> Mã giảm giá hệ thống
                                 <span class="fa fa-chevron-down"></span></a>
                             <ul class="nav child_menu">
-                                <li><a href="{{ route('discounts.indexAdmin') }}">Danh sách mã giảm giá</a></li>
-                                {{-- <li><a href="{{route('('discounts.createAdmin')')}}">Tạo mã giảm giá mới</a></li> --}}
+                                <li><a href="{{ route('manage-discounts.index') }}">Danh sách mã giảm giá</a></li>
+                                <li><a href="{{route('manage-discounts.create')}}">Tạo mã giảm giá mới</a></li>
                             </ul>
                         </li>
                         <li>

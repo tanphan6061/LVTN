@@ -3,7 +3,7 @@
         <div class="modal-content">
             <!-- Modal Header -->
             <div class="modal-header">
-                <h4 id="header-modal-delete" class="modal-title"></h4>
+                <h4 id="header-modal-delete" class="modal-title text-capitalize"></h4>
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
 
@@ -26,38 +26,36 @@
     </div>
 </div>
 <script>
-    const setModalDelete = (type, message) => {
+    const setModalDelete = (type, message, action) => {
         switch (type) {
             case 'header':
-                document.getElementById('header-modal-delete').innerHTML = `Xoá ${message}`;
+                document.getElementById('header-modal-delete').innerHTML = `${action} ${message}`;
                 break;
             case 'body':
-                document.getElementById('message-modal-delete').innerHTML = `Bạn muốn xóa ${message}?`;
+                document.getElementById('message-modal-delete').innerHTML = `Bạn muốn ${action} ${message}?`;
                 break;
             case 'action':
                 document.getElementById('delete-form').setAttribute('action', message);
                 break;
         }
     }
-    // const messDelete = document.getElementById('mess-delete');
-    // messDelete.innerHTML = `Bạn muốn xóa sản phẩm: ${nameproduct}?`;
-    // const deleteForm = document.getElementById('delete-form');
-    // deleteForm.setAttribute('action', `${location.pathname}/${id}`)
 
     /**@argument
      * Set modal delete in list page
      */
     const setModalDeleteInListPage = (namePage) => {
-        setModalDelete('header', namePage)
         const btns = document.querySelectorAll('.btn-modal-delete');
         btns.forEach(btn => btn.addEventListener('click', (e) => {
             const {
                 name,
                 id
             } = e.target.dataset;
-
-            setModalDelete('body', `${namePage} ${name}`)
-            setModalDelete('action', `${location.pathname}/${id}`)
+            const act = btn.textContent ? btn.textContent : 'Xoá'
+            setModalDelete('header', namePage, act)
+            setModalDelete('body', `${namePage} ${name}`, act.toLowerCase())
+            setModalDelete('action', `${location.pathname}/${id}`, act)
+            document.getElementById('accept-delete-btn').innerHTML = act
         }))
     }
+
 </script>

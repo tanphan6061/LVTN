@@ -20,12 +20,12 @@ class CreateSuppliersTable extends Migration
             $table->string('password');
             $table->string('avatar')->default('http://localhost:8000/assets/images/avatar-placeholder.gif');
             $table->string('phone');
-            $table->string('description', 500);
+            $table->string('description', 500)->default('');
             $table->string('nameOfShop')->nullable();
             $table->string('slug')->nullable();
             $table->string('address')->nullable();
             $table->enum('role',['supplier','admin']); // default is supplier
-            $table->boolean('is_activated')->default(1); // default is 1 (is activated)
+            $table->boolean('is_activated')->default(0); // default is 0 (is inactivated)
             $table->timestamps();
         });
     }

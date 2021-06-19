@@ -26,7 +26,11 @@ Route::get('/', function () {
     return redirect()->route('login');
 });
 
+
 Auth::routes();
+Route::get('/register', [SupplierController::class, 'create'])->name('suppliers.create');
+Route::post('/register', [SupplierController::class, 'store'])->name('suppliers.store');
+
 Route::group(['prefix' => '/admin', 'middleware' => ['auth']], function () {
     Route::resource('products', ProductController::class);
     Route::resource('discounts', DiscountController::class);

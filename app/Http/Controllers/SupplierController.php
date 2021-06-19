@@ -40,7 +40,7 @@ class SupplierController extends Controller
      */
     public function create()
     {
-        //
+        return view('auth.register');
     }
 
     /**
@@ -49,9 +49,32 @@ class SupplierController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(SupplierRequest $request)
     {
-        //
+        $data = $request->validate(
+            array_merge(
+                $request->rules(),
+                [
+                    'password' => 'required|min:5',
+                    'password_confirmation' => 'required|min:5',
+                    'email' => [
+                        'required',
+                        'regex:/^([a-z0-9\+_\-]+)(\.[a-z0-9\+_\-]+)*@([a-z0-9\-]+\.)+[a-z]{2,6}$/ix',
+                        'unique:suppliers'
+                    ]
+                ]
+            ),
+            $request->messages(),
+            $request->attributes()
+        );
+
+        if ($data['password'] != $data['password_confirmation'])
+            return redirect()->back()->withErrors(['password' => 'Nhập lại mật khẩu không khớp']);
+
+        unset($data['password_confirmation']);
+        $data['password'] =  bcrypt($data['password']);
+        Supplier::create($data);
+        return redirect()->route('login');
     }
 
     /**

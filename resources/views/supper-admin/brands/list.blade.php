@@ -61,6 +61,5 @@
         const namePage = 'thương hiệu';
         setModalDeleteInListPage(namePage);
         setModalHandle(namePage);
-
     </script>
 @endsection

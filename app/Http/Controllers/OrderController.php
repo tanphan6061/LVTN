@@ -104,7 +104,31 @@ class OrderController extends Controller
      */
     public function update(Request $request, Order $order)
     {
-        //
+        $message = 'Cập nhật trạng thái đơn đặt hàng thành công';
+        $error = false;
+        if (!$order) {
+            $message = 'Đơn đặt hàng không tồn tại';
+            $error = true;
+        }
+
+        // $data = $request->validated();
+        if ($order->currentStatus() === 'cancel') {
+            $message = 'Không thể cập nhật trạng thái đơn đặt hàng có trạng thái: ' . $order->currentStatus();
+            $error = true;
+        }
+        if (!$request->status) {
+            $message = 'Trạng thái đơn hàng là bắt buộc' . $order->currentStatus();
+            $error = true;
+        }
+
+        if ($error) {
+            session(['error' => $message]);
+            return $this->respondedError($message, ["isRedirect" => true]);
+        }
+
+        $order->history_orders()->create(['status' => $request->status]);
+        session(['success' => $message]);
+        return $this->responded($message);
     }
 
     /**
@@ -116,7 +140,7 @@ class OrderController extends Controller
     public function destroy(Order $order)
     {
         //
-        if ($order->currentStatus() !== 'processing')
+        if ($order->currentStatus() === 'delivered')
             return redirect()->back()->with('error', 'Không thể huỷ đơn đang ở trạng thái ' . $order->currentStatus());
 
         $order->history_orders()->create(['status' => 'cancel']);

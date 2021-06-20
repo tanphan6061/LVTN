@@ -9,7 +9,7 @@
 
             <!-- Modal body -->
             <div class="modal-body">
-                <form method="POST"  enctype="multipart/form-data" action="" id="formHandle">
+                <form method="POST" enctype="multipart/form-data" action="" id="formHandle">
                     @csrf
                     @method('put')
                     @yield('bodyModalHandle')
@@ -82,16 +82,18 @@
     /**@argument
      * Set modal delete in list page
      */
-    const setModalHandle = (namePage) => {
+    const setModalHandle = (namePage, actionUrl = location.pathname) => {
         const btnAdd = document.getElementById('btn-modal-add');
         const btnEdits = document.querySelectorAll('.btn-modal-edit');
         // // open modal add
-       if(btnAdd){
+        if (btnAdd) {
             btnAdd.addEventListener('click', (e) => {
                 for (element of formHandle.elements) {
                     if (!['_method', '_token'].includes(element.name)) {
-                        if(element.type==='file'){
-                            document.getElementById('avatar-image').setAttribute('src', `${location.protocol}//${location.host}/assets/images/placeholder-images.png`);
+                        if (element.type === 'file') {
+                            document.getElementById('avatar-image').setAttribute('src',
+                                `${location.protocol}//${location.host}/assets/images/placeholder-images.png`
+                            );
                         }
                         element.value = '';
                         resetValidForm(element);
@@ -99,34 +101,38 @@
                 }
                 headerModalHandle.innerHTML = `Thêm ${namePage}`;
                 btnAcceptHandle.innerHTML = 'Thêm';
-                formHandle.action = `${location.pathname}`
+                formHandle.action = `${actionUrl}`
                 formHandle['_method'].value = 'POST'
             })
-       }
+        }
 
         // open modal edit
         btnEdits.forEach(btn => btn.addEventListener('click', (e) => {
-            console.log("haha");
             let {
                 data
             } = e.target.dataset;
-            data = JSON.parse(data)
             console.log(data);
+            data = JSON.parse(data)
             for (element of formHandle.elements) {
                 if (!['_method', '_token'].includes(element.name)) {
-                    switch(element.type) {
+                    switch (element.type) {
                         case 'file':
-                            document.getElementById('avatar-image').setAttribute('src', `${location.protocol}//${location.host}/${data[element.name]}`);
+                            document.getElementById('avatar-image').setAttribute('src',
+                                `${location.protocol}//${location.host}/${data[element.name]}`);
                             break;
                         case 'select-one':
-                            [...element.options].forEach(option =>option.setAttribute('style','display: block'));
-                            const indexOptionOfCurrentCategory = [...element.options].findIndex(i=>i.value== data.id);
-                            if(indexOptionOfCurrentCategory>-1){
-                                element.options[indexOptionOfCurrentCategory].setAttribute('style','display: none');
+                            [...element.options].forEach(option => option.setAttribute('style',
+                                'display: block'));
+                            const indexOptionOfCurrentCategory = [...element.options].findIndex(i => i
+                                .value == data.id);
+                            if (indexOptionOfCurrentCategory > -1) {
+                                element.options[indexOptionOfCurrentCategory].setAttribute('style',
+                                    'display: none');
                             }
-                            const indexOfOption = [...element.options].findIndex(i=>i.value== (data[element.name]?data[element.name]:'') );
-                            if(indexOfOption>-1){
-                                element.options.selectedIndex  = indexOfOption;
+                            const indexOfOption = [...element.options].findIndex(i => i.value == (data[
+                                element.name] ? data[element.name] : ''));
+                            if (indexOfOption > -1) {
+                                element.options.selectedIndex = indexOfOption;
                             }
                             break;
                         default:
@@ -135,11 +141,11 @@
                     resetValidForm(element);
                 }
             }
+
             headerModalHandle.innerHTML = `Sửa ${namePage}`;
             btnAcceptHandle.innerHTML = 'Cập nhật';
-            formHandle.action = `${location.pathname}/${data.id}`
+            formHandle.action = `${actionUrl}/${data.id}`
             formHandle['_method'].value = 'PUT'
         }))
     }
-
 </script>

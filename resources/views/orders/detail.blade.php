@@ -13,11 +13,15 @@
             </div>
             <div>
                 @if ($order->currentStatus() !== 'cancel')
-                    <button class="btn btn-primary">Thay đổi trạng thái</button>
+                    <button data-data='@json($order)' data-target="#modal-handle" data-toggle="modal"
+                        class="btn btn-primary btn-modal-edit">
+                      Thay đổi trạng thái
+                    </button>
                 @endif
 
-                @if ($order->currentStatus() === 'processing')
-                    <button class="btn btn-danger">Huỷ đơn</button>
+                @if ($order->currentStatus() !== 'cancel' && $order->currentStatus() !== 'delivered')
+                <button data-toggle="modal" data-id="{{ $order->id }}" data-name="{{ $order->id }}"
+                    data-target="#modal-delete" class="btn btn-danger btn-modal-delete">Huỷ đơn</button>
                 @endif
             </div>
         </div>
@@ -95,8 +99,8 @@
                         <td>
                             <div style="width:50px;height:50px">
                                 <img style="width: 100%;
-                                            height: 100%;
-                                            object-fit: cover;" class="img-thumbnail"
+                                                height: 100%;
+                                                object-fit: cover;" class="img-thumbnail"
                                     src="{{ $order_detail->product->images[0]->url ?? url('assets/images/placeholder-images.png') }}"
                                     alt="">
                             </div>
@@ -114,5 +118,18 @@
     </div>
 @endsection
 
-@section('javascript')
+@section('bodyModalHandle')
+    <select class="form-control" name="status" class="p-3" id="status">
+        <option value="processing">Chưa xác nhận</option>
+        <option value="shipping">Đang giao</option>
+        <option value="delivered">Đã giao</option>
+    </select>
+@endsection
+
+@section('bodyScript')
+    <script>
+        const namePage = 'đơn đặt hàng';
+        setModalDeleteInListPage(namePage,`${location.protocol}//${location.host}/admin/orders`);
+        setModalHandle('trạng thái đơn đặt hàng',`${location.protocol}//${location.host}/admin/orders`);
+    </script>
 @endsection

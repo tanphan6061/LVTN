@@ -4,15 +4,14 @@ use App\Http\Controllers\API\v1\AuthController;
 use App\Http\Controllers\API\v1\BrandController;
 use App\Http\Controllers\API\v1\CartController;
 use App\Http\Controllers\API\v1\CategoryController;
+use App\Http\Controllers\API\v1\DiscountCodeController;
 use App\Http\Controllers\API\v1\FavouriteController;
 use App\Http\Controllers\API\v1\OrderController;
 use App\Http\Controllers\API\v1\RecommendationController;
 use App\Http\Controllers\API\v1\ReviewController;
 use App\Http\Controllers\API\v1\SupplierController;
-use App\Http\Controllers\API\v1\UserController;
 use \App\Http\Controllers\API\v1\ProductController;
 use App\Http\Controllers\API\v1\AddressController;
-use App\Http\Controllers\DiscountCodeController;
 use Illuminate\Support\Facades\Route;
 
 /*

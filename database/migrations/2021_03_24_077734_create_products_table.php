@@ -22,6 +22,7 @@ class CreateProductsTable extends Migration
             $table->bigInteger('brand_id')->unsigned();
             $table->bigInteger('supplier_id')->unsigned();
             $table->integer('amount');
+            $table->integer('max_buy')->default(1);
             $table->text('description');
             // $table->text('detail');
             $table->enum('status', ['available', 'out_of_stock']);

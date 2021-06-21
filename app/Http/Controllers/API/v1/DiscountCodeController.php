@@ -1,12 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\API\v1;
 
-use App\Http\Controllers\API\v1\ApiController;
+
 use App\Http\Resources\DiscountCodeGlobalR;
 use App\Http\Resources\DiscountCodeR;
 use App\Models\Discount_code;
-use Illuminate\Http\Request;
 
 class DiscountCodeController extends ApiController
 {

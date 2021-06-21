@@ -58,6 +58,8 @@ Route::group(['prefix' => 'v1', 'middleware' => ['jwt.verify', 'api', 'cors']], 
 
     route::put('me/carts', [CartController::class, 'update']);
 
+    route::get('me/carts/count', [CartController::class, 'getCountItems']);
+
     route::get('me/getListWaitingReview', [ReviewController::class, 'getListWaitingReview']);
 
     route::get('me/addresses/active', [AddressController::class, 'showActive']);

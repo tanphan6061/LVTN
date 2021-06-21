@@ -30,7 +30,7 @@ class CartController extends ApiController
     public function index()
     {
         $cart_items = $this->user->carts;
-        $products = $suppliers = $cart_items->map(function ($item) {
+        $products = $cart_items->map(function ($item) {
             $product = $item->product;
             $product->quantity = $item->quantity;
             return $product;
@@ -114,6 +114,13 @@ class CartController extends ApiController
 
         $cart->update($validated);
         return $this->responded("Update cart item successfully", $cart);
+    }
 
+    public function getCountItems()
+    {
+        $total = $this->user->carts()->count();
+        return $this->responded("Get total count items in cart", [
+            'total_count' => $total,
+        ]);
     }
 }

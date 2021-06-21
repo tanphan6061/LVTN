@@ -43,7 +43,7 @@
     /**@argument
      * Set modal delete in list page
      */
-    const setModalDeleteInListPage = (namePage) => {
+    const setModalDeleteInListPage = (namePage, actionUrl = location.pathname) => {
         const btns = document.querySelectorAll('.btn-modal-delete');
         btns.forEach(btn => btn.addEventListener('click', (e) => {
             const {
@@ -53,9 +53,8 @@
             const act = btn.textContent ? btn.textContent : 'Xoá'
             setModalDelete('header', namePage, act)
             setModalDelete('body', `${namePage} ${name}`, act.toLowerCase())
-            setModalDelete('action', `${location.pathname}/${id}`, act)
+            setModalDelete('action', `${actionUrl}/${id}`, act)
             document.getElementById('accept-delete-btn').innerHTML = act
         }))
     }
-
 </script>

@@ -43,10 +43,11 @@
                             <i class="fa fa-edit"></i> Đơn Hàng <span class="fa fa-chevron-down"></span>
                         </a>
                         <ul class="nav child_menu">
-                            <li><a href="{{ route('orders.index') }}">Đơn chưa xác nhận</a></li>
-                            <li><a href="{{ route('orders.index') }}">Đơn đang giao</a></li>
-                            <li><a href="{{ route('orders.index') }}">Đơn đã giao</a></li>
-                            <li><a href="{{ route('orders.index') }}">Đơn đã huỷ</a></li>
+                            <li><a href="{{ route('orders.index', ['type' => 'processing']) }}">Đơn chưa xác nhận</a>
+                            </li>
+                            <li><a href="{{ route('orders.index', ['type' => 'shipping']) }}">Đơn đang giao</a></li>
+                            <li><a href="{{ route('orders.index', ['type' => 'delivered']) }}">Đơn đã giao</a></li>
+                            <li><a href="{{ route('orders.index', ['type' => 'cancel']) }}">Đơn đã huỷ</a></li>
                         </ul>
                     </li>
                     <li>
@@ -100,7 +101,7 @@
                                 <span class="fa fa-chevron-down"></span></a>
                             <ul class="nav child_menu">
                                 <li><a href="{{ route('manage-discounts.index') }}">Danh sách mã giảm giá</a></li>
-                                <li><a href="{{route('manage-discounts.create')}}">Tạo mã giảm giá mới</a></li>
+                                <li><a href="{{ route('manage-discounts.create') }}">Tạo mã giảm giá mới</a></li>
                             </ul>
                         </li>
                         <li>

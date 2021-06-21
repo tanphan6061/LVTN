@@ -53,16 +53,21 @@
                                         class="glyphicon glyphicon-info-sign"></span>
                                 </a>
                             </div>
-                            <div class="d-inline-block" data-toggle="tooltip" title="Thay đổi trạng thái đơn">
-                                <button data-code="{{ $order->code }}" data-id="{{ $order->id }}" data-toggle="modal"
-                                    data-target="#modalDelete" class="btn btn-primary delete-discount-code"> <span
-                                        class="glyphicon glyphicon-edit"></span>
-                                </button>
-                            </div>
-                            <div class="d-inline-block" data-toggle="tooltip" title="Huỷ đơn">
-                                <button data-toggle="modal" data-id="{{ $order->id }}" data-name="{{ $order->id }}"
-                                    data-target="#modal-delete" class="btn btn-danger btn-modal-delete">Huỷ đơn</button>
-                            </div>
+                            @if ($order->currentStatus() !== 'cancel')
+                                <div class="d-inline-block" data-toggle="tooltip" title="Thay đổi trạng thái đơn">
+                                    <button data-data='@json($order)' data-target="#modal-handle" data-toggle="modal"
+                                        class="btn btn-primary btn-modal-edit">
+                                        <i style="  pointer-events: none; user-select: none;" class="fa fa-edit"></i>
+                                    </button>
+                                </div>
+                                @if ($order->currentStatus() !== 'delivered')
+                                    <div class="d-inline-block" data-toggle="tooltip" title="Huỷ đơn">
+                                        <button data-toggle="modal" data-id="{{ $order->id }}"
+                                            data-name="{{ $order->id }}" data-target="#modal-delete"
+                                            class="btn btn-danger btn-modal-delete">Huỷ đơn</button>
+                                    </div>
+                                @endif
+                            @endif
                         </td>
                     </tr>
                 @endforeach
@@ -72,10 +77,20 @@
     <div class="d-flex justify-content-center mt-4">
         {!! $orders->render('pagination::bootstrap-4') !!}
     </div>
+@endsection
 
+@section('bodyModalHandle')
+    <select class="form-control" name="status" class="p-3" id="status">
+        <option value="processing">Chưa xác nhận</option>
+        <option value="shipping">Đang giao</option>
+        <option value="delivered">Đã giao</option>
+    </select>
+@endsection
+
+@section('bodyScript')
     <script>
         const namePage = 'đơn đặt hàng';
         setModalDeleteInListPage(namePage);
-
+        setModalHandle('trạng thái đơn đặt hàng');
     </script>
 @endsection

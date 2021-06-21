@@ -21,109 +21,102 @@ class RecommendationController extends ApiController
     public function index()
     {
         $limit = 10;
-        $productIDs = $this->getRecommendProducts($limit);
-        $products = $productIDs->reduce(function ($acc, $productID) {
-            $product = Product::find($productID);
-            return $acc->push($product);
+        $product_ids = $this->get_recommend_products($limit);
+        $products = $product_ids->reduce(function ($acc, $product_id) {
+            $product = Product::find($product_id);
+            return $product ? $acc->push($product) : $acc;
         }, collect([]));
 
         return $this->responded('Get list recommend successfully', ProductR::collection($products));
     }
 
-    private function getRecommendProducts($limit = 10)
+    //lấy danh sách mã sản phẩm gợi ý cho người dùng
+    private function get_recommend_products($limit = 10)
     {
-        $currentUser = $this->user;
-        $matrix = $this->initTheMatrix();
-        $similars = $this->getTheSimilars($matrix, $currentUser);
-        $similars = $this->sortSimilars($similars);
-        $tempCurrentUser = ['user_id' => $currentUser->id, 'items' => $matrix[$currentUser->id]];
-        return $this->getPrediction($tempCurrentUser, $similars, $limit);
+        $current_user = $this->user;
+        $current_user_id = $current_user->id;
+        $matrix = $this->init_matrix();
+        $similarity_users = $this->sort_similarity_users($this->get_similarity_users($matrix, $current_user_id));
+        $format_current_user = ['user_id' => $current_user_id, 'reviews' => $matrix[$current_user_id]];
+        return $this->get_prediction($format_current_user, $similarity_users, $limit);
     }
 
 
-    private function printMatrix($matrix)
-    {
-        foreach ($matrix as $userID => $rows) {
-            if ($userID == 1) {
-                echo "\t\t";
-                foreach ($rows as $product_id => $item) {
-                    echo "$product_id\t";
-                }
-                echo "\n";
-            }
-            echo "$userID\t\t";
 
-            foreach ($rows as $item) {
-                echo "$item\t";
-            }
-            echo "\n";
-        }
-    }
-
-    private function initTheMatrix()
+    //khởi tạo ma trận người dùng - sản phẩm - điểm đánh giá
+    private function init_matrix()
     {
-        $tempMatrix = [];
+        $temp_matrix = [];
         $users = User::all();
         $products = Product::all();
         foreach ($users as $user) {
+            $user_id = $user->id;
             foreach ($products as $product) {
+                $product_id = $product->id;
                 $review = $user->reviews->where('product_id', $product->id)->first();
-                $tempMatrix[$user->id][$product->id] = $review ? $review->star : 0;
+                $temp_matrix[$user_id][$product_id] = $review ? $review->star : 0;
             }
         }
-        return $tempMatrix;
+        return $temp_matrix;
     }
 
-    private function getTheSimilars($matrix, $currentUser)
+
+    //lấy mảng chứa tính toán độ tương tự người dùng
+    private function get_similarity_users($matrix, $current_user_id)
     {
-        $tempSimilars = [];
-        foreach ($matrix as $userID => $rows) {
-            if ($userID != $currentUser->id) {
-                $tempSimilars[] = [
-                    'user_id' => $userID,
-                    'value' => $this->calcSimilarityCosine($matrix[$currentUser->id], $rows),
-                    'items' => $rows
+        $similarity_users = [];
+        $current_user_data = $matrix[$current_user_id];
+        foreach ($matrix as $other_user_id => $other_user_data) {
+            if ($other_user_id != $current_user_id) {
+                $similarity_users[] = [
+                    'user_id' => $other_user_id,
+                    'value' => $this->calc_similary_cosine($current_user_data, $other_user_data),
+                    'reviews' => $other_user_data
                 ];
             }
         }
-        return $tempSimilars;
+        return $similarity_users;
     }
 
-    private function sortSimilars($matrix)
+    //sắp xếp mảng chứa người dùng có độ tương tự theo thứ tự giảm giầm
+    private function sort_similarity_users($matrix)
     {
         return collect($matrix)->filter(function ($item) {
             return $item['value'];
         })->sortByDesc('value')->values()->toArray();
-        /*return collect($matrix)->filter(function ($item) {
-            return $item['similar'];
-        })->sortBy('similar')->values()->toArray();*/
     }
 
-    private function calcSimilarityCosine($userA, $userB)
+
+    //tính toán độ tương tự giữa 2 người dùng bằng công thức cô-sin
+    private function calc_similary_cosine($user_a, $user_b)
     {
-        $dotProduct = $this->calcDotProduct($userA, $userB);
-        return $dotProduct / ($this->calcDistanceVector($userA) * $this->calcDistanceVector($userB));
+        $dotProduct = $this->calc_dot_vectors($user_a, $user_b);
+        return $dotProduct / ($this->calc_distance_vector($user_a) * $this->calc_distance_vector($user_b));
     }
 
-    private function calcDotProduct($userA, $userB)
+
+    //tính toán tích vô hướng giữa 2 vec tơ đại diện cho mảng đánh giá của 2 người dùng
+    private function calc_dot_vectors($current_user_data, $other_user_data)
     {
-        return collect($userA)->reduce(function ($acc, $item, $index) use ($userB) {
-            return $acc + $item * $userB[$index];
+        return collect($current_user_data)->reduce(function ($acc, $value, $index) use ($other_user_data) {
+            return $acc + $value * $other_user_data[$index];
         }, 0);
     }
 
-    private function calcDistanceVector($user)
+    //tính toán độ dài véc tơ
+    private function calc_distance_vector($user_data)
     {
-        $tempValue = collect($user)->reduce(function ($acc, $item) {
-            return $acc + pow($item, 2);
+        $value = collect($user_data)->reduce(function ($acc, $value) {
+            return $acc + pow($value, 2);
         }, 0);
-        return sqrt($tempValue);
+        return sqrt($value);
     }
 
-    private function calcAverageRating($items)
+    //tính toán diểm đánh giá trung bình của người dùng
+    private function calc_average_ratings($user)
     {
-        //$data = collect($rows);
-        $data = collect(array_filter($items));
+        $reviews = $user['reviews'];
+        $data = collect(array_filter($reviews)); //convert array just filter null to collection
         if ($data->count() == 0) return 0;
         return $data->reduce(function ($acc, $item) {
                 return $acc + $item;
@@ -131,36 +124,39 @@ class RecommendationController extends ApiController
     }
 
 
-    private function getPrediction($currentUser, $similars, $limit = 10)
+    //lấy danh sách giá trị dự đoán sản phẩm cho người dùng
+    private function get_prediction($current_user, $similarity_users, $limit = 10)
     {
         $matrix = collect([]);
-        $averageRatingCurrentUser = $this->calcAverageRating($currentUser['items']);
-        $notPurchasedProducts = collect($currentUser['items'])->filter(function ($item) {
-            return $item == 0;
-        })->toArray();
-        //dd($notPurchasedProducts);
+        $current_user_avg_ratings = $this->calc_average_ratings($current_user);
+        $not_purchased_products = $this->get_not_purchased_products($current_user);
 
-        foreach ($notPurchasedProducts as $productID => $rate) {
-            foreach ($similars as $similar) {
-                //dd($similar);
-                $avg = $this->calcAverageRating($similar['items']);
-                //dd($similar['items'],$avg);
-                $process1 = $similar['value'] * ($similar['items'][$productID] - $avg);
-                $process2 = $similar['value'];
-                $predict = $averageRatingCurrentUser + ($process1 / $process2);
-                $temp = [
-                    'product_id' => $productID,
-                    'predict' => $predict,
-                    'user_id' => $currentUser['user_id']
+        foreach ($not_purchased_products as $product_id => $rating) {
+            foreach ($similarity_users as $other_user) {
+                $avg_ratings = $this->calc_average_ratings($other_user);
+                $process1 = $other_user['value'] * ($other_user['reviews'][$product_id] - $avg_ratings);
+                $process2 = $other_user['value'];
+                $predicted_value = $current_user_avg_ratings + ($process1 / $process2);
+                $temp = (object)[
+                    'product_id' => $product_id,
+                    'predicted_value' => $predicted_value,
+                    'user_id' => $current_user['user_id']
                 ];
-                $matrix->push((object)$temp);
+                $matrix->push($temp);
             }
         }
 
-        $data = $matrix->sortByDesc('predict')->values()->take($limit);
+        $data = $matrix->sortByDesc('predicted_value')->values()->take($limit);
         //dd($data);
         return $data->pluck('product_id');
     }
+
+
+    //lấy danh sách những sản phẩm mà người dùng chưa mua
+    private function get_not_purchased_products($user)
+    {
+        return collect($user['reviews'])->filter(function ($item) {
+            return $item == 0;
+        })->toArray();
+    }
 }
-
-

@@ -26,7 +26,7 @@ class SearchResultR extends JsonResource
                     'total_count' => $resource->brands->count(),
                 ],
                 'suppliers' => [
-                    'data' => SupplierR::collection($this->suppliers),
+                    'data' => SupplierOverviewR::collection($this->suppliers),
                     'total_count' => $this->suppliers->count(),
                 ],
 

@@ -2,11 +2,13 @@
 
 namespace Database\Factories;
 
+use App\Http\Resources\ProductR;
 use App\Models\Order;
 use App\Models\Order_detail;
 use App\Models\Product;
 use App\Models\Supplier;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Http\Resources\Json\JsonResource;
 
 class Order_detailFactory extends Factory
 {
@@ -33,12 +35,15 @@ class Order_detailFactory extends Factory
             if (!$flag) $loop = false;
         }
 
+        $product = Product::find($product_id);
+
         return [
             'order_id' => 1,
             'product_id' => $product_id,
             'quantity' => rand(1, 5),
-            'price' => Product::find($product_id)->price,
-            'discount' => 0,
+            'price' => $product->price,
+            'discount' => $product->discount,
+            'temp_product' => (new ProductR($product))->toJson(),
             //'grand_total' => Product::find($product_id)->currentPrice,
         ];
     }

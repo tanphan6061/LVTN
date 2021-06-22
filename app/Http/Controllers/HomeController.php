@@ -32,8 +32,20 @@ class HomeController extends Controller
             return $order;
         });
 
+        $count = [];
+        $count['processing'] = Auth::user()->orders->filter(function ($order) {
+            return $order->currentStatus() == 'processing';
+        })->count();
+        $count['shipping'] = Auth::user()->orders->filter(function ($order) {
+            return $order->currentStatus() == 'shipping';
+        })->count();
+        $count['delivered'] = Auth::user()->orders->filter(function ($order) {
+            return $order->currentStatus() == 'delivered';
+        })->count();
+        $count['cancel'] = Auth::user()->orders->filter(function ($order) {
+            return $order->currentStatus() == 'cancel';
+        })->count();
 
-
-        return view('admin', compact('orders'));
+        return view('admin', compact('orders', 'count'));
     }
 }

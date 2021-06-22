@@ -81,6 +81,7 @@ class RecommendationController extends ApiController
     //sắp xếp mảng chứa người dùng có độ tương tự theo thứ tự giảm giầm
     private function sort_similarity_users($matrix)
     {
+        dd(collect($matrix)->filter());
         return collect($matrix)->filter(function ($item) {
             return $item['value'];
         })->sortByDesc('value')->values()->toArray();
@@ -130,22 +131,24 @@ class RecommendationController extends ApiController
         $matrix = collect([]);
         $current_user_avg_ratings = $this->calc_average_ratings($current_user);
         $not_purchased_products = $this->get_not_purchased_products($current_user);
-
         foreach ($not_purchased_products as $product_id => $rating) {
+            $process1 = 0;
+            $process2 = 0;
             foreach ($similarity_users as $other_user) {
                 $avg_ratings = $this->calc_average_ratings($other_user);
-                $process1 = $other_user['value'] * ($other_user['reviews'][$product_id] - $avg_ratings);
-                $process2 = $other_user['value'];
-                $predicted_value = $current_user_avg_ratings + ($process1 / $process2);
-                $temp = (object)[
-                    'product_id' => $product_id,
-                    'predicted_value' => $predicted_value,
-                    'user_id' => $current_user['user_id']
-                ];
-                $matrix->push($temp);
+                $process1 += $other_user['value'] * ($other_user['reviews'][$product_id] - $avg_ratings);
+                $process2 += $other_user['value'];
             }
-        }
 
+            $predicted_value = $current_user_avg_ratings + ($process1 / $process2);
+            $temp = (object)[
+                'product_id' => $product_id,
+                'predicted_value' => $predicted_value,
+                'user_id' => $current_user['user_id']
+            ];
+            $matrix->push($temp);
+        }
+        //dd($not_purchased_products,$matrix);
         $data = $matrix->sortByDesc('predicted_value')->values()->take($limit);
         //dd($data);
         return $data->pluck('product_id');

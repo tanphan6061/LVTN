@@ -60,7 +60,7 @@ class Product extends Model
         return $this->price * (100 - $this->discount) / 100;
     }
 
-    public function getisAvailableAttribute()
+    public function getAvailableAttribute()
     {
         return $this->status == 'available' && $this->amount > 0;
     }

@@ -28,5 +28,4 @@ class Cart extends Model
     {
         static::addGlobalScope(new ActiveScope);
     }
-
 }

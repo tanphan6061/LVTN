@@ -22,10 +22,10 @@ class CartProductItemR extends JsonResource
             'is_deleted'
         ];
         $accepts = ['id', 'name', 'slug', 'price',
-            'discount', 'quantity', 'amount',
+            'discount', 'quantity', 'amount','max_buy',
             'status', 'created_at', 'updated_at'];
         $data = collect($this->resource)->only($accepts);
-        $data['is_available'] = $this->isAvailable;
+        $data['available'] = $this->available;
         $data['grand_total'] = $this->grandTotal;
         $data['favourited'] = $this->favourited;
         $data['reviewed'] = $this->reviewed;

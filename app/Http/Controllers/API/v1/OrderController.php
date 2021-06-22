@@ -5,6 +5,8 @@ namespace App\Http\Controllers\API\v1;
 use App\Http\Requests\Api\OrderCreateRequest;
 use App\Http\Resources\OrderDetailR;
 use App\Http\Resources\OrderR;
+use App\Http\Resources\ProductR;
+use App\Http\Resources\TempProductOrderDetailR;
 use App\Models\Discount_code;
 use App\Models\Order;
 use App\Models\Product;
@@ -88,12 +90,12 @@ class OrderController extends ApiController
 
         $isAvailable = $cartItems->every(function ($item) {
             $product = $item->product;
-            return $product->isAvailable;
+            return $product->available;
         });
 
         $isValidAmount = $cartItems->every(function ($item) {
             $product = $item->product;
-            return $product->amount >= $item->quantity;
+            return ($product->max_buy >= $item->quantity) && ($product->max_buy <= $product->amount);
         });
 
 
@@ -105,7 +107,7 @@ class OrderController extends ApiController
 
         if (!$isValidAmount) {
             return $this->respondedError("Cart Empty", [
-                'cart' => ['Giỏ hàng không hợp lệ, vui lòng thanh toán lại!']
+                'cart' => ['Giỏ hàng không hợp lệ, kiểm tra lại giỏ hàng!']
             ]);
         }
 
@@ -167,12 +169,16 @@ class OrderController extends ApiController
     private function createOrderDetails($order, $supplier)
     {
         return $supplier['items']->map(function ($product) use ($order) {
+            $temp_product = Product::find($product->id);
             $data = [
                 'product_id' => $product->id,
                 'price' => $product->price,
                 'discount' => $product->discount,
-                'quantity' => $product->quantity
+                'quantity' => $product->quantity,
+                'temp_product' => (new TempProductOrderDetailR($temp_product))->toJson()
             ];
+
+            //dd($data);
 
             $this->updateProduct($product->id, $product->quantity);
             return $order->order_details()->create($data);

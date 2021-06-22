@@ -4,12 +4,12 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class ProductR extends JsonResource
+class ProductDetailR extends JsonResource
 {
     /**
      * Transform the resource into an array.
      *
-     * @param \Illuminate\Http\Request $request
+     * @param  \Illuminate\Http\Request  $request
      * @return array
      */
     public function toArray($request)
@@ -26,15 +26,15 @@ class ProductR extends JsonResource
         $data['favourited'] = $this->favourited;
         $data['reviewed'] = $this->reviewed;
         $data['available'] = $this->available;
-        $data['category'] = new CategoryOverviewR($this->category);
-        $data['supplier'] = new SupplierOverviewR($this->supplier);
-        $data['brand'] = new BrandR($this->brand);
-        $data['images'] = ProductImageR::collection($this->images);
         $data['ratings'] = [
             'rating_average' => $this->reviews()->avg('star'),
             'rating_count' => $this->reviews()->count(),
-            //'stars' => $this->stars,
+            'stars' => $this->stars,
         ];
+        $data['category'] = new CategoryOverviewR($this->category);
+        $data['supplier'] = new SupplierR($this->supplier);
+        $data['brand'] = new BrandR($this->brand);
+        $data['images'] = ProductImageR::collection($this->images);
         return $data;
     }
 }

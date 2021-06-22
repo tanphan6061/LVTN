@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API\v1;
 
 use App\Http\Resources\BrandR;
+use App\Http\Resources\ProductDetailR;
 use App\Http\Resources\ProductR;
 use App\Http\Resources\SearchResultR;
 use App\Http\Resources\SupplierR;
@@ -55,6 +56,7 @@ class ProductController extends ApiController
      */
     public function show(Product $product)
     {
-        return $this->responded("Get product successfully", new ProductR($product));
+
+        return $this->responded("Get product successfully", new ProductDetailR($product));
     }
 }

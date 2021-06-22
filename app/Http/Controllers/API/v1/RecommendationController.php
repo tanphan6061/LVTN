@@ -81,7 +81,7 @@ class RecommendationController extends ApiController
     //sắp xếp mảng chứa người dùng có độ tương tự theo thứ tự giảm giầm
     private function sort_similarity_users($matrix)
     {
-        dd(collect($matrix)->filter());
+        //dd(collect($matrix)->filter());
         return collect($matrix)->filter(function ($item) {
             return $item['value'];
         })->sortByDesc('value')->values()->toArray();

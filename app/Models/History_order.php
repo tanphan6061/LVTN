@@ -15,4 +15,15 @@ class History_order extends Model
     {
         return $this->belongsTo(Order::class);
     }
+
+    public function getTextAttribute()
+    {
+        $text = [
+            'cancel' => 'đã hủy',
+            'processing' => 'đang chờ xác nhận',
+            'shipping' => 'đang vận chuyển',
+            'delivered' => 'đã giao hàng',
+        ];
+        return $text[$this->status];
+    }
 }

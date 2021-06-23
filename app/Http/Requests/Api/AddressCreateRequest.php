@@ -17,6 +17,7 @@ class AddressCreateRequest extends ApiRequest
             'name' => 'required',
             'phone' => 'required',
             'address' => 'required',
+            'active' => 'boolean|nullable',
         ];
     }
 }

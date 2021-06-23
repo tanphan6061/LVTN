@@ -46,6 +46,8 @@ class HomeController extends Controller
             return $order->currentStatus() == 'cancel';
         })->count();
 
+
+        // dd(Auth::user()->orders);
         return view('admin', compact('orders', 'count'));
     }
 }

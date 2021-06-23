@@ -50,11 +50,19 @@ class WebRequest extends FormRequest
             'phone' => 'Số điện thoại',
             'password' => 'Mật khẩu',
             'nameOfShop' => 'Tên của cửa hàng',
-            'address'=> 'Địa chỉ',
-            'password'=>'Mật khẩu',
-            'new_password'=>'Mật khẩu mới',
-            'password_confirmation'=>'Nhập lại mật khẩu'
+            'address' => 'Địa chỉ',
+            'password' => 'Mật khẩu',
+            'new_password' => 'Mật khẩu mới',
+            'password_confirmation' => 'Nhập lại mật khẩu',
 
+            // product
+            'price' => 'Giá',
+            'amount' => 'Số lượng',
+            'description' => 'Mô tả',
+            'discount' => 'Giảm giá',
+            'brand_id' => 'Thương hiệu',
+            'max_buy'=> 'Số lượng mua tối đa',
+            'status'=>'Trạng thasiF'
         ];
     }
 
@@ -71,10 +79,10 @@ class WebRequest extends FormRequest
             'unique' => ':attribute đã tồn tại trên hệ thống.',
             'in' => ':attribute không hợp lệ.',
             'numeric' => ':attribute phải là một số.',
-            'after'=>':attribute phải sau ngày bắt đầu.',
-            'regex'=>':attribute định dạng không hợp lệ.',
-            'min'=>':attribute tối thiểu :min kí tự.',
-            'max'=>':attribute tối đa :max kí tự.',
+            'after' => ':attribute phải sau ngày bắt đầu.',
+            'regex' => ':attribute định dạng không hợp lệ.',
+            'min' => ':attribute tối thiểu :min kí tự.',
+            'max' => ':attribute tối đa :max kí tự.',
         ];
     }
 }

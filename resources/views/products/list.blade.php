@@ -2,7 +2,7 @@
 @section('content')
     <div class="border-bottom mb-5">
         <ul class="nav--header">
-            <li><a href="#">Trang chủ</a></li>
+            <li><a href="/">Trang chủ</a></li>
             <li><span>Sản phẩm</span></li>
             <li><span>Danh sách sản phẩm</span></li>
         </ul>
@@ -21,19 +21,23 @@
         </form>
         <div class="container-list">
             @foreach ($products as $product)
-                <div onclick="changeRoute(this,'{{ route('products.show', $product) }}')" class="border rounded product shadow">
-                {{-- <div class="border rounded product shadow"> --}}
+                <div class="border rounded product shadow">
+                    {{-- <div class="border rounded product shadow"> --}}
 
-                    <a href="#" class="product-name text-truncate">{{ $product->name }}</a>
-                    <div class="my-1">{{ number_format($product->price, 0, '', ',') }} vnđ</div>
-                    <div class="product-img">
+                    <a href="#" onclick="changeRoute(this,'{{ route('products.show', $product) }}')"
+                        class="product-name text-truncate">{{ $product->name }}</a>
+                    <div onclick="changeRoute(this,'{{ route('products.show', $product) }}')" class="my-1">
+                        {{ number_format($product->price, 0, '', ',') }} vnđ</div>
+                    <div onclick="changeRoute(this,'{{ route('products.show', $product) }}')" class="product-img">
                         <img class="img-thumbnail"
-                            src="{{ $product->images[0]->url ?? url('assets/images/placeholder-images.png') }}" alt="">
+                            src="{{ count($product->images) ? url($product->images[0]->url) : url('assets/images/placeholder-images.png') }}"
+                            alt="">
                     </div>
                     <div class="d-flex justify-content-between mt-2">
-                        <a href="{{route('products.edit',$product)}}" class="btn-warning btn text-white">Sửa <i class="fa fa-edit"></i></a>
-                        <button data-nameProduct="{{ $product->name }}" data-id="{{ $product->id }}" data-toggle="modal"
-                            data-target="#modalDelete" class="btn btn-danger delete-product">Xoá <i
+                        <a href="{{ route('products.edit', $product) }}" class="btn-warning btn text-white">Sửa <i
+                                class="fa fa-edit"></i></a>
+                        <button data-nameProduct="{{ $product->name }}" data-id="{{ $product->id }}"
+                            data-toggle="modal" data-target="#modalDelete" class="btn btn-danger delete-product">Xoá <i
                                 class="fa fa-trash"></i>
                         </button>
                     </div>
@@ -74,7 +78,7 @@
         <div>
 
             <script>
-                const changeRoute = (e,route) => {
+                const changeRoute = (e, route) => {
                     window.location.href = route;
                 }
 
@@ -91,6 +95,5 @@
                     const deleteForm = document.getElementById('delete-form');
                     deleteForm.setAttribute('action', `${location.pathname}/${id}`)
                 }))
-
             </script>
         @endsection

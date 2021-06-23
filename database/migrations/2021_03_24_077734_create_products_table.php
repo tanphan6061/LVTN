@@ -25,7 +25,7 @@ class CreateProductsTable extends Migration
             $table->integer('max_buy')->default(1);
             $table->text('description');
             // $table->text('detail');
-            $table->enum('status', ['available', 'out_of_stock']);
+            $table->enum('status', ['available', 'hidden']);
             $table->integer('discount')->default(0);
             $table->boolean('is_deleted')->default(0);
 

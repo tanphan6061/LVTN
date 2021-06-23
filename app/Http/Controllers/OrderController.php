@@ -46,6 +46,8 @@ class OrderController extends Controller
         if ($request->q) {
             $orders->setPath('?q=' . $request->q);
         }
+
+        // dd($orders);
         $orders->setPath('?type=' . $request->type);
 
         return view('orders.list', compact('orders'));
@@ -112,12 +114,12 @@ class OrderController extends Controller
         }
 
         // $data = $request->validated();
-        if ($order->currentStatus() === 'cancel') {
-            $message = 'Không thể cập nhật trạng thái đơn đặt hàng có trạng thái: ' . $order->currentStatus();
+        if ($order->currentStatus === 'cancel') {
+            $message = 'Không thể cập nhật trạng thái đơn đặt hàng có trạng thái: ' . $order->currentStatus;
             $error = true;
         }
         if (!$request->status) {
-            $message = 'Trạng thái đơn hàng là bắt buộc' . $order->currentStatus();
+            $message = 'Trạng thái đơn hàng là bắt buộc' . $order->currentStatus;
             $error = true;
         }
 
@@ -140,8 +142,8 @@ class OrderController extends Controller
     public function destroy(Order $order)
     {
         //
-        if ($order->currentStatus() === 'delivered')
-            return redirect()->back()->with('error', 'Không thể huỷ đơn đang ở trạng thái ' . $order->currentStatus());
+        if ($order->currentStatus === 'delivered')
+            return redirect()->back()->with('error', 'Không thể huỷ đơn đang ở trạng thái ' . $order->currentStatus);
 
         $order->history_orders()->create(['status' => 'cancel']);
         return redirect()->back()->with('success', 'Huỷ đơn thành công');

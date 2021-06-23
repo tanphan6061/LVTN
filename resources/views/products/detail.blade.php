@@ -2,7 +2,7 @@
 @section('content')
     <div class="border-bottom">
         <ul class="nav--header">
-            <li><a href="#">Trang chủ</a></li>
+            <li><a href="/">Trang chủ</a></li>
             <li><span>Sản phẩm</span></li>
             <li><span>Chi tiết sản phẩm</span></li>
         </ul>
@@ -62,6 +62,10 @@
             <div>{{ $product->amount }}</div>
         </div>
         <div class="d-flex">
+            <div class="w-25  mt-2 font-weight-bold">Số sản phẩm được mua tối đa:</div>
+            <div>{{ $product->max_buy }}</div>
+        </div>
+        <div class="d-flex">
             <div class="w-25 mt-2  font-weight-bold">Nhãn hiệu:</div>
             <div>{{ $product->brand->name }}</div>
         </div>
@@ -71,7 +75,7 @@
         </div>
         <div class="d-flex">
             <div class="w-25 mt-2  font-weight-bold">Trạng thái:</div>
-            <div>{{ $product->status==='' }}</div>
+            <div>{{ $product->status === 'available' ? 'Có sẵn' : 'Ẩn' }}</div>
         </div>
 
 
@@ -84,19 +88,12 @@
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td>Cân nặng</td>
-                    <td>60kg</td>
-                </tr>
-                <tr>
-                    <td>Khích thước</td>
-                    <td>20x30x32</td>
-                </tr>
-                <tr>
-                    <td>Chất liệu</td>
-                    <td>silicon</td>
-                </tr>
-            </tbody>
+                @foreach ($product->product_details as $product_detail)
+                    <tr>
+                        <td>{{ $product_detail->key }}</td>
+                        <td>{{ $product_detail->value }}</td>
+                    </tr>
+                @endforeach
         </table>
 
         <h2 class="mt-4">Mô tả sản phẩm: </h2>
@@ -106,28 +103,19 @@
 
         <h2 class="mt-4">Đánh giá:</h2>
         <div class="border rounded background-white p-4 shadow" style="height:400px; overflow-y: auto">
-           <div class="mb-4">Tổng: {{$product->reviews->count()}} đánh giá</div>
-            @foreach($product->reviews as $review)
-            <div class="d-flex border my-2 p-3 rounded">
-                <div class="d-flex align-items-center border-right" style="width:180px; font-size:1.001rem">
-                   <div>{{$review->user->name}}</div>
+            <div class="mb-4">Tổng: {{ $product->reviews->count() }} đánh giá</div>
+            @foreach ($product->reviews as $review)
+                <div class="d-flex border my-2 p-3 rounded">
+                    <div class="d-flex align-items-center border-right" style="width:180px; font-size:1.001rem">
+                        <div>{{ $review->user->name }}</div>
+                    </div>
+                    <div class="ml-3">
+                        <div>{{ $review->star }}</div>
+                        <div class="my-2">{{ $review->comment }}</div>
+                        <div class="text-secondary" style="font-size:0.76rem">Nhận xét vào lúc:
+                            {{ date_format($review->updated_at, 'H:i:s, d/m/Y') }}</div>
+                    </div>
                 </div>
-                <div class="ml-3">
-                    <div>{{$review->star}}</div>
-                    <div class="my-2">{{$review->comment}}</div>
-                    <div class="text-secondary" style="font-size:0.76rem">Nhận xét vào lúc: {{date_format($review->updated_at,'H:i:s, d/m/Y')}}</div>
-                </div>
-            </div>
-            <div class="d-flex border my-2 p-3 rounded">
-                <div class="d-flex align-items-center border-right" style="width:180px; font-size:1.001rem">
-                   <div>{{$review->user->name}}</div>
-                </div>
-                <div class="ml-3">
-                    <div>{{$review->star}}</div>
-                    <div class="my-2">{{$review->comment}}</div>
-                    <div class="text-secondary" style="font-size:0.76rem">Nhận xét vào lúc: {{date_format($review->updated_at,'H:i:s, d/m/Y')}}</div>
-                </div>
-            </div>
             @endforeach
         </div>
     </div>

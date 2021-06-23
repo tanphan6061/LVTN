@@ -3,7 +3,7 @@
 
     <div class="border-bottom mb-5">
         <ul class="nav--header">
-            <li><a href="#">Trang chủ</a></li>
+            <li><a href="/">Trang chủ</a></li>
             <li><a href="{{route('discounts.index')}}">Mã giảm giá</a></li>
             <li><span>Tạo mã giảm giá mới</span></li>
         </ul>

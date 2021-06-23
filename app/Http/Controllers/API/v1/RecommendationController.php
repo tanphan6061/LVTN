@@ -4,10 +4,9 @@ namespace App\Http\Controllers\API\v1;
 
 
 use App\Http\Resources\ProductR;
-use App\Http\Resources\SearchResultR;
 use App\Models\Product;
 use App\Models\User;
-use App\Taka\Paginate\Paginate;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class RecommendationController extends ApiController
@@ -18,11 +17,11 @@ class RecommendationController extends ApiController
         $this->user = Auth::guard('api')->user();
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $limit = 10;
+        $limit = $request->get('limit') ?? 10;
         $product_ids = $this->get_recommend_products($limit);
-        $products = $product_ids->reduce(function ($acc, $product_id) {
+        $products = collect($product_ids)->reduce(function ($acc, $product_id) {
             $product = Product::find($product_id);
             return $product ? $acc->push($product) : $acc;
         }, collect([]));
@@ -40,7 +39,6 @@ class RecommendationController extends ApiController
         $format_current_user = ['user_id' => $current_user_id, 'reviews' => $matrix[$current_user_id]];
         return $this->get_prediction($format_current_user, $similarity_users, $limit);
     }
-
 
 
     //khởi tạo ma trận người dùng - sản phẩm - điểm đánh giá
@@ -91,8 +89,16 @@ class RecommendationController extends ApiController
     //tính toán độ tương tự giữa 2 người dùng bằng công thức cô-sin
     private function calc_similary_cosine($user_a, $user_b)
     {
-        $dotProduct = $this->calc_dot_vectors($user_a, $user_b);
-        return $dotProduct / ($this->calc_distance_vector($user_a) * $this->calc_distance_vector($user_b));
+        //dd($user_a, $user_b);
+        $dot_product = $this->calc_dot_vectors($user_a, $user_b);
+        //dd($dot_product);
+        if (!$dot_product) return 0;
+        $distance_user_a = $this->calc_distance_vector($user_a);
+        $distance_user_b = $this->calc_distance_vector($user_b);
+        $distance = $distance_user_a * $distance_user_b;
+        //dd($distance_user_a, $distance_user_b, $distance);
+        if (!$distance) return 0;
+        return $dot_product / $distance;
     }
 
 
@@ -128,6 +134,7 @@ class RecommendationController extends ApiController
     //lấy danh sách giá trị dự đoán sản phẩm cho người dùng
     private function get_prediction($current_user, $similarity_users, $limit = 10)
     {
+        if (count($similarity_users) == 0) return [];
         $matrix = collect([]);
         $current_user_avg_ratings = $this->calc_average_ratings($current_user);
         $not_purchased_products = $this->get_not_purchased_products($current_user);
@@ -151,7 +158,7 @@ class RecommendationController extends ApiController
         //dd($not_purchased_products,$matrix);
         $data = $matrix->sortByDesc('predicted_value')->values()->take($limit);
         //dd($data);
-        return $data->pluck('product_id');
+        return $data->pluck('product_id')->toArray();
     }
 
 

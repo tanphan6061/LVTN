@@ -19,8 +19,13 @@ class RecommendationController extends ApiController
 
     public function index(Request $request)
     {
+        $request->validate([
+            'limit' => 'numeric|min:0|nullable',
+            'neighbors' => 'numeric|min:0|nullable',
+        ]);
         $limit = $request->get('limit') ?? 10;
-        $product_ids = $this->get_recommend_products($limit);
+        $neighbors = $request->get('neighbors') ?? 0;
+        $product_ids = $this->get_recommend_products($limit, $neighbors);
         $products = collect($product_ids)->reduce(function ($acc, $product_id) {
             $product = Product::find($product_id);
             return $product ? $acc->push($product) : $acc;
@@ -30,14 +35,14 @@ class RecommendationController extends ApiController
     }
 
     //lấy danh sách mã sản phẩm gợi ý cho người dùng
-    private function get_recommend_products($limit = 10)
+    private function get_recommend_products($limit = 10, $neighbors = 0)
     {
         $current_user = $this->user;
         $current_user_id = $current_user->id;
         $matrix = $this->init_matrix();
         $similarity_users = $this->sort_similarity_users($this->get_similarity_users($matrix, $current_user_id));
         $format_current_user = ['user_id' => $current_user_id, 'reviews' => $matrix[$current_user_id]];
-        return $this->get_prediction($format_current_user, $similarity_users, $limit);
+        return $this->get_prediction($format_current_user, $similarity_users, $limit, $neighbors);
     }
 
 
@@ -132,9 +137,14 @@ class RecommendationController extends ApiController
 
 
     //lấy danh sách giá trị dự đoán sản phẩm cho người dùng
-    private function get_prediction($current_user, $similarity_users, $limit = 10)
+    private function get_prediction($current_user, $similarity_users, $limit = 10, $neighbors = 0)
     {
-        if (count($similarity_users) == 0) return [];
+        $count_similarity_users = count($similarity_users);
+        if (!$count_similarity_users) return [];
+        if ($neighbors > 0) {
+            $similarity_users = collect($similarity_users)->take($neighbors)->toArray();
+        }
+
         $matrix = collect([]);
         $current_user_avg_ratings = $this->calc_average_ratings($current_user);
         $not_purchased_products = $this->get_not_purchased_products($current_user);
@@ -156,8 +166,9 @@ class RecommendationController extends ApiController
             $matrix->push($temp);
         }
         //dd($not_purchased_products,$matrix);
-        $data = $matrix->sortByDesc('predicted_value')->values()->take($limit);
-        //dd($data);
+        $data = $matrix->sortByDesc('predicted_value')->values()->take(abs($limit));
+
+
         return $data->pluck('product_id')->toArray();
     }
 

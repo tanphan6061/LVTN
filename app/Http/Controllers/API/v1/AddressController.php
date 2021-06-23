@@ -7,7 +7,9 @@ use App\Http\Requests\Api\AddressCreateRequest;
 use App\Http\Resources\AddressR;
 use App\Models\Address;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class AddressController extends ApiController
 {
@@ -45,25 +47,17 @@ class AddressController extends ApiController
      */
     public function store(AddressCreateRequest $request)
     {
-        //
-        $isActive = $request->active ? 1 : 0;
-        $addressCount = $this->user->addresses->where('active', 1)->count();
-        if (!$addressCount) $isActive = 1;
-        $validated = $request->validated();
-        $ext_rules = [
-            'active' => $isActive,
-            //'user_id' => $user->id
-        ];
-
-        if ($isActive) {
-            foreach ($this->user->addresses as $address) {
-                $address->active = 0;
-                $address->save();
-            }
+        $data = collect($request->validated());
+        $active_address = $this->user->addresses->where('active', 1)->first();
+        if (!$active_address) {
+            $data->active = 1;
+        }
+        if ($request->get('active') && $active_address) {
+            $active_address->update(['active' => 0]);
         }
 
-        $data = $this->user->addresses()->create(array_merge($validated, $ext_rules));
-        return $this->responded("Create address successfully", $data);
+        $address = $this->user->addresses()->create($data->toArray());
+        return $this->responded("Created address successfully", new AddressR($address));
     }
 
     /**
@@ -88,30 +82,22 @@ class AddressController extends ApiController
      * @param \App\Models\Address $address
      * @return \Illuminate\Http\Response
      */
-    public function update(AddressCreateRequest $request, Address $address)
+    public function update(Address $address, AddressCreateRequest $request)
     {
-        //
-        if ($address->user->id == $this->user->id) {
-            $isActive = $request->active ? 1 : 0;
-            $validated = $request->validated();
-            $ext_rules = [
-                'active' => $isActive,
-                //'user_id' => $user->id
-            ];
-
-            if ($isActive) {
-                foreach ($this->user->addresses as $address) {
-                    $address->active = 0;
-                    $address->save();
-                }
-            }
-
-            $data = $address->update(array_merge($validated, $ext_rules));
-            return $this->responded("Update address successfully", $data);
+        if ($address->user->id != $this->user->id) {
+            return $this->respondedError("Invalid");
+        }
+        $active_address = $this->user->addresses->where('active', 1)->first();
+        $data = collect($request->validated());
+        if (!$address->active && $request->get('active') && $active_address) {
+            $active_address->update(['active' => 0]);
+        }
+        if ($address->active) {
+            $data->forget('active');
         }
 
-        return $this->respondedError("Invalid");
-
+        $address->update($data->toArray());
+        return $this->responded("Update address successfully", new AddressR($address));
     }
 
     /**
@@ -120,14 +106,15 @@ class AddressController extends ApiController
      * @param \App\Models\Address $address
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Address $address)
+    public
+    function destroy(Address $address)
     {
-        if ($address->user->id == $this->user->id) {
-            $address->is_deleted = 1;
-            $address->save();
-            return $this->responded("Remove address successfully");
+        if ($address->user->id != $this->user->id) {
+            return $this->respondedError("Invalid");
         }
 
-        return $this->respondedError("Invalid");
+        $address->is_deleted = 1;
+        $address->save();
+        return $this->responded("Remove address successfully");
     }
 }

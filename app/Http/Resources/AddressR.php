@@ -14,6 +14,7 @@ class AddressR extends JsonResource
      */
     public function toArray($request)
     {
-        return collect($this->resource)->only('id', 'name', 'phone', 'address', 'active');
+        $accepts = ['id', 'name', 'phone', 'address', 'active'];
+        return collect($this->resource)->only($accepts);
     }
 }

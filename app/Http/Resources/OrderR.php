@@ -16,6 +16,7 @@ class OrderR extends JsonResource
     {
         $data = collect($this->resource)->except(['user_id', 'updated_at']);
         $data['status'] = $this->currentStatus;
+        $data['status_text'] = $this->currentStatusText;
         $data['description'] = $this->products->map(function ($product) {
             return $product->name;
         })->implode(', ');

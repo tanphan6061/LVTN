@@ -21,9 +21,9 @@ class OrderDetailR extends JsonResource
         $data['items'] = ProductOrderDetailR::collection($this->order_details);
         $data['shipping_address'] = new ShippingAddressR($this->shipping_address);
         $data['status'] = $this->currentStatus;
-        //$data['status_histories'] = [];
-        //$data['price_summary'] = [];
-        $data['coupon_code'] = [];
+        $data['status_text'] = $this->currentStatusText;
+        $data['latest_history'] = new HistoryOrderR($this->history_orders()->latest()->first());
+        //$data['coupon_code'] = [];
         return $data;
     }
 }

@@ -70,6 +70,8 @@ Route::group(['prefix' => 'v1', 'middleware' => ['jwt.verify', 'api', 'cors']], 
 
     route::get('recommendations', [RecommendationController::class, 'index']);
 
+    route::post('me/orders/{order}/cancel', [OrderController::class, 'cancel']);
+
     route::resource('addresses', AddressController::class)
         ->only(['index', 'destroy', 'store', 'update', 'show']);
     route::resource('me/favourites', FavouriteController::class)

@@ -14,6 +14,7 @@ use App\Models\Shipping_address;
 use App\Taka\Paginate\Paginate;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use PhpParser\Node\Stmt\DeclareDeclare;
 
 class OrderController extends ApiController
 {
@@ -58,6 +59,26 @@ class OrderController extends ApiController
     }
 
 
+    public function cancel(Order $order)
+    {
+        if ($order->user_id != $this->user->id) {
+            return $this->respondedError("Not authorization");
+        }
+
+        if ($order->currentStatus != "processing") {
+            return $this->respondedError("Order invalid", [
+                'cart' => [
+                    'Không thể hủy đơn hàng này'
+                ]
+            ]);
+        }
+
+
+        $order->history_orders()->create(['status' => 'cancel']);
+        return $this->responded('Cancel order successfully', new OrderR($order));
+    }
+
+
     /**
      * Store a newly created resource in storage.
      *
@@ -79,6 +100,7 @@ class OrderController extends ApiController
                 'address_id' => ['Chưa thêm địa chỉ nhận hàng!']
             ]);
         }
+
 
         $validated['coupon_suppliers_use'] = $this->toObjectCollection($validated['coupon_suppliers_use']);
         $cartItems = $this->user->carts;
@@ -111,60 +133,57 @@ class OrderController extends ApiController
             ]);
         }
 
-        $listDiscountAvailable = Discount_code::available()->getGlobalCouponAvailable();
+        $orders = collect([]);
+        $list_global_discount_codes = Discount_code::available()->getGlobalCouponAvailable();
+        $global_discount_code = $list_global_discount_codes->where('code', $request->coupon_global_use)->first();
+        $is_used_global_discount_code = false;
+        $products = $this->getListProducts($cartItems); //get list products from cart
+        $suppliers = $this->getListSuppliers($cartItems, $products); //get list suppliers from cart
+        foreach ($suppliers as $supplier) {
+            $supplier_discount_code = null;
+            $deduct_supplier_discount_code = 0;
+            $grandTotal = $supplier['grandTotal']; //granTotal in getListSuppliers method
+            $current_supplier_discount_code = $validated['coupon_suppliers_use']->where('supplier_id', $supplier['id'])->first();
 
-        $discountGlobal = $listDiscountAvailable->where('code', $request->coupon_global_use)->first();
-        $discountGlobalUsed = false;
-
-        $products = $this->getListProducts($cartItems);
-
-        $suppliers = $this->getListSuppliers($cartItems, $products);
-
-        $orders = collect($suppliers)->map(function ($supplier) use ($discountGlobalUsed, $discountGlobal, $validated, $addressShipping) {
-            $discountSupplier = null;
-            $deductCouponSupplier = 0;
-
-            $grandTotal = $supplier['grandTotal'];
-            $itemCouponSupplier = $validated['coupon_suppliers_use']->where('supplier_id', $supplier['id'])->first();
-            if ($itemCouponSupplier) {
-                $discountSupplier = $supplier['discount_codes']->where('code', $itemCouponSupplier->discount_code)->first();
-                $deductCouponSupplier = $this->getDeductCouponSupplier($supplier, $itemCouponSupplier);
+            if ($current_supplier_discount_code) {
+                $supplier_discount_code = $supplier['discount_codes']->where('code', $current_supplier_discount_code->discount_code)->first();
+                $deduct_supplier_discount_code = $this->getDeductSupplierDiscountCode($supplier, $current_supplier_discount_code);
             }
 
 
-            $deductCouponGlobal = $this->getDeductCouponGlobal($supplier, $discountGlobal);
-            //dd($discountSupplier, $discountGlobal);
+            $deduct_global_discount_code = $this->getDeductGlobalDiscountCode($supplier, $global_discount_code);
+            //dd($supplier_discount_code, $global_discount_code);
             $order = $this->user->orders()->create(
                 [
                     'supplier_id' => $supplier['id'],
                     'payment_type' => $validated['payment_type'],
                     'price' => $grandTotal,
-                    'discount' => $deductCouponGlobal + $deductCouponSupplier,
-                    'grand_total' => $grandTotal - ($deductCouponGlobal + $deductCouponSupplier)
+                    'discount' => $deduct_global_discount_code + $deduct_supplier_discount_code,
+                    'grand_total' => $grandTotal - ($deduct_global_discount_code + $deduct_supplier_discount_code)
                 ]
             );
 
 
             $this->createOrderDetails($order, $supplier);
 
-            if ($deductCouponSupplier) {
-                $discountSupplier->amount -= 1;
-                $discountSupplier->save();
-                $this->createODC($order, $discountSupplier, $deductCouponSupplier);
+            if ($deduct_supplier_discount_code) {
+                $supplier_discount_code->amount -= 1; //deduct value amount
+                $supplier_discount_code->save();
+                $this->createODDC($order, $supplier_discount_code, $deduct_supplier_discount_code);
             }
 
-            if ($deductCouponGlobal && $discountGlobalUsed == false) {
-                $discountGlobalUsed = true;
-                $discountGlobal->amount -= 1;
-                $discountGlobal->save();
-                $this->createODC($order, $discountGlobal, $deductCouponGlobal);
+            if ($deduct_global_discount_code && $is_used_global_discount_code == false) {
+                $is_used_global_discount_code = true;
+                $global_discount_code->amount -= 1;//deduct value amount
+                $global_discount_code->save();
+                $this->createODDC($order, $global_discount_code, $deduct_global_discount_code);
             }
 
             $this->createShippingAddress($order, $addressShipping);
             $order->history_orders()->create();
             $this->updateCart($supplier);
-            return $order;
-        });
+            $orders->push($order);
+        }
 
 
         return $this->responded("Create orders successfully", OrderR::collection($orders));
@@ -185,12 +204,12 @@ class OrderController extends ApiController
 
             //dd($data);
 
-            $this->updateProduct($product->id, $product->quantity);
+            $this->update_amount_product($product->id, $product->quantity);
             return $order->order_details()->create($data);
         });
     }
 
-    private function updateProduct($id, $quantity)
+    private function update_amount_product($id, $quantity)
     {
         $product = Product::find($id);
         $product->amount = $product->amount - $quantity;
@@ -198,7 +217,14 @@ class OrderController extends ApiController
     }
 
 
-    private function createODC($order, $discount_code, $deduct)
+    /**
+     * create order_detail_discount_codes
+     * @param $order
+     * @param $discount_code
+     * @param $deduct_value
+     * @return mixed
+     */
+    private function createODDC($order, $discount_code, $deduct_value)
     {
         $acceptFields = ['code', 'start_date', 'end_date', 'amount'
             , 'percent', 'from_price', 'max_price', 'is_global', 'category_id'];
@@ -206,8 +232,8 @@ class OrderController extends ApiController
             [
                 'discount_code_id' => $discount_code->id,
                 'order_id' => $order->id,
-                'discount' => $deduct,
-                'description' => collect($discount_code)->only($acceptFields)->toJson(),
+                'discount' => $deduct_value,
+                'description' => collect($discount_code)->only($acceptFields)->toJson(), //temp discount
             ]
         );
     }
@@ -229,36 +255,36 @@ class OrderController extends ApiController
     }
 
 
-    private function getDeductCouponSupplier($supplier, $itemCouponSupplier)
+    private function getDeductSupplierDiscountCode($supplier, $current_supplier_discount_code)
     {
         $grandTotal = $supplier['grandTotal'];
-        if (!$itemCouponSupplier) return 0;
+        if (!$current_supplier_discount_code) return 0;
 
-        $discountCode = $supplier['discount_codes']->where('code', $itemCouponSupplier->discount_code)->first();
-        if (!$discountCode) return 0;
+        $discount_code = $supplier['discount_codes']->where('code', $current_supplier_discount_code->discount_code)->first();
+        if (!$discount_code) return 0;
 
-        if ($discountCode->from_price > $grandTotal) return 0;
+        if ($discount_code->from_price > $grandTotal) return 0;
 
-        $tempDeductCoupon = $grandTotal * $discountCode->percent / 100;
-        return $tempDeductCoupon > $discountCode->max_price ? $discountCode->max_price : $grandTotal * $discountCode->percent / 100;
+        $tempDeductCoupon = $grandTotal * $discount_code->percent / 100;
+        return $tempDeductCoupon > $discount_code->max_price ? $discount_code->max_price : $grandTotal * $discount_code->percent / 100;
     }
 
-    private function getDeductCouponGlobal($supplier, $discountCode)
+    private function getDeductGlobalDiscountCode($supplier, $discount_code)
     {
-        if (!$discountCode) return 0;
+        if (!$discount_code) return 0;
 
-        $totalPriceByCategory = $supplier['items']->reduce(function ($accumulator, $product) use ($discountCode) {
-            if ($product->category_id == $discountCode->category_id || $discountCode->category->childs->contains($product->category_id)) {
+        $totalPriceByCategory = $supplier['items']->reduce(function ($accumulator, $product) use ($discount_code) {
+            if ($product->category_id == $discount_code->category_id || $discount_code->category->childs->contains($product->category_id)) {
                 return $accumulator + $product->grandTotal;
             }
             return $accumulator + 0;
         }, 0);
 
 
-        if ($discountCode->from_price > $totalPriceByCategory) return 0;
+        if ($discount_code->from_price > $totalPriceByCategory) return 0;
 
-        $tempDeductCoupon = $totalPriceByCategory * $discountCode->percent / 100;
-        return $tempDeductCoupon > $discountCode->max_price ? $discountCode->max_price : $totalPriceByCategory * $discountCode->percent / 100;
+        $tempDeductCoupon = $totalPriceByCategory * $discount_code->percent / 100;
+        return $tempDeductCoupon > $discount_code->max_price ? $discount_code->max_price : $totalPriceByCategory * $discount_code->percent / 100;
     }
 
     private function getListProducts($cartItems)

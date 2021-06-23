@@ -46,15 +46,21 @@ class Order extends Model
         return $this->hasMany(Order_Discount_code::class);
     }
 
-    public function currentStatus()
-    {
-        $status = $this->history_orders()->latest()->first();
-        return $status ? $status->status : null;
-    }
 
     public function getCurrentStatusAttribute()
     {
-        $status = $this->history_orders()->latest()->first();
-        return $status ? $status->status : null;
+        $history = $this->history_orders()->latest()->first();
+        return $history->status;
+    }
+
+    public function getCurrentStatusTextAttribute()
+    {
+        $text = [
+            'cancel' => 'Đã hủy',
+            'processing' => 'Đang chờ xác nhận',
+            'shipping' => 'Đang vận chuyển',
+            'delivered' => 'Đã giao hàng',
+        ];
+        return $text[$this->currentStatus];
     }
 }

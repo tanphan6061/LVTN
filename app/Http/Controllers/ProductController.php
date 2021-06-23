@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ProductRequest;
 use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Order;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Validation\Rule;
+use Illuminate\Support\Str;
 
 class ProductController extends Controller
 {
@@ -20,7 +21,7 @@ class ProductController extends Controller
     public function index(Request $request)
     {
         //
-        $products = Auth::user()->products()->filterQ()->paginate(12);
+        $products = Auth::user()->products()->filterQ()->orderBy('created_at', 'DESC')->paginate(12);
         if ($request->q) {
             $products->setPath('?q=' . $request->q);
         }
@@ -46,42 +47,77 @@ class ProductController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(ProductRequest $request)
     {
+        $data = $request->validated();
+        if ($request->category_id) {
+            $category = Category::find($request->category_id);
+            if (!$category) {
+                return redirect()->back()->withErrors(['category_id' => 'Loại sản phẩm không tồn tại'])->withInput();
+            }
 
-        $data = $this->validate(
-            $request,
-            [
-                'name' => 'required',
-                // 'slug' => [
-                //     'regex:/^[a-z0-9-]+$/',
-                //     'unique' => Rule::unique('events')->where(function ($query) {
-                //         return $query->where('organizer_id', Auth::user()->id);
-                //     })
-                // ],
-                'price' => 'required|numeric|min:0',
-                'amount' => 'required|numeric|min:0',
-                'description' => 'required',
-                // 'detail' => 'required',
-                'discount' => 'required|numeric|min:0',
-                'category_id' => 'required|exists:categories,id',
-                'brand_id' => 'required|exists:brands,id',
-            ],
-            [
-                'name.required' => "Tên sản phẩm là bắt buộc",
-                'amount.required' => "Số lượng sản phẩm là bắt buộc",
-                'description.required' => "Mô tả là bắt buộc",
-                'discount.required' => "Số tiền (%) giảm là bắt buộc",
-                'category_id.required' => "Loại phẩm là bắt buộc",
-                'brand_id.required' => "Nhãn hiệu là bắt buộc",
-                'price.required' => 'Giá sản phẩm là bắt buộc',
-                'price.numeric' => 'Giá sản phẩm phải là số',
-                'price.min' => 'Giá sản phẩm tối thiểu 0 vnđ',
-            ]
-        );
-        dd($data, Auth::user()->products);
-        //   $event = Auth::user()->events()->create($data);
-        // return redirect()->route('events.show', $event)->with('success', 'Event successfully created');
+            $data['category_id'] = $request->category_id;
+        } else {
+            if (!$request->parent_category) {
+                return redirect()->back()->withErrors(['parent_category' => 'Danh mục sản phẩm là bắt buộc'])->withInput();
+            }
+
+            $parent_category = Category::find($request->parent_category);
+            if (!$parent_category) {
+                return redirect()->back()->withErrors(['parent_category' => 'Doanh mục sản phẩm không tồn tại'])->withInput();
+            }
+
+            $data['category_id'] = $request->parent_category;
+        }
+
+        if($data['amount']<$data['max_buy']){
+            return redirect()->back()->withErrors(['max_buy' => 'Số lượng được mua tối đa không được vượt quá số lượng sản phẩm'])->withInput();
+
+        }
+
+        if (!$request->key || !$request->value)
+            return redirect()->back()->withErrors(['key' => 'Sản phẩm cần ít nhất 1 chi tiết sản phẩm'])->withInput();
+        if (count($request->key) !== count($request->value))
+            return redirect()->back()->withErrors(['key' => 'Chi tiết sản phẩm không hợp lệ'])->withInput();
+
+        // for ($i = 0; $i < count($request->key); $i++) {
+
+        // }
+        $checkKey = collect($request->key)->every(function ($key) {
+            return $key !== null;
+        });
+
+        if (!$checkKey)
+            return redirect()->back()->withErrors(['key' => 'Tất cả các thuộc tính không được để trống'])->withInput();
+
+        $checkValue = collect($request->value)->every(function ($value) {
+            return $value !== null;
+        });
+        if (!$checkValue)
+            return redirect()->back()->withErrors(['value' => 'Tất cả các chi tiết không được để trống'])->withInput();
+
+
+        $product = Auth::user()->products()->create($data);
+
+        $product->slug =  Str::slug($data['name'], '-') .'-'. $product->id;
+        $product->save();
+        for ($i = 0; $i < count($request->key); $i++) {
+            $product->product_details()->create(['key' => $request->key[$i], 'value' => $request->value[$i]]);
+        }
+
+        if ($request->images) {
+            $dir = 'uploads/images/products';
+            foreach ($request->images as $image) {
+                $imageName = time() . '.' . $image->extension();
+                $image->move(public_path($dir), $imageName);
+                $image = $dir . "/" . $imageName;
+                $product->images()->create(['url' => $image]);
+            }
+        } else {
+            $product->images()->create();
+        }
+
+        return redirect()->route('products.show', $product)->with('success', 'Product successfully created');
     }
 
     /**
@@ -92,13 +128,8 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
-        //
-        $count = 0;
-        foreach ($product->reviews as $review){
-            $count += $review->star;
-        }
-        $product->numberOfReview = number_format((float)round($count/$product->reviews->count(),1), 1, '.', '');
-        return view('products.detail',compact('product'));
+        $product->numberOfReview = round($product->reviews->avg('star'),1) ?? 0;
+        return view('products.detail', compact('product'));
     }
 
     /**
@@ -112,7 +143,7 @@ class ProductController extends Controller
         //
         $categories = Category::all();
         $brands = Brand::all();
-        return view ('products.edit',compact('categories','brands','product'));
+        return view('products.edit', compact('categories', 'brands', 'product'));
     }
 
     /**
@@ -138,12 +169,12 @@ class ProductController extends Controller
         //
         $orders = Order::where('status', '!=', 'cancel')->get();
 
-        $orders = $orders->filter(function ($order) use($product) {
-            return $order->order_details()->where('product_id',$product->id)->count() > 0;
+        $orders = $orders->filter(function ($order) use ($product) {
+            return $order->order_details()->where('product_id', $product->id)->count() > 0;
         });
         //cancel order;
         foreach ($orders as $order) {
-            $order->update(['status'=>'cancel']);
+            $order->update(['status' => 'cancel']);
         }
         $product->update(['is_deleted' => 1]);
         return redirect()->back()->with('success', 'Xóa sản phẩm thành công');

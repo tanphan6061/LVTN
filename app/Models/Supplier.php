@@ -70,7 +70,7 @@ class Supplier extends Authenticatable
     public function getCancellationOrdersAttribute()
     {
         return $this->orders->filter(function ($order) {
-            return $order->currentStatus() == "cancel";
+            return $order->currentStatus == "cancel";
         })->count();
     }
 

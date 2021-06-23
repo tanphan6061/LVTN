@@ -2,7 +2,7 @@
 @section('content')
     <div class="border-bottom">
         <ul class="nav--header">
-            <li><a href="#">Trang chủ</a></li>
+            <li><a href="/">Trang chủ</a></li>
             <li><span>Sản phẩm</span></li>
             <li><span>Tạo mới</span></li>
         </ul>
@@ -89,7 +89,8 @@
                         {{-- {{ dd($brands) }} --}}
                         <div id="categoryGroup" class="form-group col-6">
                             <label for="amount"><span class="text-danger">*</span> Số lượng:</label>
-                            <input name="amount" type="number" value="1" type="number" min="1" step="1"
+                            <input onchange="document.getElementById('max_buy').value=this.value" name="amount"
+                                type="number" value="{{ old('amount') ?? 1 }}" type="number" min="1" step="1"
                                 class="form-control {{ $errors->has('amount') ? 'is-invalid' : '' }}"
                                 placeholder="Nhập số lượng sản phẩm" id="amount">
                             @if ($errors->has('amount'))
@@ -113,6 +114,35 @@
                             @endif
                         </div>
                     </div>
+
+                    <div class="row mt-4 ">
+                        {{-- {{ dd($brands) }} --}}
+                        <div id="categoryGroup" class="form-group col-6">
+                            <label for="max_buy"><span class="text-danger">*</span> Số lượng mua tối đa:</label>
+                            <input name="max_buy" id="max_buy" type="number" value="{{ old('amount') ?? 1 }}" type="number"
+                                min="1" step="1" class="form-control {{ $errors->has('max_buy') ? 'is-invalid' : '' }}"
+                                placeholder="Nhập số lượng mua tối đa" id="max_buy">
+                            @if ($errors->has('max_buy'))
+                                <div class="invalid-feedback">
+                                    {{ $errors->first('max_buy') }}
+                                </div>
+                            @endif
+                        </div>
+                        <div class="form-group col-6">
+                            <label for="status"><span class="text-danger">*</span> Trạng thái:</label>
+                            <select id="status" name="status"
+                                class="custom-select {{ $errors->has('status') ? 'is-invalid' : '' }}">
+                                <option value="available">Có sẵn</option>
+                                <option value="hidden">Ẩn</option>
+                            </select>
+                            @if ($errors->has('status'))
+                                <div class="invalid-feedback">
+                                    {{ $errors->first('status') }}
+                                </div>
+                            @endif
+                        </div>
+                    </div>
+
                     <div class="mt-4 ">
                         <label for="detail"><span class="text-danger">*</span> Mô tả chi tiết:</label>
                         <table class="table table-bordered">
@@ -131,7 +161,6 @@
                                 </tr>
                             </thead>
                             <tbody id="detail-body">
-
                             </tbody>
                         </table>
                     </div>
@@ -139,7 +168,7 @@
                         <label for="description"><span class="text-danger">*</span> Mô tả sản phẩm:</label>
                         <textarea style="min-height:200px" name="description" type="number" value="1" type="number" min="1"
                             step="1" class="form-control {{ $errors->has('description') ? 'is-invalid' : '' }}"
-                            placeholder="Nhập mô tả sản phẩm" id="description"></textarea>
+                            placeholder="Nhập mô tả sản phẩm" id="description">{{ old('description') }}</textarea>
                         @if ($errors->has('description'))
                             <div class="invalid-feedback">
                                 {{ $errors->first('description') }}
@@ -155,30 +184,25 @@
             <div class="modal" id="myModal">
                 <div class="modal-dialog" style="min-width:85%;">
                     <div class="modal-content">
-
                         <!-- Modal Header -->
                         <div class="modal-header">
                             <h4 class="modal-title">Ảnh sản phẩm</h4>
                             <button type="button" class="close" data-dismiss="modal">&times;</button>
                         </div>
-
                         <!-- Modal body -->
                         <div class="modal-body">
                             <h2>Thêm ảnh</h2>
                             <div class="custom-file">
-                                <input accept="image/png, image/gif, image/jpeg" type="file" class="custom-file-input"
-                                    id="customFile" multiple>
+                                <input accept="image/png, image/gif, image/jpeg" type="file" name="images[]"
+                                    class="custom-file-input" id="customFile" multiple>
                                 <label id="custom-file-label" class="custom-file-label" for="customFile">Choose file</label>
                             </div>
                             <div class="list-image-product mt-3" id="list-image-product">
-
                             </div>
                         </div>
-
                         <!-- Modal footer -->
                         <div class="modal-footer">
-                            <button type="button" id="cancel-file" class="btn btn-secondary"
-                                data-dismiss="modal">Huỷ</button>
+                            <button type="button" id="cancel-file" class="btn btn-secondary">Huỷ</button>
                             <button type="button" id="save-file" class="btn btn-primary" data-dismiss="modal">Lưu</button>
                         </div>
                     </div>
@@ -195,9 +219,12 @@
                 <td><input name="key[]" type="text" value=""
                         class="form-control {{ $errors->has('key') ? 'is-invalid' : '' }}"
                         placeholder="Nhập tên thuộc tính"></td>
-                <td><input name="value[]" type="text" value=""
+                <td style="position:relative">
+                    <input name="value[]" type="text" value=""
                         class="form-control {{ $errors->has('value') ? 'is-invalid' : '' }}"
-                        placeholder="Nhập chi tiết"></td>
+                        placeholder="Nhập chi tiết">
+                    <button onclick="this.parentElement.parentElement.remove();" style="position:absolute;right:-20px;top:11px" type="button" class="btn btn-danger btn-remove-detail-item">x</button>
+                        </td>
             `;
         const details = [defaultItem];
 
@@ -207,17 +234,23 @@
         const detailBody = document.getElementById('detail-body');
         const cancelFileBtn = document.getElementById('cancel-file');
         const saveFileBtn = document.getElementById('save-file');
+        const label = document.getElementById('custom-file-label');
+        const listImageProduct = document.getElementById('list-image-product');
 
         cancelFileBtn.addEventListener('click', (e) => {
-            console.log("haha");
-            // console.log( document.getElementById('customFile'));
-            // document.getElementById('customFile').files = [];
+            $('#myModal').modal('hide')
+            document.getElementById('customFile').value = "";
+            label.innerHTML = "Choose file";
+            listImageProduct.innerHTML = '';
         });
 
         const renderDetailBody = (details) => {
             const tr = document.createElement('tr');
             tr.innerHTML = defaultItem;
             detailBody.appendChild(tr)
+            const action = (e) => {
+                console.log(e);
+            }
         }
         renderDetailBody(details);
 
@@ -240,11 +273,9 @@
         }
 
         document.getElementById('customFile').addEventListener('change', (e) => {
-            const listImageProduct = document.getElementById('list-image-product');
             const files = e.target.files;
             console.log(e.target.files);
             listImageProduct.innerHTML = ''
-            const label = document.getElementById('custom-file-label');
             label.setAttribute('class', 'custom-file-label selected');
             label.innerHTML = files.length > 1 ? `${files[0].name} và ${files.length -1} ảnh khác` : files[0].name
             Array.from(files).forEach(file => {

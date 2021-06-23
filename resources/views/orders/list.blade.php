@@ -3,7 +3,7 @@
 
     <div class="border-bottom mb-5">
         <ul class="nav--header">
-            <li><a href="#">Trang chủ</a></li>
+            <li><a href="/">Trang chủ</a></li>
             <li><span>Đơn đặt hàng</span></li>
         </ul>
         <div class="d-flex justify-content-between align-items-center">
@@ -43,31 +43,31 @@
                         <td>{{ $order->id }}</td>
                         <td>{{ $order->user->name }}</td>
                         <td>{{ $order->payment_type }}</td>
-                        <td>{{ $order->price }}</td>
-                        <td>{{ $order->discount }}</td>
-                        <td>{{ $order->grand_total }}</td>
-                        <td>{{ $order->currentStatus() }}</td>
+                        <td>{{ number_format($order->price, 0, '', ',') }} vnđ</td>
+                        <td>{{ number_format($order->discount, 0, '', ',') }} vnđ</td>
+                        <td>{{ number_format($order->grand_total, 0, '', ',') }} vnđ</td>
+                        <td>{{ $order->currentStatus }}</td>
                         <td>
                             <div class="d-inline-block" data-toggle="tooltip" title="Xem chi tiết đơn">
                                 <a href="{{ route('orders.show', $order) }}" class="btn btn-warning"> <span
                                         class="glyphicon glyphicon-info-sign"></span>
                                 </a>
                             </div>
-                            @if ($order->currentStatus() !== 'cancel')
+                            @if ($order->currentStatus !== 'cancel')
                                 <div class="d-inline-block" data-toggle="tooltip" title="Thay đổi trạng thái đơn">
                                     <button data-data='@json($order)' data-target="#modal-handle" data-toggle="modal"
                                         class="btn btn-primary btn-modal-edit">
                                         <i style="  pointer-events: none; user-select: none;" class="fa fa-edit"></i>
                                     </button>
                                 </div>
-                                @if ($order->currentStatus() !== 'delivered')
+                                @if ($order->currentStatus !== 'delivered')
                                     <div class="d-inline-block" data-toggle="tooltip" title="Huỷ đơn">
                                         <button data-toggle="modal" data-id="{{ $order->id }}"
                                             data-name="{{ $order->id }}" data-target="#modal-delete"
                                             class="btn btn-danger btn-modal-delete">Huỷ đơn</button>
                                     </div>
                                 @endif
-                            @endif
+                        @endif
                         </td>
                     </tr>
                 @endforeach

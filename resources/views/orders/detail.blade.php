@@ -2,24 +2,24 @@
 @section('content')
     <div class="border-bottom">
         <ul class="nav--header">
-            <li><a href="#">Trang chủ</a></li>
+            <li><a href="/">Trang chủ</a></li>
             <li><a href="{{ route('orders.index') }}">Đơn đặt hàng</a></li>
             <li><span>Chi tiết đơn hàng</span></li>
         </ul>
         <div class="d-flex justify-content-between align-items-center">
             <div>
                 <h1>Mã đơn: {{ $order->id }}</h1>
-                <div class="mb-2">Trạng thái hiện tại: {{ $order->currentStatus() }}</div>
+                <div class="mb-2">Trạng thái hiện tại: {{ $order->currentStatus }}</div>
             </div>
             <div>
-                @if ($order->currentStatus() !== 'cancel')
+                @if ($order->currentStatus !== 'cancel')
                     <button data-data='@json($order)' data-target="#modal-handle" data-toggle="modal"
                         class="btn btn-primary btn-modal-edit">
                       Thay đổi trạng thái
                     </button>
                 @endif
 
-                @if ($order->currentStatus() !== 'cancel' && $order->currentStatus() !== 'delivered')
+                @if ($order->currentStatus !== 'cancel' && $order->currentStatus !== 'delivered')
                 <button data-toggle="modal" data-id="{{ $order->id }}" data-name="{{ $order->id }}"
                     data-target="#modal-delete" class="btn btn-danger btn-modal-delete">Huỷ đơn</button>
                 @endif

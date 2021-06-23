@@ -2,7 +2,7 @@
 @section('content')
     <div class="border-bottom">
         <ul class="nav--header">
-            <li><a href="#">Trang chủ</a></li>
+            <li><a href="/">Trang chủ</a></li>
         </ul>
         <h1>Tổng quan</h1>
     </div>

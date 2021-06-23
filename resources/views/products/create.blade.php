@@ -177,9 +177,10 @@
 
                         <!-- Modal footer -->
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-primary" data-dismiss="modal">Lưu</button>
+                            <button type="button" id="cancel-file" class="btn btn-secondary"
+                                data-dismiss="modal">Huỷ</button>
+                            <button type="button" id="save-file" class="btn btn-primary" data-dismiss="modal">Lưu</button>
                         </div>
-
                     </div>
                 </div>
             </div>
@@ -204,6 +205,14 @@
         const categoryDOM = document.getElementById('category');
         const categoryGroup = document.getElementById('categoryGroup');
         const detailBody = document.getElementById('detail-body');
+        const cancelFileBtn = document.getElementById('cancel-file');
+        const saveFileBtn = document.getElementById('save-file');
+
+        cancelFileBtn.addEventListener('click', (e) => {
+            console.log("haha");
+            // console.log( document.getElementById('customFile'));
+            // document.getElementById('customFile').files = [];
+        });
 
         const renderDetailBody = (details) => {
             const tr = document.createElement('tr');
@@ -233,7 +242,8 @@
         document.getElementById('customFile').addEventListener('change', (e) => {
             const listImageProduct = document.getElementById('list-image-product');
             const files = e.target.files;
-            listImageProduct.innerHTML =''
+            console.log(e.target.files);
+            listImageProduct.innerHTML = ''
             const label = document.getElementById('custom-file-label');
             label.setAttribute('class', 'custom-file-label selected');
             label.innerHTML = files.length > 1 ? `${files[0].name} và ${files.length -1} ảnh khác` : files[0].name
@@ -243,8 +253,6 @@
                 img.src = urlImage;
                 listImageProduct.appendChild(img);
             })
-
         })
-
     </script>
 @endsection

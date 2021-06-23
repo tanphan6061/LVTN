@@ -165,9 +165,10 @@
 
         const showChartMonth = (year = currentYear) => {
             const data = convertData.find(i => i.year == year);
+            console.log("Data", data);
             grand_total_year.innerHTML =
-                `Tổng doanh thu năm ${year}: ${data.grand_total.toLocaleString('it-IT', {style : 'currency', currency : 'VND'})}`
-            const dataOfMonth = data.dataOfYear.map(item => item.grand_total);
+                `Tổng doanh thu năm ${year}: ${data ? data.grand_total.toLocaleString('it-IT', {style : 'currency', currency : 'VND'}) : '0 VND'}`
+            const dataOfMonth = data ? data.dataOfYear.map(item => item?.grand_total) : [];
             new Chart(
                 document.getElementById('revenueMonth'), {
                     type: 'line',
@@ -215,11 +216,11 @@
                 tension: 0.1
             }]
         };
-        const total = convertData.reduce((a,b)=>{
+        const total = convertData.reduce((a, b) => {
             return b.grand_total + a;
-        },0)
+        }, 0)
         grand_total_month.innerHTML =
-                `Tổng doanh thu: ${total.toLocaleString('it-IT', {style : 'currency', currency : 'VND'})}`
+            `Tổng doanh thu: ${total.toLocaleString('it-IT', {style : 'currency', currency : 'VND'})}`
         var revenueYear = new Chart(
             document.getElementById('revenueYear'), {
                 type: 'bar',

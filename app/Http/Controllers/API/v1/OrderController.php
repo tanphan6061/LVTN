@@ -131,8 +131,9 @@ class OrderController extends ApiController
                 $deductCouponSupplier = $this->getDeductCouponSupplier($supplier, $itemCouponSupplier);
             }
 
-            $deductCouponGlobal = $this->getDeductCouponGlobal($supplier, $discountGlobal);
 
+            $deductCouponGlobal = $this->getDeductCouponGlobal($supplier, $discountGlobal);
+            //dd($discountSupplier, $discountGlobal);
             $order = $this->user->orders()->create(
                 [
                     'supplier_id' => $supplier['id'],
@@ -147,11 +148,15 @@ class OrderController extends ApiController
             $this->createOrderDetails($order, $supplier);
 
             if ($deductCouponSupplier) {
+                $discountSupplier->amount -= 1;
+                $discountSupplier->save();
                 $this->createODC($order, $discountSupplier, $deductCouponSupplier);
             }
 
             if ($deductCouponGlobal && $discountGlobalUsed == false) {
                 $discountGlobalUsed = true;
+                $discountGlobal->amount -= 1;
+                $discountGlobal->save();
                 $this->createODC($order, $discountGlobal, $deductCouponGlobal);
             }
 

@@ -30,7 +30,8 @@ class Discount_code extends Model
     public function scopeAvailable($query)
     {
         return $query->whereDate('start_date', '<=', date('Y-m-d'))
-            ->whereDate('end_date', '>=', date('Y-m-d'));
+            ->whereDate('end_date', '>=', date('Y-m-d'))
+            ->where('amount', '>=', 1);
 
     }
 

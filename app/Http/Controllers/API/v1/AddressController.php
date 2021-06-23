@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\AddressCreateRequest;
 use App\Http\Resources\AddressR;
 use App\Models\Address;
-use Illuminate\Http\Request;
+
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -50,12 +50,13 @@ class AddressController extends ApiController
         $data = collect($request->validated());
         $active_address = $this->user->addresses->where('active', 1)->first();
         if (!$active_address) {
-            $data->active = 1;
+            $data->put('active', 1);
         }
-        if ($request->get('active') && $active_address) {
+        if ($active_address && $request->get('active')) {
             $active_address->update(['active' => 0]);
         }
 
+        //dd($data);
         $address = $this->user->addresses()->create($data->toArray());
         return $this->responded("Created address successfully", new AddressR($address));
     }
@@ -68,11 +69,10 @@ class AddressController extends ApiController
      */
     public function show(Address $address)
     {
-        //
-        if ($address->user->id == $this->user->id) {
-            return $this->responded('Get detail address', new AddressR($address));
+        if ($address->user->id != $this->user->id) {
+            return $this->respondedError("Invalid");
         }
-        return $this->respondedError("Invalid");
+        return $this->responded('Get detail address', new AddressR($address));
     }
 
     /**
@@ -89,9 +89,11 @@ class AddressController extends ApiController
         }
         $active_address = $this->user->addresses->where('active', 1)->first();
         $data = collect($request->validated());
+
         if (!$address->active && $request->get('active') && $active_address) {
             $active_address->update(['active' => 0]);
         }
+
         if ($address->active) {
             $data->forget('active');
         }
@@ -106,11 +108,16 @@ class AddressController extends ApiController
      * @param \App\Models\Address $address
      * @return \Illuminate\Http\Response
      */
-    public
-    function destroy(Address $address)
+    public function destroy(Address $address)
     {
         if ($address->user->id != $this->user->id) {
             return $this->respondedError("Invalid");
+        }
+
+        if ($address->active) {
+            return $this->respondedError("Invalid", [
+                'active' => ["Không thể xóa địa chỉ đang active"]
+            ]);
         }
 
         $address->is_deleted = 1;

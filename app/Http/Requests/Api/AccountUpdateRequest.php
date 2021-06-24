@@ -17,7 +17,7 @@ class AccountUpdateRequest extends ApiRequest
     {
         $ext_rules = [];
         $validate = [
-            'name' => 'required|between:3,16',
+            'name' => 'required|between:3,32',
             //'email' => 'required|email|unique:users',
             'birthday' => 'required|date|date_format:Y-m-d|before:now',
             'sex' => [

@@ -23,7 +23,7 @@ class ReviewFilter extends Filter
 //
 //        $reviews = auth('api')->user()->reviews->pluck('id');
         $user = User::find($id);
-        $reviews = $user ?  $user->reviews->pluck('id') : [];
+        $reviews = $user ? $user->reviews->pluck('id') : [];
         return $this->builder->whereIn('id', $reviews);
     }
 

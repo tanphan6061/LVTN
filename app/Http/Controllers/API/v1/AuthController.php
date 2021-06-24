@@ -26,7 +26,6 @@ class AuthController extends ApiController
 
     public function update(AccountUpdateRequest $request)
     {
-
         $validated = $request->validated();
         $array_pw = isset($validated['old_password']) ? [
             'password' => bcrypt($validated['new_password'])
@@ -36,7 +35,7 @@ class AuthController extends ApiController
                 'new_password' => ['Mật khẩu mới không được trùng với mật khẩu cũ.']
             ]);
 
-        } elseif (isset($validated['old_password'], $validated['new_password']) && !Hash::check($validated['old_password'], $user->password)) {
+        } elseif (isset($validated['old_password'], $validated['new_password']) && !Hash::check($validated['old_password'], $this->user->password)) {
             return $this->respondedError("Update information failed", [
                 'old_password' => ['Mật khẩu cũ không hợp lệ.']
             ]);
@@ -48,7 +47,7 @@ class AuthController extends ApiController
                 $validated,
                 $array_pw
             ));
-            return $this->responded("Update information successfully", Auth::user());
+            return $this->responded("Update information successfully", $this->user);
         }
 
     }

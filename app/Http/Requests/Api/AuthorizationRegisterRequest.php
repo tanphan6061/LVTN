@@ -17,7 +17,7 @@ class AuthorizationRegisterRequest extends ApiRequest
     public function rules()
     {
         return [
-            'name' => 'required|between:3,16',
+            'name' => 'required|between:3,32',
             'email' => 'required|email|unique:users',
             'password' => 'required|confirmed|between:6,32', //password_confirmation
             'sex' => [

@@ -191,7 +191,7 @@ class OrderController extends ApiController
 
             $this->createShippingAddress($order, $addressShipping);
             $order->history_orders()->create();
-            //$this->updateCart($supplier);
+            $this->updateCart($supplier);
             $orders->push($order);
         }
 

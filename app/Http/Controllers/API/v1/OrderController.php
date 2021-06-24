@@ -74,7 +74,18 @@ class OrderController extends ApiController
         }
 
 
+        $order_discount_codes = $order->order_discount_codes;
+        //dd($order_discount_codes);
+        foreach ($order_discount_codes as $order_discount_code) {
+            $discount_code = Discount_code::find($order_discount_code->discount_code_id);
+            if (!$discount_code) {
+                $discount_code->amount += 1;
+                $discount_code->save();
+            }
+        }
+
         $order->history_orders()->create(['status' => 'cancel']);
+
         return $this->responded('Cancel order successfully', new OrderR($order));
     }
 
@@ -88,7 +99,6 @@ class OrderController extends ApiController
     public function store(OrderCreateRequest $request)
     {
         $validated = $request->validated();
-
         if ($validated['address_id']) {
             $addressShipping = $this->user->addresses->where('id', $validated['address_id'])->first();
         } else {
@@ -181,7 +191,7 @@ class OrderController extends ApiController
 
             $this->createShippingAddress($order, $addressShipping);
             $order->history_orders()->create();
-            $this->updateCart($supplier);
+            //$this->updateCart($supplier);
             $orders->push($order);
         }
 
@@ -202,16 +212,15 @@ class OrderController extends ApiController
                 'temp_product' => (new TempProductOrderDetailR($temp_product))->toJson()
             ];
 
-            //dd($data);
 
-            $this->update_amount_product($product->id, $product->quantity);
+            $this->updateProductAmount($product->id, $product->quantity);
             return $order->order_details()->create($data);
         });
     }
 
-    private function update_amount_product($id, $quantity)
+    private function updateProductAmount($product_id, $quantity)
     {
-        $product = Product::find($id);
+        $product = Product::find($product_id);
         $product->amount = $product->amount - $quantity;
         $product->save();
     }
@@ -306,7 +315,8 @@ class OrderController extends ApiController
             $supplier->grandTotal = $supplier->items->reduce(function ($accumulator, $product) {
                 return $accumulator + $product->grandTotal * $product->quantity;
             }, 0);
-            $supplier->discount_codes = $supplier->discount_codes()->available()->get();
+            $supplier->discount_codes = $supplier->discount_codes()->available()
+                ->where('is_global', 0)->get();
             return collect($supplier);
         })->unique();
     }

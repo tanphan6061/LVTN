@@ -119,7 +119,7 @@ class SupplierController extends Controller
             $imageName = time() . '.' . $data['avatar']->extension();
             $dir = 'uploads/avatar';
             $data['avatar']->move(public_path($dir), $imageName);
-            $data['avatar'] = $dir . "/" . $imageName;
+            $data['avatar'] = url($dir . "/" . $imageName);
         }
 
        $data['slug'] =  Str::slug($data['nameOfShop'], '-') . '-' . Auth::user()->id;

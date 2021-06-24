@@ -121,6 +121,8 @@ class SupplierController extends Controller
             $data['avatar']->move(public_path($dir), $imageName);
             $data['avatar'] = $dir . "/" . $imageName;
         }
+
+       $data['slug'] =  Str::slug($data['nameOfShop'], '-') . '-' . Auth::user()->id;
         Auth::user()->update($data);
         return redirect()->route('suppliers.show')->with('success', 'Cập nhật thông tin thành công');
     }

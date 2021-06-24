@@ -46,7 +46,7 @@
                         <td>{{ number_format($order->price, 0, '', ',') }} vnđ</td>
                         <td>{{ number_format($order->discount, 0, '', ',') }} vnđ</td>
                         <td>{{ number_format($order->grand_total, 0, '', ',') }} vnđ</td>
-                        <td>{{ $order->currentStatus }}</td>
+                        <td>{{ $order->currentStatusText }}</td>
                         <td>
                             <div class="d-inline-block" data-toggle="tooltip" title="Xem chi tiết đơn">
                                 <a href="{{ route('orders.show', $order) }}" class="btn btn-warning"> <span

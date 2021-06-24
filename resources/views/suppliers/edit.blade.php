@@ -60,7 +60,7 @@
                             style="display:none" />
                         <div class="d-flex justify-content-center mt-2">
                             <button onclick="event.preventDefault();
-                                    document.getElementById('avatar').click();" class="btn btn-primary">Đổi ảnh đại
+                                            document.getElementById('avatar').click();" class="btn btn-primary">Đổi ảnh đại
                                 diện</button>
                         </div>
                     </div>
@@ -90,6 +90,15 @@
                         </div>
                     @endif
                 </div>
+                <label for="description">Mô tả:</label>
+                <textarea style="min-height:200px" name="description" type="number"
+                    class="form-control {{ $errors->has('description') ? 'is-invalid' : '' }}"
+                    id="description">{{ old('description') ?? Auth::user()->description }}</textarea>
+                @if ($errors->has('description'))
+                    <div class="invalid-feedback">
+                        {{ $errors->first('description') }}
+                    </div>
+                @endif
                 <div class="d-flex justify-content-end">
                     <a href="{{ route('suppliers.show') }}" class="mt-3 px-5 btn btn-secondary">Huỷ</a>
                     <button type="submit" class="btn btn-primary mt-3 px-5">Cập nhật</button>
@@ -105,6 +114,5 @@
             const urlImage = URL.createObjectURL(e.target.files[0]);
             avatarImage.setAttribute('src', urlImage);
         })
-
     </script>
 @endsection

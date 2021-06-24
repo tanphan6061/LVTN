@@ -55,6 +55,9 @@ class Kernel extends HttpKernel
      */
     protected $routeMiddleware = [
         'cors' => \App\Http\Middleware\CORS::class,
+        'checkIsAdmin' => \App\Http\Middleware\checkIsAdmin::class,
+        'checkIsOwnerOfSupplier' => \App\Http\Middleware\checkIsOwnerOfSupplier::class,
+        'checkGotoPreviousPageAfterLogout' => \App\Http\Middleware\checkGotoPreviousPageAfterLogout::class,
         'auth' => \App\Http\Middleware\Authenticate::class,
         'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
         'cache.headers' => \Illuminate\Http\Middleware\SetCacheHeaders::class,

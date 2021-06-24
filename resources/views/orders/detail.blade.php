@@ -9,7 +9,7 @@
         <div class="d-flex justify-content-between align-items-center">
             <div>
                 <h1>Mã đơn: {{ $order->id }}</h1>
-                <div class="mb-2">Trạng thái hiện tại: {{ $order->currentStatus }}</div>
+                <div class="mb-2">Trạng thái hiện tại: {{ $order->currentStatusText }}</div>
             </div>
             <div>
                 @if ($order->currentStatus !== 'cancel')
@@ -42,7 +42,7 @@
                     @foreach ($order->history_orders as $key => $history_order)
                         <tr>
                             <td>{{ $key + 1 }}</td>
-                            <td>{{ $history_order->status }}</td>
+                            <td>{{ $history_order->text }}</td>
                             <td>{{ date_format($history_order->created_at, 'H:i:s, d/m/Y') }}</td>
                         </tr>
                     @endforeach

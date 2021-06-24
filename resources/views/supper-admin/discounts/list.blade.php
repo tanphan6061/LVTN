@@ -4,7 +4,7 @@
     <div class="border-bottom mb-5">
         <ul class="nav--header">
             <li><a href="/">Trang chủ</a></li>
-            <li><span>Mã giảm giá</span></li>
+            <li><a href="{{route('discounts.index')}}">Mã giảm giá</a></li>
             <li><span>Danh sách mã giảm giá</span></li>
         </ul>
         <div class="d-flex justify-content-between align-items-center">

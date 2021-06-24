@@ -11,7 +11,7 @@
             <div onclick="location.href='{{ route('orders.index', ['type' => 'processing']) }}'"
                 class="order-overall-item rounded processing">
                 <div style="font-size:1.15rem">
-                    Đơn chưa xác nhận
+                    Đơn chờ xác nhận
                 </div>
                 <div>{{ $count['processing'] }}</div>
             </div>

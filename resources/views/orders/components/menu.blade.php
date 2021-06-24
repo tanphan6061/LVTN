@@ -2,7 +2,7 @@
     <ul class="nav nav-tabs">
         <li class="nav-item">
             <a class="nav-link {{ request()->query('type') == 'processing' ? 'active' : '' }}"
-                href="{{ route('orders.index', ['type' => 'processing']) }}">Đơn chưa xác nhận</a>
+                href="{{ route('orders.index', ['type' => 'processing']) }}">Đơn chờ xác nhận</a>
         </li>
         <li class="nav-item">
             <a class="nav-link {{ request()->query('type') == 'shipping' ? 'active' : '' }}"

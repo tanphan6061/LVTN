@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\BrandRequest;
 use App\Models\Brand;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class BrandController extends Controller
 {
@@ -45,7 +46,11 @@ class BrandController extends Controller
     public function store(BrandRequest $request)
     {
         $data = $request->validated();
-        Brand::create($data);
+        $brand = Brand::create($data);
+
+        $brand->slug =  Str::slug($data['name'], '-') . '-' . $brand->id;
+        $brand->save();
+
         session(['success' => 'Tạo thương hiệu thành công']);
         return $this->responded('Tạo thương hiệu thành công');
     }
@@ -90,6 +95,7 @@ class BrandController extends Controller
         }
 
         $data = $request->validated();
+        $data['slug'] =  Str::slug($data['name'], '-') . '-' . $brand->id;
         $brand->update($data);
         session(['success' => $message]);
         return $this->responded($message);

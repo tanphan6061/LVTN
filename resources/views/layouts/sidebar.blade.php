@@ -43,7 +43,7 @@
                             <i class="fa fa-edit"></i> Đơn Hàng <span class="fa fa-chevron-down"></span>
                         </a>
                         <ul class="nav child_menu">
-                            <li><a href="{{ route('orders.index', ['type' => 'processing']) }}">Đơn chưa xác nhận</a>
+                            <li><a href="{{ route('orders.index', ['type' => 'processing']) }}">Đơn chờ xác nhận</a>
                             </li>
                             <li><a href="{{ route('orders.index', ['type' => 'shipping']) }}">Đơn đang giao</a></li>
                             <li><a href="{{ route('orders.index', ['type' => 'delivered']) }}">Đơn đã giao</a></li>

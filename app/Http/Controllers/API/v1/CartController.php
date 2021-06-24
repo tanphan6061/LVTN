@@ -39,7 +39,8 @@ class CartController extends ApiController
             $supplier->items = $products->filter(function ($product) use ($supplier) {
                 return $product->supplier->id == $supplier->id;
             });
-            $supplier->discount_codes = $supplier->discount_codes()->available()->get();
+            $supplier->discount_codes = $supplier->discount_codes()->available()
+                ->where('is_global', 0)->get();
             return collect($supplier);
         })->unique();
 

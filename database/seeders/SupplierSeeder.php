@@ -53,6 +53,7 @@ class SupplierSeeder extends Seeder
             'email' => 'admin@gmail.com',
             'password' => bcrypt('12345'),
             'nameOfShop' => 'Taka',
+            'slug' => 'taka',
             'phone' => '0923123123',
             'role' => 'admin',
             'is_activated' => 1

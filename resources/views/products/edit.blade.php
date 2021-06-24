@@ -3,7 +3,7 @@
     <div class="border-bottom">
         <ul class="nav--header">
             <li><a href="/">Trang chủ</a></li>
-            <li><a href="{{ route('products.index') }}">Trang chủ</a></li>
+            <li><a href="{{ route('products.index') }}">Sản phẩm</a></li>
             <li><span>Sửa sản phẩm</span></li>
         </ul>
         <h1>Sửa sản phẩm</h1>

@@ -3,7 +3,7 @@
     <div class="border-bottom mb-5">
         <ul class="nav--header">
             <li><a href="/">Trang chủ</a></li>
-            <li><a href="{{route('products.index')}}">Trang chủ</a></li>
+            <li><a href="{{route('products.index')}}">Sản phẩm</a></li>
             <li><span>Danh sách sản phẩm</span></li>
         </ul>
         <div class="d-flex justify-content-between align-items-center">

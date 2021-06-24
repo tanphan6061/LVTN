@@ -22,7 +22,6 @@ class CartController extends ApiController
      */
     public function index()
     {
-
         $products = $this->user->carts->map(function ($item) {
             if (!$product = $item->product) {
                 $item->is_deleted = 1;

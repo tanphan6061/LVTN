@@ -10,6 +10,7 @@ use App\Http\Resources\ReviewR;
 use App\Models\Product;
 use App\Models\Review;
 use App\Taka\Filters\ReviewFilter;
+use App\Taka\Paginate\Paginate;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -30,10 +31,11 @@ class ReviewController extends ApiController
      */
     public function index(ReviewFilter $filter)
     {
-        $reviews = Review::filter($filter)->get();
+        $builder = Review::orderBy('updated_at', 'desc');
+        $reviews = new Paginate($builder->filter($filter));
         $data = [
-            'reviews' => ReviewR::collection($reviews),
-            'count' => $reviews->count(),
+            'reviews' => ReviewR::collection($reviews->getData()),
+            'count' => $reviews->getTotal(),
         ];
 
         return $this->responded('Get list reviews successfully', $data);
@@ -42,23 +44,15 @@ class ReviewController extends ApiController
     public function getListWaitingReview()
     {
         $productIDsAvailable = $this->user->listWaitingForReview;
-        $products = Product::whereIn('id', $productIDsAvailable)->get();
+        $builder = Product::whereIn('id', $productIDsAvailable);
+        $products = new Paginate($builder);
         $data = [
-            'products' => ProductR::collection($products),
-            'count' => $productIDsAvailable->count()
+            'products' => ProductR::collection($products->getData()),
+            'count' => $products->getTotal()
         ];
         return $this->responded('Get list waiting for review successfully', $data);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
 
     /**
      * Store a newly created resource in storage.
@@ -84,28 +78,6 @@ class ReviewController extends ApiController
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param \App\Models\Review $review
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Review $review)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param \App\Models\Review $review
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Review $review)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      *
      * @param \Illuminate\Http\Request $request
@@ -124,14 +96,4 @@ class ReviewController extends ApiController
         return $this->responded("Update review successfully", $review);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param \App\Models\Review $review
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Review $review)
-    {
-        //
-    }
 }

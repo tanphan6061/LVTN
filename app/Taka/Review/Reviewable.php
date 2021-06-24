@@ -33,7 +33,9 @@ trait Reviewable
             return [];
         }
 
-        $productAvailable = $user->order_details->pluck('product_id')->unique();
+        $productAvailable = $user->order_details->filter(function ($order_detail) {
+            return $order_detail->order->currentStatus == "delivered";
+        })->pluck('id');
         $productReviewed = $user->reviews->pluck('product_id')->unique();
         return $productAvailable->diff($productReviewed);
     }

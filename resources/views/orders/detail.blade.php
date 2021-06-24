@@ -15,13 +15,13 @@
                 @if ($order->currentStatus !== 'cancel')
                     <button data-data='@json($order)' data-target="#modal-handle" data-toggle="modal"
                         class="btn btn-primary btn-modal-edit">
-                      Thay đổi trạng thái
+                        Thay đổi trạng thái
                     </button>
                 @endif
 
                 @if ($order->currentStatus !== 'cancel' && $order->currentStatus !== 'delivered')
-                <button data-toggle="modal" data-id="{{ $order->id }}" data-name="{{ $order->id }}"
-                    data-target="#modal-delete" class="btn btn-danger btn-modal-delete">Huỷ đơn</button>
+                    <button data-toggle="modal" data-id="{{ $order->id }}" data-name="{{ $order->id }}"
+                        data-target="#modal-delete" class="btn btn-danger btn-modal-delete">Huỷ đơn</button>
                 @endif
             </div>
         </div>
@@ -99,13 +99,13 @@
                         <td>
                             <div style="width:50px;height:50px">
                                 <img style="width: 100%;
-                                                height: 100%;
-                                                object-fit: cover;" class="img-thumbnail"
-                                    src="{{ $order_detail->product->images[0]->url ?? url('assets/images/placeholder-images.png') }}"
+                                                    height: 100%;
+                                                    object-fit: cover;" class="img-thumbnail"
+                                    src="{{ json_decode($order_detail->temp_product)->images[0]->url ?? url('assets/images/placeholder-images.png') }}"
                                     alt="">
                             </div>
                             <div class="mt-1">
-                                {{ $order_detail->product->name }}
+                                {{ json_decode($order_detail->temp_product)->name }}
                             </div>
                         </td>
                         <td>{{ $order_detail->quantity }}</td>
@@ -129,7 +129,7 @@
 @section('bodyScript')
     <script>
         const namePage = 'đơn đặt hàng';
-        setModalDeleteInListPage(namePage,`${location.protocol}//${location.host}/admin/orders`);
-        setModalHandle('trạng thái đơn đặt hàng',`${location.protocol}//${location.host}/admin/orders`);
+        setModalDeleteInListPage(namePage, `${location.protocol}//${location.host}/admin/orders`);
+        setModalHandle('trạng thái đơn đặt hàng', `${location.protocol}//${location.host}/admin/orders`);
     </script>
 @endsection

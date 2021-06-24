@@ -80,6 +80,17 @@
                     </div>
                 @endif
             </div>
+            <div class="form-group mt-4">
+                <label for="address">Mô tả:</label>
+                <textarea disabled style="min-height:200px" name="description" type="number" value="1" type="number" min="1" step="1"
+                    class="form-control {{ $errors->has('description') ? 'is-invalid' : '' }}"
+                    id="description">{{ Auth::user()->description }}</textarea>
+                @if ($errors->has('description'))
+                    <div class="invalid-feedback">
+                        {{ $errors->first('description') }}
+                    </div>
+                @endif
+            </div>
         </div>
     </div>
     </div>

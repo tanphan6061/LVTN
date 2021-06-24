@@ -3,7 +3,7 @@
     <div class="border-bottom">
         <ul class="nav--header">
             <li><a href="/">Trang chủ</a></li>
-            <li><span>Sản phẩm</span></li>
+            <li><a href="{{ route('products.index') }}">Trang chủ</a></li>
             <li><span>Chi tiết sản phẩm</span></li>
         </ul>
         <div>
@@ -11,42 +11,19 @@
                 <h1>{{ $product->name }}</h1>
                 <div>Đánh giá: {{ $product->numberOfReview }}/5.0 <i class="fas fa-star text-warning"></i></div>
             </div>
-
         </div>
     </div>
 
     <div class="my-4">
-        <div>
-            <h2>Ảnh sản phẩm:</h2>
-            <div id="demo" class="carousel slide" data-ride="carousel">
-                <!-- Indicators -->
-                <ul class="carousel-indicators">
-                    <li data-target="#demo" data-slide-to="0" class="active"></li>
-                    <li data-target="#demo" data-slide-to="1"></li>
-                    <li data-target="#demo" data-slide-to="2"></li>
-                </ul>
-
-                <!-- The slideshow -->
-                <div class="carousel-inner">
-                    <div class="carousel-item active">
-                        <img src="https://www.w3schools.com/bootstrap4/chicago.jpg" alt="Los Angeles">
-                    </div>
-                    <div class="carousel-item active">
-                        <img src="https://www.w3schools.com/bootstrap4/la.jpg" alt="Los Angeles">
-                    </div>
-                    <div class="carousel-item active">
-                        <img src="https://www.w3schools.com/bootstrap4/ny.jpg" alt="Los Angeles">
-                    </div>
-                </div>
-
-                <!-- Left and right controls -->
-                <a class="carousel-control-prev" href="#demo" data-slide="prev">
-                    <span class="carousel-control-prev-icon"></span>
-                </a>
-                <a class="carousel-control-next" href="#demo" data-slide="next">
-                    <span class="carousel-control-next-icon"></span>
-                </a>
+        <div class="d-flex justify-content-between align-items-start">
+            <div>
+                <img id="avatar-image" class="edit-avatar border"
+                    src="{{ count($product->images) ? url($product->images[0]->url) : url('assets/images/placeholder-images.png') }}"
+                    alt="avatar user">
+                <Button data-toggle="modal" data-target="#album-image-product" class="btn mt-4 btn-primary">Ảnh sản
+                    phẩm</Button>
             </div>
+            <a href='{{ route('products.edit', $product) }}' class="btn btn-primary">Sửa sản phẩm</a>
         </div>
         <h2 class="mt-4">Thông tin chung:</h2>
         <div class="d-flex">
@@ -117,6 +94,30 @@
                     </div>
                 </div>
             @endforeach
+        </div>
+    </div>
+
+    <div class="modal" id="album-image-product">
+        <div class="modal-dialog" style="min-width:85%;">
+            <div class="modal-content">
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Ảnh sản phẩm</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <div class="list-image-product mt-3" id="list-image-product">
+                        @foreach ($product->images as $image)
+                            <img src="{{ url($image->url) }}" />
+                        @endforeach
+                    </div>
+                </div>
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Đóng</button>
+                </div>
+            </div>
         </div>
     </div>
 

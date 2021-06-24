@@ -163,13 +163,16 @@ class OrderController extends ApiController
 
             $deduct_global_discount_code = $this->getDeductGlobalDiscountCode($supplier, $global_discount_code);
             //dd($supplier_discount_code, $global_discount_code);
+
+            $total_deduct = $deduct_global_discount_code + $deduct_supplier_discount_code;
+            $total_deduct = $total_deduct > $grandTotal ? $grandTotal : $total_deduct;
             $order = $this->user->orders()->create(
                 [
                     'supplier_id' => $supplier['id'],
                     'payment_type' => $validated['payment_type'],
                     'price' => $grandTotal,
-                    'discount' => $deduct_global_discount_code + $deduct_supplier_discount_code,
-                    'grand_total' => $grandTotal - ($deduct_global_discount_code + $deduct_supplier_discount_code)
+                    'discount' => $total_deduct,
+                    'grand_total' => $grandTotal - $total_deduct
                 ]
             );
 

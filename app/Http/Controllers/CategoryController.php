@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CategoryRequest;
 use App\Models\Category;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 
 class CategoryController extends Controller
 {
@@ -80,7 +80,10 @@ class CategoryController extends Controller
         }
 
 
-        Category::create($data);
+        $category = Category::create($data);
+        $category->slug =  Str::slug($data['name'], '-') . '-' . $category->id;
+        $category->save();
+
         session(['success' => 'Tạo thương hiệu thành công']);
         return $this->responded('Tạo thương hiệu thành công');
     }
@@ -160,6 +163,7 @@ class CategoryController extends Controller
             $data['parent_category_id'] = null;
         }
 
+        $data['slug'] =  Str::slug($data['name'], '-') . '-' . $category->id;
         $category->update($data);
         session(['success' => 'Cập nhật thương hiệu thành công']);
         return $this->responded('Cập nhật thương hiệu thành công');

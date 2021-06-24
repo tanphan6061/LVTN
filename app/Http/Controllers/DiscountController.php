@@ -3,10 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\DiscountRequest;
-use App\Models\Category;
 use App\Models\Discount_code;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
 
 class DiscountController extends Controller
 {
@@ -15,9 +15,16 @@ class DiscountController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $discount_codes = Auth::user()->discount_codes()->where('is_deleted', false)->orderBy('created_at', 'DESC')->paginate(10);
+        $discount_codes = Auth::user()->discount_codes()->where([
+            ['code', 'like', "%$request->q%"],
+            ['is_deleted', false]
+        ])->orderBy('created_at', 'DESC')->paginate(10);
+
+        if ($request->q) {
+            $discount_codes->setPath('?q=' . $request->q);
+        }
         return view('discounts.list', compact('discount_codes'));
     }
 
@@ -29,8 +36,7 @@ class DiscountController extends Controller
     public function create()
     {
         //
-        $categories = Category::where('is_deleted', false)->where('parent_category_id', '!=', null)->get();
-        return view('discounts.create', compact('categories'));
+        return view('discounts.create');
     }
 
     /**
@@ -47,7 +53,9 @@ class DiscountController extends Controller
                 [
                     'code' => [
                         'required',
-                        'unique:discount_codes'
+                        'unique' => Rule::unique('discount_codes')->where(function ($query) {
+                            return $query->where('is_deleted', '!=', true);
+                        })
                     ]
                 ]
             ),
@@ -81,8 +89,7 @@ class DiscountController extends Controller
         if (!$discount_code)
             return abort('404');
 
-        $categories = Category::where('is_deleted', false)->where('parent_category_id', '!=', null)->get();
-        return view('discounts.edit', compact('discount_code', 'categories'));
+        return view('discounts.edit', compact('discount_code'));
         //
     }
 
@@ -106,7 +113,7 @@ class DiscountController extends Controller
                     'code' => [
                         'required',
                         'unique' => Rule::unique('discount_codes')->where(function ($query) use ($discount_code) {
-                            return $query->where('id', '!=', $discount_code->id);
+                            return $query->where('id', '!=', $discount_code->id)->where('is_deleted', '!=', true);
                         })
                     ]
                 ]

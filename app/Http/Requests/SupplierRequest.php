@@ -24,7 +24,8 @@ class SupplierRequest extends WebRequest
             'avatar' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'phone'=>['required','regex:/^((84|0[3|5|7|8|9])+[0-9]{8})$/i'],
             'nameOfShop' =>'required',
-            'address'=>'required'
+            'address'=>'required',
+            'description' =>'nullable',
         ];
     }
 }

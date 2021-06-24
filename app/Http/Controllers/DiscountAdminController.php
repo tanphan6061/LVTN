@@ -7,6 +7,7 @@ use App\Models\Category;
 use App\Models\Discount_code;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
 
 class DiscountAdminController extends Controller
 {
@@ -15,9 +16,18 @@ class DiscountAdminController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $discount_codes = Discount_code::where('is_deleted', false)->where('is_global', true)->orderBy('created_at', 'DESC')->paginate(10);
+        $discount_codes = Discount_code::where([
+            ['code', 'like', "%$request->q%"],
+            ['is_deleted', false],
+            ['is_global', true]
+        ])->orderBy('created_at', 'DESC')->paginate(10);
+
+        if ($request->q) {
+            $discount_codes->setPath('?q=' . $request->q);
+        }
+
         return view('discounts.list', compact('discount_codes'));
     }
 
@@ -30,7 +40,8 @@ class DiscountAdminController extends Controller
     public function create()
     {
         //
-        $categories = Category::where('is_deleted', false)->where('parent_category_id', '!=', null)->get();
+        $categories = Category::where('is_deleted', false)->get();
+        // dd(  $categories );
         return view('discounts.create', compact('categories'));
     }
 
@@ -48,7 +59,9 @@ class DiscountAdminController extends Controller
                 [
                     'code' => [
                         'required',
-                        'unique:discount_codes'
+                        'unique' => Rule::unique('discount_codes')->where(function ($query) {
+                            return $query->where('is_deleted', '!=', true);
+                        })
                     ]
                 ]
             ),
@@ -83,7 +96,7 @@ class DiscountAdminController extends Controller
         if (!$discount_code)
             return abort('404');
 
-        $categories = Category::where('is_deleted', false)->where('parent_category_id', '!=', null)->get();
+        $categories = Category::where('is_deleted', false)->get();
         return view('discounts.edit', compact('discount_code', 'categories'));
         //
     }
@@ -108,7 +121,7 @@ class DiscountAdminController extends Controller
                     'code' => [
                         'required',
                         'unique' => Rule::unique('discount_codes')->where(function ($query) use ($discount_code) {
-                            return $query->where('id', '!=', $discount_code->id);
+                            return $query->where('id', '!=', $discount_code->id)->where('is_deleted', '!=', true);
                         })
                     ]
                 ]

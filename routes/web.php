@@ -26,15 +26,17 @@ Route::get('/', function () {
     return redirect()->route('login');
 });
 
-
 Auth::routes();
 Route::get('/register', [SupplierController::class, 'create'])->name('suppliers.create');
 Route::post('/register', [SupplierController::class, 'store'])->name('suppliers.store');
 
-Route::group(['prefix' => '/admin', 'middleware' => ['auth']], function () {
-    Route::resource('products', ProductController::class);
-    Route::resource('discounts', DiscountController::class);
-    Route::resource('orders', OrderController::class);
+Route::group(['prefix' => '/admin', 'middleware' => ['auth', 'checkGotoPreviousPageAfterLogout']], function () {
+    Route::group(['middleware' => ['checkIsOwnerOfSupplier']], function () {
+        Route::resource('products', ProductController::class);
+        Route::resource('discounts', DiscountController::class);
+        Route::resource('orders', OrderController::class);
+    });
+
     // suppliers
     Route::get('view-profile', [SupplierController::class, 'show'])->name('suppliers.show');
     Route::get('edit-profile', [SupplierController::class, 'edit'])->name('suppliers.edit');
@@ -42,10 +44,12 @@ Route::group(['prefix' => '/admin', 'middleware' => ['auth']], function () {
     Route::get('change-password', [SupplierController::class, 'changePassword'])->name('suppliers.changePassword');
     Route::post('change-password', [SupplierController::class, 'updatePassword'])->name('suppliers.updatePassword');
 
-    Route::get('manage-suppliers', [SupplierController::class, 'index'])->name('suppliers.index');
-    Route::put('manage-suppliers/{id}', [SupplierController::class, 'changeActiveStatus'])->name('suppliers.changeActiveStatus');
-    Route::resource('manage-discounts', DiscountAdminController::class);
-    Route::resource('manage-categories', CategoryController::class);
-    Route::resource('manage-brands', BrandController::class);
+    Route::group(['middleware' => ['checkIsAdmin']], function () {
+        Route::get('manage-suppliers', [SupplierController::class, 'index'])->name('suppliers.index');
+        Route::put('manage-suppliers/{id}', [SupplierController::class, 'changeActiveStatus'])->name('suppliers.changeActiveStatus');
+        Route::resource('manage-discounts', DiscountAdminController::class);
+        Route::resource('manage-categories', CategoryController::class);
+        Route::resource('manage-brands', BrandController::class);
+    });
 });
-Route::get('/admin', [App\Http\Controllers\HomeController::class, 'index'])->name('admin');
+Route::get('/admin', [App\Http\Controllers\HomeController::class, 'index'])->name('admin')->middleware(['checkGotoPreviousPageAfterLogout']);

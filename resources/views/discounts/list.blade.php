@@ -4,12 +4,12 @@
     <div class="border-bottom mb-5">
         <ul class="nav--header">
             <li><a href="/">Trang chủ</a></li>
-            <li><span>Mã giảm giá</span></li>
+            <li><a href="{{ route('discounts.index') }}">Mã giảm giá</a></li>
             <li><span>Danh sách mã giảm giá</span></li>
         </ul>
         <div class="d-flex justify-content-between align-items-center">
             <h1>Danh sách mã giảm giá</h1>
-            <a href="{{Request::url()}}/create" class="btn btn-primary">Tạo mã giảm giá mới</a>
+            <a href="{{ Request::url() }}/create" class="btn btn-primary">Tạo mã giảm giá mới</a>
         </div>
     </div>
     <div class="table-responsive">
@@ -25,6 +25,9 @@
                 <tr>
                     <th>STT</th>
                     <th>Mã</th>
+                    @if (Route::currentRouteName() === 'manage-discounts.index')
+                        <th>Loại sản phẩm áp dụng</th>
+                    @endif
                     <th>Số lượng</th>
                     <th>Ngày bắt đầu</th>
                     <th>Ngày kết thúc</th>
@@ -39,14 +42,18 @@
                     <tr>
                         <td>{{ $key + 1 }}</td>
                         <td>{{ $discount_code->code }}</td>
+                        @if (Route::currentRouteName() === 'manage-discounts.index')
+                            <td>{{$discount_code->category->name}}</td>
+                        @endif
                         <td>{{ $discount_code->amount }}</td>
                         <td>{{ $discount_code->start_date }}</td>
                         <td>{{ $discount_code->end_date }}</td>
                         <td>{{ $discount_code->percent }}</td>
-                        <td>{{ $discount_code->from_price }}</td>
-                        <td>{{ $discount_code->max_price }}</td>
+                        <td>{{ number_format($discount_code->from_price, 0, '', ',') }} vnđ</td>
+                        <td>{{ number_format($discount_code->max_price, 0, '', ',') }} vnđ</td>
                         <td>
-                            <a href="{{route(str_replace('index','edit',Route::currentRouteName()), $discount_code)}}" class="btn btn-warning">Sửa</a>
+                            <a href="{{ route(str_replace('index', 'edit', Route::currentRouteName()), $discount_code) }}"
+                                class="btn btn-warning">Sửa</a>
                             <button data-code="{{ $discount_code->code }}" data-id="{{ $discount_code->id }}"
                                 data-toggle="modal" data-target="#modalDelete"
                                 class="btn btn-danger delete-discount-code">Xóa</button>
@@ -104,6 +111,5 @@
             const deleteForm = document.getElementById('delete-form');
             deleteForm.setAttribute('action', `${location.pathname}/${id}`)
         }))
-
     </script>
 @endsection

@@ -105,7 +105,7 @@
                             @endif
                         </div>
                         <div>
-                            <input id="email" type="text" class="form-control @error('email') is-invalid @enderror"
+                            <input id="email"  value="{{ old('email') }}" type="text" class="form-control @error('email') is-invalid @enderror"
                                 name="email" required autocomplete="email" actofocus placeholder="Email">
                             @error('email')
                                 <span class="invalid-feedback" role="alert">
@@ -114,7 +114,7 @@
                             @enderror
                         </div>
                         <div>
-                            <input id="phone" type="text" class="form-control @error('phone') is-invalid @enderror"
+                            <input id="phone"  value="{{ old('phone') }}" type="text" class="form-control @error('phone') is-invalid @enderror"
                                 name="phone" required autocomplete="phone" actofocus placeholder="Số điện thoại">
                             @error('phone')
                                 <span class="invalid-feedback" role="alert">
@@ -123,7 +123,7 @@
                             @enderror
                         </div>
                         <div>
-                            <input id="nameOfShop" type="text"
+                            <input id="nameOfShop" type="text"  value="{{ old('nameOfShop') }}"
                                 class="form-control @error('nameOfShop') is-invalid @enderror" name="nameOfShop" required
                                 autocomplete="nameOfShop" actofocus placeholder="Tên cửa hàng">
                             @error('nameOfShop')
@@ -133,7 +133,7 @@
                             @enderror
                         </div>
                         <div>
-                            <input id="address" type="text" class="form-control @error('address') is-invalid @enderror"
+                            <input id="address" value="{{ old('address') }}" type="text" class="form-control @error('address') is-invalid @enderror"
                                 name="address" required autocomplete="address" actofocus placeholder="Địa chỉ">
                             @error('address')
                                 <span class="invalid-feedback" role="alert">

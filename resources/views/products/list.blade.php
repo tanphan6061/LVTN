@@ -3,7 +3,7 @@
     <div class="border-bottom mb-5">
         <ul class="nav--header">
             <li><a href="/">Trang chủ</a></li>
-            <li><span>Sản phẩm</span></li>
+            <li><a href="{{route('products.index')}}">Trang chủ</a></li>
             <li><span>Danh sách sản phẩm</span></li>
         </ul>
         <div class="d-flex justify-content-between align-items-center">
@@ -36,7 +36,7 @@
                     <div class="d-flex justify-content-between mt-2">
                         <a href="{{ route('products.edit', $product) }}" class="btn-warning btn text-white">Sửa <i
                                 class="fa fa-edit"></i></a>
-                        <button data-nameProduct="{{ $product->name }}" data-id="{{ $product->id }}"
+                        <button data-nameProduct="{{ $product->name }}" data-id="{{ $product->slug }}"
                             data-toggle="modal" data-target="#modalDelete" class="btn btn-danger delete-product">Xoá <i
                                 class="fa fa-trash"></i>
                         </button>

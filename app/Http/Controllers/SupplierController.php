@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 class SupplierController extends Controller
 {
@@ -69,11 +70,13 @@ class SupplierController extends Controller
         );
 
         if ($data['password'] != $data['password_confirmation'])
-            return redirect()->back()->withErrors(['password' => 'Nhập lại mật khẩu không khớp']);
+            return redirect()->back()->withErrors(['password' => 'Nhập lại mật khẩu không khớp'])->withInput();
 
         unset($data['password_confirmation']);
         $data['password'] =  bcrypt($data['password']);
-        Supplier::create($data);
+        $supplier =  Supplier::create($data);
+        $supplier->slug =  Str::slug($data['nameOfShop'], '-') . '-' . $supplier->id;
+        $supplier->save();
         return redirect()->route('login');
     }
 

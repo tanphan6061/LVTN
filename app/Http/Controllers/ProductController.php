@@ -106,7 +106,7 @@ class ProductController extends Controller
         if ($request->images) {
             $dir = 'uploads/images/products';
             foreach ($request->images as $image) {
-                $imageName = time() . '.' . $image->extension();
+                $imageName = time() .$product->id. $image->getClientOriginalName();
                 $image->move(public_path($dir), $imageName);
                 $image = $dir . "/" . $imageName;
                 $product->images()->create(['url' => $image]);
@@ -213,7 +213,7 @@ class ProductController extends Controller
             $dir = 'uploads/images/products';
             foreach ($request->images as $key => $image) {
                 if (!in_array($key, array_filter($request->remove_uploads))) {
-                    $imageName = time() . '.' . $image->extension();
+                    $imageName = time() .$product->id. $image->getClientOriginalName();
                     $image->move(public_path($dir), $imageName);
                     $image = $dir . "/" . $imageName;
                     $product->images()->create(['url' => $image]);

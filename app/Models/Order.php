@@ -50,11 +50,12 @@ class Order extends Model
     public function getCurrentStatusAttribute()
     {
         $history = $this->history_orders()->latest()->first();
-        return $history->status;
+        return $history ? $history->status : null;
     }
 
     public function getCurrentStatusTextAttribute()
     {
+        if (!$this->currentStatus) return null;
         $text = [
             'cancel' => 'Đã hủy',
             'processing' => 'Đang chờ xác nhận',

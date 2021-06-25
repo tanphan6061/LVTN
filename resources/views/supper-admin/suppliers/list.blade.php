@@ -47,7 +47,7 @@
                     <th>Tên cửa hàng</th>
                     <th>Địa chỉ</th>
                     <th>Trạng thái</th>
-                    <th>Hoạt động</th>
+                    {{-- <th>Hoạt động</th> --}}
                 </tr>
             </thead>
             <tbody>
@@ -76,7 +76,7 @@
                         <th>
                             {{ $supplier->is_activated ? 'Đang hoạt động' : 'Chưa hoạt động' }}
                         </th>
-                        <th>
+                        {{-- <th>
                             @if ($supplier->is_activated)
                             <div  data-toggle="tooltip"  data-placement="top" title="Tạm ngưng hoạt động cửa hàng" >
                                 <button data-target="#modalUpdateSupplier" data-id="{{$supplier->id}}" data-nameOfShop="{{$supplier->nameOfShop}}"
@@ -88,7 +88,7 @@
                                  data-type="active"   data-toggle="modal" class="btn btn-primary btn-modal-update" type="button">Duyệt</button>
                             </div>
                             @endif
-                        </th>
+                        </th> --}}
                     </tr>
                 @endforeach
             </tbody>

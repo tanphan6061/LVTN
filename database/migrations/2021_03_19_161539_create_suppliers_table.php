@@ -25,7 +25,7 @@ class CreateSuppliersTable extends Migration
             $table->string('slug')->nullable();
             $table->string('address')->nullable();
             $table->enum('role',['supplier','admin']); // default is supplier
-            $table->boolean('is_activated')->default(0); // default is 0 (is inactivated)
+            $table->boolean('is_activated')->default(1); // default is 1 (is active)
             $table->timestamps();
         });
     }

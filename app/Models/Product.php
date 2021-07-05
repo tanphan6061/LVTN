@@ -67,6 +67,7 @@ class Product extends Model
 
     public function scopeGetElementRelation($query, $relation)
     {
+        //dd($query->count());
         return $query->with($relation)->get()->map(function ($product) use ($relation) {
             return $product->$relation;
         })->unique()->sortBy('id');

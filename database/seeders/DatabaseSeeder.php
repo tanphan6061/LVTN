@@ -32,28 +32,60 @@ class DatabaseSeeder extends Seeder
         User::create([
             'name' => 'Nguoi trong ao ho',
             'email' => 'choeger@example.net',
-            // 'email_verified_at' => now(),
             'password' => bcrypt('Demopass69'), // password
-            'birthday' => '1999-01-01', // password
-            'sex' => 'male', // password
+            'birthday' => '1999-01-01',
+            'sex' => 'male',
         ]);
-        User::factory()->count(10)->create();
-        Brand::factory()->count(10)->create();
-        Category::factory()->count(5)->create();
+        User::factory()->count(20)->create();
 
-        $this->call([
-            SupplierSeeder::class,
-        ]);
+        //Brand::factory()->count(78)->create();
+        //Category::factory()->count(26)->create();
 
-        Product::factory()->count(50)->create();
-        Discount_code::factory()->count(10)->create();
-        Product_image::factory()->count(50)->create();
-        Favourite::factory()->count(30)->create();
-        Review::factory()->count(500)->create();
-        Order::factory()->count(1)->create();
-        Order_detail::factory()->count(5)->create();
-        Shipping_address::factory()->count(1)->create();
-        History_order::factory()->count(3)->create();
+
+        $this->call(BrandSeeder::class);
+        $this->call(CategorySeeder::class);
+
+        $this->call(SupplierSeeder::class);
+
+        $this->call(ProductSeeder::class);
+        $this->call(Product1Seeder::class);
+        $this->call(Product2Seeder::class);
+        $this->call(Product3Seeder::class);
+        $this->call(Product4Seeder::class);
+        $this->call(Product5Seeder::class);
+        $this->call(Product6Seeder::class);
+        $this->call(Product7Seeder::class);
+        $this->call(Product8Seeder::class);
+        $this->call(Product9Seeder::class);
+        $this->call(Product10Seeder::class);
+        $this->call(Product11Seeder::class);
+        $this->call(Product12Seeder::class);
+        $this->call(Product13Seeder::class);
+        $this->call(Product14Seeder::class);
+        $this->call(Product15Seeder::class);
+        $this->call(Product16Seeder::class);
+        $this->call(Product17Seeder::class);
+        $this->call(Product18Seeder::class);
+        $this->call(Product19Seeder::class);
+        $this->call(Product20Seeder::class);
+        $this->call(Product21Seeder::class);
+        $this->call(Product22Seeder::class);
+        $this->call(Product23Seeder::class);
+        $this->call(Product24Seeder::class);
+        $this->call(Product25Seeder::class);
+
+        $this->call(RatingSeeder::class);
+
+
+        /*        Product::factory()->count(50)->create();
+                Discount_code::factory()->count(10)->create();
+                Product_image::factory()->count(50)->create();
+                Favourite::factory()->count(30)->create();
+                Review::factory()->count(500)->create();
+                Order::factory()->count(1)->create();
+                Order_detail::factory()->count(5)->create();
+                Shipping_address::factory()->count(1)->create();
+                History_order::factory()->count(3)->create();*/
     }
 
 }

@@ -27,11 +27,10 @@ class ProductController extends ApiController
     {
         //DB::enableQueryLog();
         $builder = Product::filterQ();
-        //dd($builder);
-
+        $builder = $builder->filter($filter);
         $brands = $builder->getElementRelation('brand');
         $suppliers = $builder->getElementRelation('supplier');
-        $products = new Paginate($builder->filter($filter));
+        $products = new Paginate($builder);
         $list_sort = [
             ['key' => 'default', 'value' => 'Bán chạy'],
             ['key' => 'new_products', 'value' => 'Hàng mới'],

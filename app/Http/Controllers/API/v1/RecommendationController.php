@@ -40,6 +40,7 @@ class RecommendationController extends ApiController
         $current_user = $this->user;
         $current_user_id = $current_user->id;
         $matrix = $this->init_matrix();
+        //dd($matrix);
         $similarity_users = $this->sort_similarity_users($this->get_similarity_users($matrix, $current_user_id));
         $format_current_user = ['user_id' => $current_user_id, 'reviews' => $matrix[$current_user_id]];
         return $this->get_prediction($format_current_user, $similarity_users, $limit, $neighbors);
@@ -50,8 +51,10 @@ class RecommendationController extends ApiController
     private function init_matrix()
     {
         $temp_matrix = [];
-        $users = User::all();
-        $products = Product::all();
+        //$users = User::all();
+        $users = User::all()->random(10);
+        //$products = Product::all();
+        $products = Product::all()->random(50);
         foreach ($users as $user) {
             $user_id = $user->id;
             foreach ($products as $product) {

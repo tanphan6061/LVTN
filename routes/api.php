@@ -12,6 +12,7 @@ use App\Http\Controllers\API\v1\ReviewController;
 use App\Http\Controllers\API\v1\SupplierController;
 use \App\Http\Controllers\API\v1\ProductController;
 use App\Http\Controllers\API\v1\AddressController;
+use App\Models\User;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -26,6 +27,12 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::group(['prefix' => 'v1', 'middleware' => ['api', 'cors']], function () {
+
+    /*route::get('/test', function () {
+        $limit = 0;
+        $users = User::all()->random($limit);
+        dd($users);
+    });*/
     route::post('login', [AuthController::class, 'login']);
     route::post('register', [AuthController::class, 'register']);
 

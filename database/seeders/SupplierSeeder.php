@@ -38,6 +38,17 @@ class SupplierSeeder extends Seeder
         );*/
 
         Supplier::create([
+            'name' => 'Taka',
+            'email' => 'admin@gmail.com',
+            'password' => bcrypt('12345'),
+            'nameOfShop' => 'Taka',
+            'slug' => 'taka',
+            'phone' => '0923123123',
+            'role' => 'admin',
+            'is_activated' => 1
+        ]);
+
+        Supplier::create([
             'name' => 'Nguyen van A',
             'email' => 'supplier@gmail.com',
             'password' => bcrypt('12345'),
@@ -45,17 +56,6 @@ class SupplierSeeder extends Seeder
             'nameOfShop' => 'Shop cua tao',
             'slug' => 'shop-cua-tao',
             'address' => '70/10 Tô Ký, quận 12, tp. HCM',
-            'is_activated' => 1
-        ]);
-
-        Supplier::create([
-            'name' => 'Phan Viet Tan',
-            'email' => 'admin@gmail.com',
-            'password' => bcrypt('12345'),
-            'nameOfShop' => 'Taka',
-            'slug' => 'taka',
-            'phone' => '0923123123',
-            'role' => 'admin',
             'is_activated' => 1
         ]);
     }

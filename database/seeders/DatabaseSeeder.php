@@ -72,7 +72,7 @@ class DatabaseSeeder extends Seeder
         $this->call(Product22Seeder::class);
         $this->call(Product23Seeder::class);
         $this->call(Product24Seeder::class);
-        $this->call(Product25Seeder::class);
+        //$this->call(Product25Seeder::class);
 
         $this->call(RatingSeeder::class);
 

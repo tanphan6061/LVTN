@@ -18,9 +18,9 @@ class RatingSeeder extends Seeder
         //
         $raw_data = json_decode(file_get_contents('http://localhost:8000/crawl_data/ratings.json'));
         $count_raw = count($raw_data);
-        $products = Product::all();
+        $products = Product::all()->random(500);
         foreach ($products as $product) {
-            $limit = rand(0, 20);
+            $limit = rand(0, 10);
             $users = User::all()->random($limit);
             foreach ($users as $user) {
                 $ratting = $raw_data[rand(0, $count_raw - 1)];

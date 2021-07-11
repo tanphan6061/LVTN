@@ -50,8 +50,10 @@ class RecommendationController extends ApiController
     private function init_matrix()
     {
         $temp_matrix = [];
-        $users = User::all()->random(50);
-        $products = Product::all()->random(100);
+        //$users = User::all();
+        $users = User::all()->random(10);
+        //$products = Product::all();
+        $products = Product::all()->random(50);
         foreach ($users as $user) {
             $user_id = $user->id;
             foreach ($products as $product) {

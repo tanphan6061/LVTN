@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API\v1;
 
 
+use App\Http\Resources\ProductOverViewR;
 use App\Http\Resources\ProductR;
 use App\Models\Product;
 use App\Models\User;
@@ -31,7 +32,7 @@ class RecommendationController extends ApiController
             return $product ? $acc->push($product) : $acc;
         }, collect([]));
 
-        return $this->responded('Get list recommend successfully', ProductR::collection($products));
+        return $this->responded('Get list recommend successfully', ProductOverViewR::collection($products));
     }
 
     //lấy danh sách mã sản phẩm gợi ý cho người dùng
@@ -52,9 +53,9 @@ class RecommendationController extends ApiController
     {
         $temp_matrix = [];
         //$users = User::all();
-        $users = User::all()->random(10);
+        $users = User::all();
         //$products = Product::all();
-        $products = Product::all()->random(50);
+        $products = Product::all()->random(25);
         foreach ($users as $user) {
             $user_id = $user->id;
             foreach ($products as $product) {
